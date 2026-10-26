@@ -74,6 +74,33 @@ label.inline{display:flex;gap:8px;align-items:center;font-weight:500;font-size:.
 .tab[aria-selected=true]{background:var(--lav);color:#fff}
 .tab:hover:not([aria-selected=true]){background:var(--lav-soft)}
 
+/* daily companion */
+.more .chip,.card:not(.lab) .chip{border-color:var(--lav-line2);color:var(--lav)}
+.more .chip.on,.card:not(.lab) .chip.on{background:var(--lav);color:#fff;border-color:var(--lav)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 2px}
+.h1s{font-size:1.35rem;margin:0}
+.more{margin:2px 0 6px}
+.qcap{display:flex;gap:8px;align-items:flex-end;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:10px 12px;margin:10px 0}
+.qcap textarea{flex:1;margin:0;min-height:44px;max-height:140px;resize:none}
+.card.today{padding:18px 20px}
+.card.today.main{border-left:5px solid var(--lav)}
+.obj{font-size:1.05rem;margin:2px 0 8px}
+.bigact{font-size:1.45rem;line-height:1.3;margin:4px 0 6px}
+.why{margin:8px 0}
+.bigbtns{margin-top:14px}
+.btn.lg{padding:14px 28px;font-size:1.05rem;min-height:48px}
+.calmrow{margin:12px 0;text-align:center}
+.questline{text-align:center;margin:18px 0}
+.srow .btn{white-space:nowrap}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.linkbtn{border:0;background:none;color:var(--lav);text-decoration:underline;padding:6px 4px;font:inherit;min-height:32px}
+.wrow{border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:8px 0;background:#fff}
+.wrow.open{background:var(--lav-tint);border-color:var(--lav-line)}
+.wrow.isdone .ttitle{text-decoration:line-through;color:var(--muted)}
+.wgroup .stagehead{width:100%}
+.advbox{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+.mini{background:var(--lav-soft);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+.mini .big{font-size:1.8rem;font-weight:700}
 /* tasks */
 .task{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;margin:8px 0;background:#fff;transition:background .3s}
 .task.open{background:var(--lav-tint);border-color:var(--lav-line)}
@@ -214,6 +241,11 @@ dialog .actions .btn{flex:none}
 @media (max-width:720px){
   .stats{grid-template-columns:1fr 1fr}
   .pgrid,.g2,.g4{grid-template-columns:1fr}
+  .tab{padding:9px 11px;font-size:.92rem}
+  .g4>div[style*="span 2"]{grid-column:auto!important}
+  .qcap{flex-wrap:wrap}.qcap .btn{width:100%}
+  .bigact{font-size:1.25rem}
+  .btn.lg{width:100%}
   .stamps{grid-template-columns:1fr 1fr}
   .node em{display:none}
   .mbtn svg{width:76px;height:76px}
@@ -223,7 +255,7 @@ dialog .actions .btn{flex:none}
 .printonly{display:none}
 @media print{
   body{background:#fff}
-  .mascot,.tabs,.btn,.actions,.hero-actions,.next .btn,#toast,#confetti,#datasec,.skip,.reasonbox,.pausebar .btn{display:none!important}
+  .more,.qcap,.topbar .hero-actions,.mascot,.tabs,.btn,.actions,.hero-actions,.next .btn,#toast,#confetti,#datasec,.skip,.reasonbox,.pausebar .btn{display:none!important}
   .printonly{display:block}
   .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid-page}
   .task{break-inside:avoid}
@@ -237,7 +269,9 @@ dialog .actions .btn{flex:none}
 <noscript><p style="padding:20px">This tracker needs JavaScript to run. Please open it in a normal browser.</p></noscript>
 <div class="wrap">
   <header id="overview"></header>
-  <nav class="tabs" id="tabs" role="tablist" aria-label="Sections"></nav>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Main sections"></nav>
+  <nav class="chips more" id="more" aria-label="More sections"></nav>
+  <div class="qcap" id="qcap"><label class="sr" for="qin">Quick capture</label><textarea id="qin" rows="1" placeholder="Capture an idea or paste a paragraph…"></textarea><button class="btn" data-act="qcap">Save to inbox</button></div>
   <main id="view" tabindex="-1"></main>
   <section class="card" id="datasec" aria-labelledby="datahead">
     <h2 id="datahead">Your data</h2>
@@ -645,7 +679,7 @@ function fpClean(it){
   if(!it||typeof it!=='object') return null;
   var str=function(v){return typeof v==='string'?v:'';}, title=str(it.title).trim(); if(!title) return null;
   var o=fpNew({id:str(it.id)||undefined,title:title,desc:str(it.desc),cat:FP_CATS.some(function(c){return c[0]===it.cat;})?it.cat:'other',outcome:str(it.outcome),
-    effort:FP_EFF[it.effort]?it.effort:'',deadline:/^\d{4}-\d{2}-\d{2}$/.test(it.deadline||'')?it.deadline:'',source:str(it.source),notes:str(it.notes),next:str(it.next),dep:str(it.dep),blocker:str(it.blocker),unblock:str(it.unblock),existing:str(it.existing),
+    effort:FP_EFF[it.effort]?it.effort:'',deadline:/^\d{4}-\d{2}-\d{2}$/.test(it.deadline||'')?it.deadline:'',source:str(it.source),notes:str(it.notes),next:str(it.next),dep:str(it.dep),blocker:str(it.blocker),unblock:str(it.unblock),doneWhen:str(it.doneWhen),started:str(it.started),when:/^\d{4}-\d{2}-\d{2}$/.test(it.when||'')?it.when:'',existing:str(it.existing),
     q:['inbox','now','next','park','drop'].indexOf(it.q)>=0?it.q:'inbox',done:it.done===true,doneAt:str(it.doneAt),result:str(it.result),archived:it.archived===true,ov:str(it.ov),ovWhy:str(it.ovWhy),
     created:str(it.created)||new Date().toISOString(),updated:str(it.updated)||new Date().toISOString()});
   if(it.flags&&typeof it.flags==='object'){ ['commitment','safety','blocker'].forEach(function(k){o.flags[k]=it.flags[k]===true;}); }
@@ -654,7 +688,7 @@ function fpClean(it){
 }
 function fpNew(o){
   var t=new Date().toISOString();
-  var it={id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'',desc:'',cat:'other',outcome:'',effort:'',deadline:'',source:'',notes:'',next:'',dep:'',blocker:'',unblock:'',existing:'',
+  var it={id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'',desc:'',cat:'other',outcome:'',effort:'',deadline:'',source:'',notes:'',next:'',dep:'',blocker:'',unblock:'',doneWhen:'',started:'',when:'',existing:'',
     q:'inbox',done:false,doneAt:'',result:'',archived:false,ov:'',ovWhy:'',flags:{commitment:false,safety:false,blocker:false},r:{impact:null,urgency:null,align:null,readiness:null,confidence:null,risk:null},created:t,updated:t};
   for(var k in o){ if(o[k]!==undefined) it[k]=o[k]; } return it;
 }
@@ -829,7 +863,7 @@ function load(){
     loadNotice='Your saved data could not be read, so you’re starting fresh. A copy of the unreadable data was kept in this browser.'; return defaults(); }
 }
 var S=load();
-var ui={tab:'start',open:null,exp:{},reason:null,draft:{},editing:'',msg:'',q:Math.floor(Date.now()/86400000)%QUOTES.length,printing:false,lesson:'',from:'',labFilter:'now',mod:{},fpTab:'focus',fpFilter:{show:'all',cat:'',q:''},fpf:{cap:'',new:{},st:null,carry:{}},fpOpen:'',fpPrev:null,fpStratEdit:false,fpNewOpen:false,tri:null};
+var ui={tab:'today',wOpen:false,calm:false,workOpen:'',advId:'',wg:{},wfil:false,disOpen:false,open:null,exp:{},reason:null,draft:{},editing:'',msg:'',q:Math.floor(Date.now()/86400000)%QUOTES.length,printing:false,lesson:'',from:'',labFilter:'now',mod:{},fpTab:'focus',fpFilter:{show:'all',cat:'',q:''},fpf:{cap:'',new:{},st:null,carry:{}},fpOpen:'',fpPrev:null,fpStratEdit:false,fpNewOpen:false,tri:null};
 
 /* ---------- helpers ---------- */
 var $=function(s){return document.querySelector(s);};
@@ -934,6 +968,10 @@ function metricsHTML(list){
 var TABS=[['start','Start here'],['roadmap','Roadmap'],['decide','Decide'],['results','Results log'],['wins','Wins'],['fp','🧭 FocusPilot'],['lab','🎓 MBA Lab']];
 
 function renderOverview(){
+  if(QUEST_TABS.indexOf(ui.tab)<0){
+    $('#overview').innerHTML='<div class="topbar"><div><p class="eyebrow">SL Curtain</p><h1 class="h1s">Your business companion</h1></div><div class="hero-actions" style="margin:0"><button class="btn ghost sm" data-act="sound" aria-pressed='+(S.sound?'"true"':'"false"')+'>'+(S.sound?'🔔 Sound on':'🔕 Sound off')+'</button><button class="btn ghost sm" data-act="theme">🎨 '+(S.theme==='butter'?'Butter yellow':'Classic rose')+'</button></div></div>';
+    return;
+  }
   var pg=progress(), cur=currentStage(), nx=nextTasks(1)[0];
   var h='<div class="card hero"><div class="hero-top"><div><p class="eyebrow">First small Meta Ads test</p><h1>SL Curtain Marketing Quest</h1><p class="micro" id="micro">'+esc(QUOTES[ui.q])+'</p></div>'+
   '<div id="mascotSlot"></div></div>';
@@ -951,8 +989,13 @@ function renderOverview(){
   var slot=$('#mascotSlot'); if(slot) slot.replaceWith(mascotEl);
 }
 function renderTabs(){
-  var h=''; TABS.forEach(function(t){ h+='<button class="tab'+(t[0]==='lab'?' labtab':'')+'" role="tab" aria-selected="'+(ui.tab===t[0])+'" data-act="tab" data-tab="'+t[0]+'">'+t[1]+'</button>'; });
+  var inb=fpActive().filter(function(x){return x.q==='inbox';}).length, P=[['today','Today'],['work','My Work'],['inbox','Idea Inbox'+(inb?' ('+inb+')':'')],['biz','Business Results']], h='';
+  P.forEach(function(t){ h+='<button class="tab" role="tab" aria-selected="'+(ui.tab===t[0])+'" data-act="tab" data-tab="'+t[0]+'">'+t[1]+'</button>'; });
   $('#tabs').innerHTML=h;
+  var inQ=QUEST_TABS.indexOf(ui.tab)>=0, L=inQ?[['start','Start here'],['roadmap','Roadmap'],['decide','Decide'],['results','Results log'],['wins','Wins'],['today','← Back to Today']]:[['start','Marketing Quest'],['review','Weekly review'],['history','Decision history'],['strategy','Strategy'],['lab','MBA Lab'],['fp','Classic FocusPilot']];
+  var m=inQ?'<span class="small muted" style="align-self:center">Marketing Quest:</span>':'';
+  L.forEach(function(t){ m+='<button class="chip'+(ui.tab===t[0]?' on':'')+'" data-act="tab" data-tab="'+t[0]+'"'+(ui.tab===t[0]?' aria-current="page"':'')+'>'+t[1]+'</button>'; });
+  $('#more').innerHTML=m;
 }
 
 function taskHTML(t,isOpen){
@@ -1303,9 +1346,9 @@ function fpStrategyHTML(){
   h+='</div>';
   if(S.fp.stratLog.length) h+='<div class="card fp"><details class="park"><summary>Strategy change history ('+S.fp.stratLog.length+')</summary><ul class="plain small">'+S.fp.stratLog.slice().reverse().slice(0,10).map(function(l){return '<li style="padding:3px 0"><span class="muted">'+fmtDate((l.at||'').slice(0,10))+'</span> · '+esc(l.fields)+' — '+esc(l.reason)+'</li>';}).join('')+'</ul></details></div>';
   var w=S.fp.weights;
-  h+='<div class="card fp"><h3>Scoring weights</h3><p class="small muted">Visible and editable. Score = weighted average of the ratings you have given (each 1–5), shown out of 100. Suggestions: ≥70 Do now · 50–69 Next · below 50 Park. It is decision support, not an objective truth, and genuine deadlines, commitments, safety issues and critical blockers bypass it. Effort counts in favour of smaller tasks.</p><div class="g4">';
+  h+='<div class="card fp"><details class="park"'+(ui.wOpen?' open':'')+'><summary data-act="wset"><b>Advanced: scoring weights</b></summary><p class="small muted">Visible and editable. Score = weighted average of the ratings you have given (each 1–5), shown out of 100. Suggestions: ≥70 Do now · 50–69 Next · below 50 Park. It is decision support, not an objective truth, and genuine deadlines, commitments, safety issues and critical blockers bypass it. Effort counts in favour of smaller tasks.</p><div class="g4">';
   [['impact','Impact'],['urgency','Urgency'],['align','Alignment'],['effort','Low effort'],['readiness','Readiness'],['confidence','Confidence'],['risk','Reversible / low risk']].forEach(function(d){ h+='<div><label for="w-'+d[0]+'">'+d[1]+'</label><input type="number" id="w-'+d[0]+'" min="0" max="10" step="0.5" data-num data-fprefresh data-bind="fp.weights.'+d[0]+'" value="'+w[d[0]]+'"></div>'; });
-  h+='</div><div class="actions"><button class="btn ghost sm" data-act="fpwreset">Reset to defaults</button></div></div>';
+  h+='</div><div class="actions"><button class="btn ghost sm" data-act="fpwreset">Reset to defaults</button></div></details></div>';
   return h;
 }
 function fpReviewHTML(){
@@ -1324,6 +1367,158 @@ function fpReviewHTML(){
   return h;
 }
 function fpRv(k,l){ return '<label for="rv-'+k+'">'+l+'</label><textarea id="rv-'+k+'" rows="2" data-bind="fp.rv.'+k+'">'+esc(S.fp.rv[k])+'</textarea>'; }
+/* ---------- Daily companion: Today / My Work / Idea Inbox / Business Results ---------- */
+var QUEST_TABS=['start','roadmap','decide','results','wins'];
+function fpReady(){ return fpInQ('now').filter(function(x){return !x.blocker;}); }
+function fpWait(){ return fpInQ('now').filter(function(x){return x.blocker;}); }
+function fpDur(it){ return it.next?'First step: about 15–30 min':(it.effort?FP_EFF[it.effort].l:'No time estimate yet'); }
+function fpWhyPlain(it){
+  var pin=fpPin(it); if(pin.length) return 'It involves '+pin.join(', ')+'.';
+  if(it.outcome) return it.outcome;
+  return 'It is the highest-ranked ready item in your Do now list.';
+}
+function stepInput(it,field,id,label,ph){ return '<label for="'+id+'">'+label+'</label><input type="text" id="'+id+'" data-fpitem="'+it.id+'|'+field+'" value="'+esc(it[field]||'')+'" placeholder="'+esc(ph)+'">'; }
+function todayMain(it){
+  var small=it.effort==='xs', started=!!it.started, sg=fpSuggest(it);
+  var h='<div class="card today main"><p class="eyebrow">Do this next</p><h2 class="bigact">'+esc(it.next||(small?it.title:'Find the first step for: '+it.title))+'</h2>';
+  if(it.next) h+='<p class="small muted">Part of: '+esc(it.title)+'</p>';
+  h+='<div class="meta"><span class="badge">'+esc(fpDur(it))+'</span>'+(started?'<span class="badge ok">In progress</span>':'')+(it.deadline?'<span class="badge st">Due '+fmtDate(it.deadline)+'</span>':'')+'</div>'+
+    '<p class="why"><b>Why it matters:</b> '+esc(fpWhyPlain(it))+'</p>';
+  if(!it.next&&!small) h+=stepInput(it,'next','rn','What is the first step you could finish in 15–30 minutes?','e.g. Draft a 3-line WhatsApp message to the first agent');
+  if(sg.prov) h+='<p class="small muted">Provisional recommendation: some information is missing. Open details to add it.</p>';
+  h+='<div class="actions bigbtns">'+(started?'':'<button class="btn lg" data-act="fpstart" data-id="'+it.id+'">▶ Start</button>')+'<button class="btn lg'+(started?'':' ghost')+'" data-act="fpdone" data-id="'+it.id+'">✓ Complete</button></div>'+
+    '<p class="small"><button class="linkbtn" data-act="fpwhy" data-id="">Why this, not that?</button> · <button class="linkbtn" data-act="wopen" data-id="'+it.id+'">Open details</button></p></div>';
+  return h;
+}
+function viewToday(){
+  var st=S.fp.strategy, ready=fpReady(), wait=fpWait(), rec=ready[0]||null, h='';
+  h+='<div class="card today"><p class="eyebrow">Current objective</p><p class="obj">'+esc(st.objective||'Not set yet. Add one under Strategy.')+'</p>'+
+    (ui.calm?'':'<label for="wk">This week’s business outcome</label><input type="text" id="wk" data-bind="fp.weekOutcome" value="'+esc(S.fp.weekOutcome)+'" placeholder="e.g. 3 property agents contacted and 1 meeting booked">')+'</div>';
+  if(ui.calm) return h+calmHTML(rec,ready,wait);
+  if(rec) h+=todayMain(rec);
+  else if(wait.length){ var w0=wait[0];
+    h+='<div class="card today main"><p class="eyebrow">Do this next</p><h2 class="bigact">'+esc(w0.unblock||'Find the smallest step that unblocks: '+w0.title)+'</h2><p class="small muted">Everything in Do now is waiting on something. Waiting for: '+esc(w0.blocker)+'</p>'+
+    (w0.unblock?'':stepInput(w0,'unblock','ru','Smallest action that would unblock it','e.g. WhatsApp Mom to confirm the referral fee'))+
+    '<p class="small"><button class="linkbtn" data-act="wopen" data-id="'+w0.id+'">Open details</button></p></div>'; }
+  else {
+    var nxt=fpInQ('next').filter(function(x){return !x.blocker;}).slice(0,3), inb=fpActive().filter(function(x){return x.q==='inbox';}).length;
+    h+='<div class="card today main"><p class="eyebrow">Nothing in Do now</p><h2 class="bigact">Pick one thing for today</h2>';
+    if(nxt.length) nxt.forEach(function(x){ h+='<div class="srow"><div>'+esc(x.next||x.title)+' <span class="small muted">'+esc(fpDur(x))+'</span></div><button class="btn sm" data-act="fpmove" data-id="'+x.id+'" data-q="now">Do this now</button></div>'; });
+    else if(inb) h+='<p class="muted">You have '+inb+' idea'+(inb>1?'s':'')+' waiting.</p><div class="actions"><button class="btn" data-act="tab" data-tab="inbox">Review ideas</button></div>';
+    else h+='<p class="muted">Nothing is waiting. Use the capture bar above for anything on your mind.</p>';
+    h+='</div>'; }
+  if(rec||wait.length) h+='<p class="calmrow"><button class="btn ghost" data-act="calm">I’m overwhelmed</button></p>';
+  var more=ready.slice(1,3);
+  if(more.length){ h+='<div class="card today"><p class="eyebrow">Also on your list</p>'; more.forEach(function(x){ h+='<div class="srow"><div><button class="ttitle" data-act="wopen" data-id="'+x.id+'">'+esc(x.next||x.title)+'</button><div class="small muted">'+esc(x.next?x.title+' · ':'')+esc(fpDur(x))+'</div></div><button class="btn ghost sm" data-act="fpdone" data-id="'+x.id+'">✓ Complete</button></div>'; }); h+='</div>'; }
+  var bl=fpActive().filter(function(x){return x.blocker&&(x.q==='now'||x.q==='next');}).sort(fpRank).slice(0,2);
+  if(bl.length){ h+='<div class="card today"><p class="eyebrow">Waiting on something</p>'; bl.forEach(function(x){ h+='<p class="small" style="margin:4px 0">⛔ <b>'+esc(x.title)+'</b>: '+esc(x.blocker)+(x.unblock?' <span class="muted">· Unblock: '+esc(x.unblock)+'</span>':'')+' <button class="linkbtn" data-act="wopen" data-id="'+x.id+'">Handle</button></p>'; }); h+='</div>'; }
+  var pg=progress(), nx=nextTasks(1)[0];
+  h+='<p class="small muted questline">Marketing Quest: '+pg.pct+'% complete'+(nx?' · next: '+esc(nx.title)+' <button class="linkbtn" data-act="focus" data-id="'+nx.id+'">Open</button>':'')+'</p>';
+  return h;
+}
+function calmHTML(rec,ready,wait){
+  var it=rec||wait[0], h='';
+  if(!it) return h+'<div class="card today main"><h2 class="bigact">Nothing is pressing.</h2><p class="muted">You can stop here. Everything else is safe.</p><div class="actions"><button class="btn ghost" data-act="calmoff">Back to my day</button></div></div>';
+  h+='<div class="card today main"><p class="eyebrow">Just this one thing</p><h2 class="bigact">'+esc(rec?it.title:'Unblock: '+it.title)+'</h2>';
+  if(rec) h+=it.next?'<p><b>Smallest next step:</b> '+esc(it.next)+'</p>':stepInput(it,'next','rn','Smallest next step (15–30 minutes)','e.g. Open WhatsApp and message one agent');
+  else h+=it.unblock?'<p><b>Smallest next step:</b> '+esc(it.unblock)+'</p>':stepInput(it,'unblock','ru','Smallest unblocking action','e.g. WhatsApp Mom to confirm the fee');
+  if(rec) h+='<div class="actions bigbtns">'+(it.started?'':'<button class="btn lg" data-act="fpstart" data-id="'+it.id+'">▶ Start</button>')+'<button class="btn lg'+(it.started?'':' ghost')+'" data-act="fpdone" data-id="'+it.id+'">✓ Complete</button></div>';
+  h+='</div>';
+  var pp=ready.filter(function(x){return x.id!==it.id;})[0]||fpInQ('next').filter(function(x){return !x.blocker&&x.id!==it.id;})[0];
+  h+='<div class="card today"><p class="eyebrow">Safe to postpone</p>'+(pp?'<p><b>'+esc(pp.title)+'</b></p>'+(pp.q==='now'?'<div class="actions"><button class="btn ghost sm" data-act="fpmove" data-id="'+pp.id+'" data-q="next">Move it to Next</button></div>':'<p class="small muted">It is already waiting in Next.</p>'):'<p class="muted">Everything else can wait.</p>')+'</div>';
+  return h+'<p class="calmrow"><button class="btn ghost" data-act="calmoff">Back to my day</button></p>';
+}
+function workBadges(it){
+  return '<div class="meta">'+(it.effort?'<span class="badge">'+FP_EFF[it.effort].l+'</span>':'')+(it.started&&!it.done?'<span class="badge ok">In progress</span>':'')+(it.blocker&&!it.done?'<span class="badge st">Blocked</span>':'')+(it.deadline?'<span class="badge st">Due '+fmtDate(it.deadline)+'</span>':'')+(it.when&&!it.done?'<span class="badge">Planned '+fmtDate(it.when)+'</span>':'')+(it.done?'<span class="badge ok">Done'+(it.doneAt?' '+fmtDate(it.doneAt.slice(0,10)):'')+'</span>':'')+'</div>';
+}
+function workAdvanced(it){
+  var sg=fpSuggest(it), sc=sg.sc, h='<div class="advbox">';
+  h+='<p class="small muted">Suggestion (rule-based'+(sg.prov?', provisional':'')+'): <b>'+FP_Q[sg.q]+'</b>'+(sc.score!=null?' · score '+sc.score+'/100':'')+'. '+esc(sg.why)+(sg.needs.length?' <i>Needs: '+esc(sg.needs.join(', '))+'.</i>':'')+'</p>';
+  h+='<p style="margin-top:8px"><b>Handled explicitly (bypass the score):</b></p><label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.commitment" '+(it.flags.commitment?'checked':'')+'> A customer or partner commitment</label><label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.safety" '+(it.flags.safety?'checked':'')+'> A safety issue</label><label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.blocker" '+(it.flags.blocker?'checked':'')+'> A critical operational blocker</label>';
+  h+=fpIn(it,'deadline','Deadline (only if genuine)','date')+fpIn(it,'existing','Existing tool or process that already solves this (optional)')+fpTa(it,'notes','Notes');
+  h+='<p style="margin-top:10px"><b>Ratings</b> <span class="muted small">(optional, 1–5)</span></p><div class="g2">';
+  FP_DIMS.forEach(function(d){ h+='<div><label for="x-'+it.id+'-r_'+d[0]+'" title="'+esc(d[2])+'">'+d[1]+'</label><select id="x-'+it.id+'-r_'+d[0]+'" data-fpitem="'+it.id+'|r.'+d[0]+'">'+fpOpt([[1,'1 – low'],[2,'2'],[3,'3'],[4,'4'],[5,'5 – high']],it.r[d[0]]==null?'':it.r[d[0]],'Not rated')+'</select><span class="muted small">'+esc(d[2])+'</span></div>'; });
+  h+='</div><div class="scorebox"><b>How the score is made</b> <span class="muted small">(decision support, not an objective truth)</span><ul class="plain">';
+  sc.parts.forEach(function(p){ h+='<li>'+esc(p.l)+': <b>'+p.v+'/5</b>'+(p.sug?' <span class="muted small">(suggested from category)</span>':'')+' × weight '+p.w+'</li>'; });
+  h+='</ul>'+(sc.score!=null?'<p>Score: <b>'+sc.score+'/100</b>'+(sc.prov?' (provisional)':'')+'</p>':'<p class="muted">Add an effort estimate or a rating to see a score.</p>')+'</div>';
+  if(sg.q!==it.q&&it.q!=='inbox'&&!it.done) h+=fpIn(it,'ovWhy','You chose '+FP_Q[it.q]+' instead of the suggested '+FP_Q[sg.q]+'. Why? (recorded)');
+  var lsn=fpStudy(it); if(lsn) h+='<div class="studybox"><b>Optional study:</b> “'+esc(lsn.t)+'” (~'+lsn.min+' min). It is not a task.<div class="actions"><button class="btn ghost sm" data-act="copy" data-id="'+lsn.id+'" data-item="'+it.id+'">📋 Copy NotebookLM prompt</button><button class="btn ghost sm" data-act="study" data-id="'+lsn.id+'">Open in MBA Lab</button></div></div>';
+  h+='<div class="actions"><button class="btn ghost sm" data-act="fpwhy" data-id="'+it.id+'">Why this, not that?</button><button class="btn ghost sm" data-act="fptriage" data-id="'+it.id+'">Help me decide</button><button class="btn danger sm" data-act="fpdel" data-id="'+it.id+'">Delete permanently…</button></div></div>';
+  return h;
+}
+function workDetail(it){
+  var h='<div class="details">';
+  if(it.done){ h+='<p><b>What happened:</b> '+esc(it.result||'No note recorded.')+'</p><div class="actions"><button class="btn ghost sm" data-act="fpundone" data-id="'+it.id+'">Re-open</button><button class="btn ghost sm" data-act="fparch" data-id="'+it.id+'">'+(it.archived?'Restore from archive':'Archive')+'</button></div></div>'; return h; }
+  h+=fpIn(it,'title','What I need to do')+fpIn(it,'doneWhen','What “done” looks like','text','e.g. 3 agents have replied')+fpIn(it,'next','Next physical action','text','e.g. Open WhatsApp and message Agent A')+
+    '<div class="g2"><div>'+fpSel(it,'effort','Estimated time',FP_EFFOPT,'Not estimated')+'</div><div>'+fpSel(it,'cat','Project or objective',FP_CATOPT)+'</div></div>'+fpIn(it,'outcome','Business outcome it supports')+
+    '<div class="g2"><div>'+fpIn(it,'dep','Depends on')+'</div><div>'+fpIn(it,'blocker','Blocked by (leave empty if nothing)')+'</div></div>'+(it.blocker?fpIn(it,'unblock','Smallest action that would unblock it','text','e.g. WhatsApp Mom to confirm the referral fee'):'');
+  h+='<div class="actions">'+(it.q==='now'&&!it.started&&!it.blocker?'<button class="btn" data-act="fpstart" data-id="'+it.id+'">▶ Start</button>':'')+(it.q!=='now'?'<button class="btn" data-act="fpmove" data-id="'+it.id+'" data-q="now">Move to Do now</button>':'')+
+    '<button class="btn'+(it.started?'':' ghost')+'" data-act="fpdone" data-id="'+it.id+'">✓ Complete</button><button class="btn ghost" data-act="fpresched" data-id="'+it.id+'">Reschedule</button>'+(it.q!=='park'?'<button class="btn ghost" data-act="fpmove" data-id="'+it.id+'" data-q="park">Park</button>':'')+
+    '<button class="btn ghost sm" data-act="fparch" data-id="'+it.id+'">Archive</button><button class="linkbtn" data-act="wadv" data-id="'+it.id+'">'+(ui.advId===it.id?'Hide advanced':'Advanced: ratings and score')+'</button></div>';
+  if(ui.advId===it.id) h+=workAdvanced(it);
+  return h+'</div>';
+}
+function workRow(it){
+  var op=ui.workOpen===it.id;
+  return '<div class="wrow'+(op?' open':'')+(it.done?' isdone':'')+'" id="w-'+it.id+'"><button class="ttitle" data-act="wtoggle" data-id="'+it.id+'" aria-expanded="'+op+'">'+esc(it.title)+'</button>'+workBadges(it)+(op?workDetail(it):'')+'</div>';
+}
+function fpLogHTML(){
+  return '<div class="card"><h2>Decision history ('+S.fp.log.length+')</h2>'+(S.fp.log.length?'<ul class="plain small">'+S.fp.log.slice().reverse().slice(0,100).map(function(l){return '<li style="padding:3px 0"><span class="muted">'+fmtDate((l.at||'').slice(0,10))+'</span> · <b>'+esc(l.item)+'</b> · '+esc(l.action)+(l.from||l.to?' ('+esc(FP_Q[l.from]||l.from||'')+' → '+esc(FP_Q[l.to]||l.to||'')+')':'')+(l.why?' — '+esc(l.why):'')+'</li>';}).join('')+'</ul>':'<p class="muted small">Decisions and the reasons you give will appear here.</p>')+'</div>';
+}
+function viewWork(){
+  var G=[['now','Do now',true],['next','Next',true],['park','Parked',false],['done','Done',false]], h='<div class="card"><h2>My Work</h2><p class="muted small">Tap a task to see details. Do now holds at most three things.</p></div>';
+  G.forEach(function(g){
+    var list=g[0]==='done'?S.fp.items.filter(function(x){return x.done&&!x.archived;}).sort(function(a,b){return a.doneAt<b.doneAt?1:-1;}).slice(0,40):fpInQ(g[0]);
+    var open=(g[0] in ui.wg)?ui.wg[g[0]]:g[2];
+    h+='<div class="card wgroup"><button class="stagehead" data-act="wgroup" data-g="'+g[0]+'" aria-expanded="'+open+'"><b>'+g[1]+' ('+list.length+')</b><span aria-hidden="true">'+(open?'▾':'▸')+'</span></button>';
+    if(open) h+=list.length?list.map(workRow).join(''):'<p class="muted small">'+({now:'Nothing here. Move one thing up from Next when you are ready.',next:'Nothing scheduled. Ideas you turn into tasks land here.',park:'Nothing parked.',done:'Nothing finished yet. That is okay.'})[g[0]]+'</p>';
+    h+='</div>';
+  });
+  h+='<div class="card"><button class="stagehead" data-act="wfilters" aria-expanded="'+!!ui.wfil+'"><b>Search, filters and archive</b><span aria-hidden="true">'+(ui.wfil?'▾':'▸')+'</span></button></div>';
+  if(ui.wfil) h+=fpItemsHTML().split('<div class="card fp"><details class="park"><summary>Decision log')[0];
+  return h;
+}
+function fpPrevHTML(){
+  if(!ui.fpPrev) return '';
+  var h='<div class="card"><div class="stagenote"><b>Check how I split this</b> <span class="muted">(one item per line, bullet or sentence; all your words are kept). Edit titles or untick anything you don’t want.</span></div>';
+  ui.fpPrev.forEach(function(p,i){ h+='<div class="prev"><input type="checkbox" class="chk" data-fpf="prev.'+i+'.inc" '+(p.inc?'checked':'')+' aria-label="Include"><div style="flex:1"><input type="text" data-fpf="prev.'+i+'.t" value="'+esc(p.t)+'">'+(p.dup?'<span class="small" style="color:var(--warn)">Possible duplicate of “'+esc(p.dup)+'”</span>':'')+'</div></div>'; });
+  return h+'<div class="actions"><button class="btn" data-act="fpcapok">Add selected to inbox</button><button class="btn ghost" data-act="fpcapcancel">Cancel</button></div></div>';
+}
+function viewInbox(){
+  var inbox=fpActive().filter(function(x){return x.q==='inbox';}).sort(function(a,b){return a.created<b.created?1:-1;}), dis=S.fp.items.filter(function(x){return x.q==='drop'&&!x.archived&&!x.done;});
+  var h=fpPrevHTML()+'<div class="card"><h2>Idea Inbox ('+inbox.length+')</h2><p class="muted small">Ideas wait here safely. Nothing becomes a task until you decide.</p>';
+  if(!inbox.length) h+='<p class="muted">The inbox is empty. Use the capture bar above whenever something comes to mind.</p>';
+  inbox.forEach(function(it){ var d=fpDup(it.title,it.id);
+    h+='<div class="fpitem"><b>'+esc(it.title)+'</b>'+(d?' <span class="badge st">Possible duplicate</span>':'')+(it.desc?'<p class="small muted" style="margin:4px 0">'+esc(it.desc.length>220?it.desc.slice(0,217)+'…':it.desc)+'</p>':'')+
+    '<div class="actions"><button class="btn sm" data-act="fpturn" data-id="'+it.id+'">Turn into task</button><button class="btn ghost sm" data-act="fpmove" data-id="'+it.id+'" data-q="park">Park for later</button><button class="btn ghost sm" data-act="fpmove" data-id="'+it.id+'" data-q="drop">Dismiss</button><button class="linkbtn" data-act="fptriage" data-id="'+it.id+'">Help me decide</button></div></div>'; });
+  h+='</div>';
+  if(dis.length) h+='<div class="card"><button class="stagehead" data-act="wdis" aria-expanded="'+!!ui.disOpen+'"><b>Dismissed ('+dis.length+')</b><span aria-hidden="true">'+(ui.disOpen?'▾':'▸')+'</span></button>'+(ui.disOpen?dis.map(function(x){return '<div class="srow"><div>'+esc(x.title)+'</div><button class="btn ghost sm" data-act="fprestore" data-id="'+x.id+'">Restore to inbox</button></div>';}).join(''):'')+'</div>';
+  return h;
+}
+function viewBiz(){
+  if(!ui.draft.channel) ui.draft.channel='b2b';
+  var wk=fpMonday(), done=S.fp.items.filter(function(x){return x.done&&(x.doneAt||'').slice(0,10)>=wk;});
+  var h='<div class="card"><h2>Business Results</h2><p class="muted small">Two different things live here. <b>Actions</b> are tasks you finished. <b>Outcomes</b> are what actually happened in the market. Finishing tasks is not the same as getting results.</p>'+
+   '<div class="g2"><div class="mini"><b>Actions completed this week</b><span class="big">'+done.length+'</span><span class="small muted">'+(done.length?esc(done.slice(0,3).map(function(x){return x.title;}).join(' · ')):'None yet. That’s okay.')+'</span></div>'+
+   '<div class="mini"><b>Outcomes logged</b><span class="big">'+S.results.filter(function(x){return x.channel==='b2b';}).length+'</span><span class="small muted">B2B entries. Log weekly totals below; per-prospect detail stays in your Lead Tracker.</span></div></div></div>';
+  return h+viewResults();
+}
+function viewReviewTab(){ return fpReviewHTML(); }
+function viewHistoryTab(){
+  var h=fpLogHTML();
+  if(S.fp.stratLog.length) h+='<div class="card"><h3>Strategy change history ('+S.fp.stratLog.length+')</h3><ul class="plain small">'+S.fp.stratLog.slice().reverse().slice(0,20).map(function(l){return '<li style="padding:3px 0"><span class="muted">'+fmtDate((l.at||'').slice(0,10))+'</span> · '+esc(l.fields)+' — '+esc(l.reason)+'</li>';}).join('')+'</ul></div>';
+  return h;
+}
+function viewStrategyTab(){ return fpStrategyHTML(); }
+function quickCapture(){
+  var el=$('#qin'); if(!el) return; var txt=(el.value||'').trim();
+  if(!txt){ toast('Type or paste something first.'); el.focus(); return; }
+  var lines=fpParse(txt); if(!lines.length){ toast('Type or paste something first.'); return; }
+  var prev=lines.map(function(l){ var o=fpFromLine(l), d=fpDup(o.title); return {t:o.title,raw:l,inc:true,dup:d?d.title:''}; });
+  el.value=''; el.style.height='';
+  if(prev.length===1&&!prev[0].dup){ fpAddItems([fpFromLine(prev[0].raw)]); render(); toast('Saved to your Idea Inbox. It is not a task yet.'); }
+  else { ui.fpPrev=prev; ui.tab='inbox'; render(); toast('Check how I split this, then confirm.'); }
+}
 function viewFP(){
   var inb=fpActive().filter(function(x){return x.q==='inbox';}).length, T=[['focus','Focus'],['inbox','Inbox'+(inb?' ('+inb+')':'')],['items','All items'],['strategy','Strategy'],['review','Weekly review']];
   var h='<div class="card fp"><p class="eyebrow">FocusPilot · rule-based prioritisation (no AI service connected)</p><p><b>Capture everything. Commit to very little. Execute what matters. Review the evidence.</b></p><div class="chips" style="margin-bottom:0">';
@@ -1465,6 +1660,11 @@ function fpAct(a,ds){
     case 'fptab': ui.fpTab=ds.t; if(ds.qf) ui.fpFilter.show=ds.qf; ui.msg=''; render(); break;
     case 'fpopen': ui.fpOpen=(ui.fpOpen===id)?'':id; renderView(); break;
     case 'fpunblock': it=fpItem(id); if(it){ var was=it.blocker; it.blocker=''; it.updated=fpNow(); fpLog(it,'blocker cleared',it.q,it.q,was); save(); renderView(); toast('Unblocked. It can be recommended again.'); } break;
+    case 'fpstart': it=fpItem(id); if(it){ it.started=fpNow(); it.updated=fpNow(); fpLog(it,'started',it.q,it.q,''); save(); renderView(); toast('Started. Just the first step.'); } break;
+    case 'fpresched': it=fpItem(id); if(it) fpDlg('<h2 id="dlgh">Reschedule</h2><p class="small">“'+esc(it.title)+'”</p><label for="rsDate">Plan to do it on (optional)</label><input type="date" id="rsDate" value="'+esc(it.when||'')+'"><p class="small muted">It moves to Next. Nothing is lost, and you can bring it back to Do now any time.</p><div class="actions"><button class="btn" data-act="fpreschedok" data-id="'+id+'">Reschedule</button><button class="btn ghost" data-act="dlgcancel">Cancel</button></div>'); break;
+    case 'fpreschedok': it=fpItem(id); if(it){ var from0=it.q, dv=($('#rsDate').value||''); it.when=/^\d{4}-\d{2}-\d{2}$/.test(dv)?dv:''; it.started=''; if(it.q==='now'||it.q==='inbox') it.q='next'; it.updated=fpNow(); fpLog(it,'rescheduled',from0,it.q,it.when?'Planned for '+it.when:''); save(); closeDlg(); render(); toast(it.when?'Rescheduled to '+fmtDate(it.when)+'.':'Moved to Next.'); } break;
+    case 'fpturn': it=fpItem(id); if(it){ it.q='next'; it.ov=''; it.ovWhy=''; it.updated=fpNow(); fpLog(it,'turned into a task','inbox','next',''); save(); ui.tab='work'; ui.workOpen=id; ui.wg={}; render(); toast('Now a task in Next. Add a next step when you are ready.'); } break;
+    case 'fprestore': it=fpItem(id); if(it){ it.q='inbox'; it.ov=''; it.ovWhy=''; it.updated=fpNow(); fpLog(it,'restored','drop','inbox',''); save(); render(); toast('Back in your inbox.'); } break;
     case 'fpshow': ui.fpFilter.show=ds.f; renderView(); break;
     case 'fpmove': fpMove(id,ds.q); break;
     case 'fpdone': fpDoneDlg(id); break;
@@ -1505,7 +1705,7 @@ function fpAct(a,ds){
       if(ch2.length){ S.fp.stratLog.push({at:fpNow(),reason:gs.reason.trim(),fields:ch2.join(', ')}); fpLog({id:'',title:'Strategy'},'strategy updated','','',gs.reason.trim()+' ('+ch2.join(', ')+')'); }
       save(); ui.fpStratEdit=false; ui.msg=''; renderView(); toast(ch2.length?'Strategy updated and logged.':'No changes to save.'); break;
     case 'fpwreset': if(confirm('Reset the scoring weights to the defaults?')){ S.fp.weights=JSON.parse(JSON.stringify(FP_W0)); save(); renderView(); } break;
-    case 'fprvstrat': ui.fpTab='strategy'; fpAct('fpstratedit',{}); render(); break;
+    case 'fprvstrat': ui.fpTab='strategy'; if(ui.tab!=='fp') ui.tab='strategy'; fpAct('fpstratedit',{}); render(); break;
     case 'fprvsave':
       var wk=fpMonday(), dn=S.fp.items.filter(function(x){return x.done&&(x.doneAt||'').slice(0,10)>=wk;}).map(function(x){return x.title;}), r=S.fp.rv, cs=ui.fpf.carry||{}, moved=[];
       Object.keys(cs).forEach(function(cid){ var x=fpItem(cid); if(x&&cs[cid]!=='keep'&&['next','park','drop'].indexOf(cs[cid])>=0){ var fr=x.q; x.q=cs[cid]; x.updated=fpNow(); fpLog(x,'moved (weekly review)',fr,x.q,''); moved.push(x.title+' → '+FP_Q[x.q]); } });
@@ -1518,7 +1718,7 @@ function renderView(){
   var h='';
   if(ui.printing){
     h='<p class="printonly small">Printed '+fmtDate(todayISO())+' · SL Curtain Marketing Quest</p>'+viewRoadmap()+viewDecide()+viewResults()+viewWins();
-  } else h={start:viewStart,roadmap:viewRoadmap,decide:viewDecide,results:viewResults,wins:viewWins,fp:viewFP,lab:viewLab}[ui.tab]();
+  } else h=({today:viewToday,work:viewWork,inbox:viewInbox,biz:viewBiz,review:viewReviewTab,history:viewHistoryTab,strategy:viewStrategyTab,start:viewStart,roadmap:viewRoadmap,decide:viewDecide,results:function(){ if(!ui.draft.channel) ui.draft.channel='ads'; return viewResults(); },wins:viewWins,fp:viewFP,lab:viewLab}[ui.tab]||viewToday)();
   $('#view').innerHTML=h;
   if(ui.reason){ var r=$('#reasonIn'); if(r) r.focus(); }
 }
@@ -1597,7 +1797,17 @@ function act(a,ds){
   var id=ds.id;
   if(a.indexOf('fp')===0){ fpAct(a,ds); return; }
   switch(a){
-    case 'tab': ui.tab=ds.tab; ui.msg=''; ui.from=''; render(); window.scrollTo({top:$('#tabs').offsetTop-8}); break;
+    case 'wset': ui.wOpen=!ui.wOpen; break;
+    case 'calm': ui.calm=true; render(); break;
+    case 'calmoff': ui.calm=false; render(); break;
+    case 'wopen': ui.tab='work'; ui.workOpen=id; ui.wg={}; render(); var we=$('#w-'+id); if(we) we.scrollIntoView({block:'center'}); break;
+    case 'wtoggle': ui.workOpen=(ui.workOpen===id)?'':id; renderView(); break;
+    case 'wadv': ui.advId=(ui.advId===id)?'':id; renderView(); break;
+    case 'wgroup': var gk=ds.g, gcur=(gk in ui.wg)?ui.wg[gk]:(gk==='now'||gk==='next'); ui.wg[gk]=!gcur; renderView(); break;
+    case 'wfilters': ui.wfil=!ui.wfil; renderView(); break;
+    case 'wdis': ui.disOpen=!ui.disOpen; renderView(); break;
+    case 'qcap': quickCapture(); break;
+    case 'tab': ui.tab=ds.tab; ui.msg=''; ui.from=''; ui.calm=false; if(ds.tab==='biz'&&!ui.draft.channel) ui.draft.channel='b2b'; render(); window.scrollTo({top:$('#tabs').offsetTop-8}); break;
     case 'focus': ui.tab='start'; ui.open=id; render(); var el=$('#t-'+id); if(el) el.scrollIntoView({block:'center'}); break;
     case 'open': ui.open=(ui.open===id||(ui.open===null&&ui.tab==='start'&&nextTasks(1)[0]&&nextTasks(1)[0].id===id))?'':id; render(); break;
     case 'stage': var cs=currentStage(), cur=(+id in ui.exp)?ui.exp[+id]:(cs&&cs.id===+id); ui.exp[+id]=!cur; render(); break;
@@ -1620,7 +1830,7 @@ function act(a,ds){
     case 'reset':
       if(confirm('Reset everything? This clears all progress, notes and results in this browser. Export a backup first if you might want it back.')){
         try{localStorage.removeItem(STORE_KEY);}catch(e){}
-        S=defaults(); ui.fpOpen=''; ui.fpPrev=null; ui.tri=null; ui.tab='start'; ui.open=null; ui.exp={}; ui.reason=null; ui.draft={}; ui.editing=''; ui.msg=''; render(); toast('Fresh start.'); }
+        S=defaults(); ui.fpOpen=''; ui.fpPrev=null; ui.tri=null; ui.tab='today'; ui.calm=false; ui.workOpen=''; ui.advId=''; ui.open=null; ui.exp={}; ui.reason=null; ui.draft={}; ui.editing=''; ui.msg=''; render(); toast('Fresh start.'); }
       break;
     case 'study': ui.tab='lab'; ui.lesson=id; ui.from=ds.from||''; ui.labFilter='all'; var lm=LESSONS.filter(function(x){return x.id===id;})[0]; if(lm) ui.mod[lm.m]=true; render(); var le=$('#les-'+id); if(le) le.scrollIntoView({block:'start'}); break;
     case 'openlesson': ui.lesson=(ui.lesson===id)?'':id; ui.from=''; var lm2=LESSONS.filter(function(x){return x.id===id;})[0]; if(lm2&&ui.lesson){ ui.mod[lm2.m]=true; var lb=lessonLabel(lm2); if(ui.labFilter!=='all'&&ui.labFilter!==lb&&!(ui.labFilter==='later'&&lb==='review')) ui.labFilter='all'; } render(); var le2=$('#les-'+id); if(le2) le2.scrollIntoView({block:'start'}); break;
@@ -1696,6 +1906,8 @@ window.addEventListener('beforeprint',function(){ ui.printing=true; renderView()
 window.addEventListener('afterprint',function(){ ui.printing=false; renderView(); });
 document.addEventListener('keydown',function(ev){ if(ev.key==='Enter'&&ev.target.id==='reasonIn'){ ev.preventDefault(); act('reasonok',{}); } if(ev.key==='Enter'&&ev.target.id==='triIn'){ ev.preventDefault(); fpAct('fptrinext',{}); } });
 
+document.addEventListener('keydown',function(ev){ if(ev.target.id==='qin'&&ev.key==='Enter'&&!ev.shiftKey){ ev.preventDefault(); quickCapture(); } });
+document.addEventListener('input',function(ev){ var t=ev.target; if(t.id==='qin'){ t.style.height='auto'; t.style.height=Math.min(t.scrollHeight,140)+'px'; } });
 if(!storageOK) warnStore();
 render();
 if(loadNotice) toast(loadNotice,true);
