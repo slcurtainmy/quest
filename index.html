@@ -601,7 +601,7 @@ var PRE=[
 var QUOTES=['One small win at a time.','Progress, not perfection.','You don’t need the whole strategy today.','Done is better than endlessly polishing.','A test that teaches you something is a success.','Finish one thing before starting another.'];
 var WINS_MSG=['Nice. One small win.','That counts. ✨','Done. Next one, or take a breath.','Another one finished.'];
 var MILES={25:'25% — you’ve started, and that’s the hardest part. 🌱',50:'Halfway there. One step at a time is working. 🌤',75:'75% — the finish line is in sight. ✨',100:'100% — every step of the quest is done. Whatever the results say, you ran the experiment. 🎉'};
-var NUMF=['spend','enq','qual','cons','quot','sales','rev','gp'];
+var NUMF=['spend','enq','qual','cons','quot','sales','rev','gp','cont','repl'];
 
 /* ---------- FocusPilot: data and rules (rule-based, no AI) ---------- */
 var FP_CATS=[['rev','Revenue and cash flow'],['b2b','B2B partnerships'],['mkt','Marketing and lead generation'],['sales','Sales and customer experience'],['ops','Operations and service quality'],['sys','Existing systems and automation'],['fin','Finance and pricing'],['learn','Learning and skill development'],['strat','Long-term strategy'],['cap','Personal capacity or workload concern'],['other','Other']];
@@ -645,7 +645,7 @@ function fpClean(it){
   if(!it||typeof it!=='object') return null;
   var str=function(v){return typeof v==='string'?v:'';}, title=str(it.title).trim(); if(!title) return null;
   var o=fpNew({id:str(it.id)||undefined,title:title,desc:str(it.desc),cat:FP_CATS.some(function(c){return c[0]===it.cat;})?it.cat:'other',outcome:str(it.outcome),
-    effort:FP_EFF[it.effort]?it.effort:'',deadline:/^\d{4}-\d{2}-\d{2}$/.test(it.deadline||'')?it.deadline:'',source:str(it.source),notes:str(it.notes),next:str(it.next),dep:str(it.dep),blocker:str(it.blocker),existing:str(it.existing),
+    effort:FP_EFF[it.effort]?it.effort:'',deadline:/^\d{4}-\d{2}-\d{2}$/.test(it.deadline||'')?it.deadline:'',source:str(it.source),notes:str(it.notes),next:str(it.next),dep:str(it.dep),blocker:str(it.blocker),unblock:str(it.unblock),existing:str(it.existing),
     q:['inbox','now','next','park','drop'].indexOf(it.q)>=0?it.q:'inbox',done:it.done===true,doneAt:str(it.doneAt),result:str(it.result),archived:it.archived===true,ov:str(it.ov),ovWhy:str(it.ovWhy),
     created:str(it.created)||new Date().toISOString(),updated:str(it.updated)||new Date().toISOString()});
   if(it.flags&&typeof it.flags==='object'){ ['commitment','safety','blocker'].forEach(function(k){o.flags[k]=it.flags[k]===true;}); }
@@ -654,7 +654,7 @@ function fpClean(it){
 }
 function fpNew(o){
   var t=new Date().toISOString();
-  var it={id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'',desc:'',cat:'other',outcome:'',effort:'',deadline:'',source:'',notes:'',next:'',dep:'',blocker:'',existing:'',
+  var it={id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'',desc:'',cat:'other',outcome:'',effort:'',deadline:'',source:'',notes:'',next:'',dep:'',blocker:'',unblock:'',existing:'',
     q:'inbox',done:false,doneAt:'',result:'',archived:false,ov:'',ovWhy:'',flags:{commitment:false,safety:false,blocker:false},r:{impact:null,urgency:null,align:null,readiness:null,confidence:null,risk:null},created:t,updated:t};
   for(var k in o){ if(o[k]!==undefined) it[k]=o[k]; } return it;
 }
@@ -727,6 +727,7 @@ function fpSuggest(it){
   if(sc.score==null) return {q:'inbox',why:'Not enough information to rank yet.',prov:true,needs:sc.missing.length?sc.missing:['Any rating'],sc:sc};
   var q, why, s=sc.score;
   if(s>=70){q='now'; why='High score ('+s+'/100).';} else if(s>=50){q='next'; why='Useful, but a score of '+s+'/100 does not beat current priorities.';} else {q='park'; why='Score of '+s+'/100 is below what current priorities and capacity justify.';}
+  if(q==='now'&&sc.prov){ q='next'; why+=' Provisional: add '+sc.missing.join(', ').toLowerCase()+' before committing it to Do now.'; }
   if(q==='now'&&(it.blocker||(it.r.readiness!=null&&it.r.readiness<=2))){ q='next'; why+=' It is blocked or not ready, so schedule it for after the blocker clears.'; }
   if(q==='now'&&it.cat==='learn'){ q='next'; why+=' Learning should support a decision, not displace execution.'; }
   var alp=sc.parts.filter(function(p){return p.k==='align';})[0];
@@ -740,7 +741,7 @@ function fpRank(a,b){
 }
 function fpHours(it){ var e=FP_EFF[it.effort]; return e?e.h:null; }
 function fpCapacity(){
-  var p=S.fp.plan, week=Math.max(0,p.hours*p.days-p.commit), now=fpInQ('now'), load=0, unk=0;
+  var p=S.fp.plan, week=Math.max(0,p.hours*p.days-p.commit), now=fpInQ('now').filter(function(x){return !x.blocker;}), load=0, unk=0;
   now.forEach(function(x){ var h=fpHours(x); if(h==null) unk++; else load+=h; });
   return {day:p.hours,week:week,load:load,unknown:unk,over:load>week&&week>0};
 }
@@ -810,7 +811,7 @@ function sanitize(raw){
   ['hyp','camp'].forEach(function(g){ if(raw[g]&&typeof raw[g]==='object') Object.keys(d[g]).forEach(function(k){d[g][k]=str(raw[g][k],d[g][k]);}); });
   if(raw.pre&&typeof raw.pre==='object') PRE.forEach(function(p){ if(raw.pre[p[0]]===true) d.pre[p[0]]=true; });
   if(Array.isArray(raw.results)) raw.results.forEach(function(r){ if(!r||typeof r!=='object') return;
-    var e={id:str(r.id,'r'+Math.random().toString(36).slice(2)),from:str(r.from,''),to:str(r.to,''),product:PRODUCTS.some(function(p){return p.id===r.product;})?r.product:'',obs:str(r.obs,'')};
+    var e={id:str(r.id,'r'+Math.random().toString(36).slice(2)),from:str(r.from,''),to:str(r.to,''),product:PRODUCTS.some(function(p){return p.id===r.product;})?r.product:'',obs:str(r.obs,''),channel:r.channel==='b2b'?'b2b':'ads'};
     NUMF.forEach(function(k){e[k]=num(r[k]);}); d.results.push(e); });
   if(raw.study&&typeof raw.study==='object') LESSONS.forEach(function(l){var r=raw.study[l.id]; if(r&&typeof r==='object') d.study[l.id]={status:['none','progress','applied'].indexOf(r.status)>=0?r.status:'none',date:str(r.date,''),take:str(r.take,''),applied:str(r.applied,''),link:str(r.link,'')};});
   d.fp=fpSanitize(raw.fp);
@@ -901,6 +902,24 @@ function metricsFor(list){
   out.push(['Revenue', r==null?'—':money(r), '']);
   out.push(['Gross profit (where entered)', g==null?'—':money(g), '']);
   return out;
+}
+function b2bMetrics(list){
+  var out=[], p, f=function(k){return sumField(list,k);}, c=f('cont'), rp=f('repl'), en=f('enq'), ql=f('qual'), qt=f('quot'), sa=f('sales'), rv=f('rev'), gp=f('gp');
+  out.push(['Prospects contacted', c==null?'—':String(c), '']);
+  p=pair(list,'cont','repl'); out.push(['Replies', rp==null?'—':String(rp), p&&p.x>0?pct1(p.y/p.x)+' of contacted':'']);
+  out.push(['Referrals received', en==null?'—':String(en), '']);
+  out.push(['Qualified referrals', ql==null?'—':String(ql), '']);
+  out.push(['Quotations', qt==null?'—':String(qt), '']);
+  p=pair(list,'quot','sales'); out.push(['Won jobs', sa==null?'—':String(sa), p&&p.x>0?pct1(p.y/p.x)+' of quotes':'']);
+  out.push(['Revenue', rv==null?'—':money(rv), '']);
+  p=pair(list,'rev','gp'); out.push(['Gross profit (where entered)', gp==null?'—':money(gp), p&&p.x>0?pct1(p.y/p.x)+' of revenue, same entries':'']);
+  return out;
+}
+function b2bHTML(list){
+  var h='<div class="metrics">'; b2bMetrics(list).forEach(function(m){ h+='<div class="metric"><b>'+m[1]+'</b><span>'+esc(m[0])+(m[2]?' · '+esc(m[2]):'')+'</span></div>'; });
+  h+='</div>'; var c=sumField(list,'cont');
+  if(c!=null&&c<10) h+='<p class="small muted">Small sample: with fewer than 10 prospects contacted, treat these as early signals, not proof the channel works.</p>';
+  return h;
 }
 function metricsHTML(list){
   var h='<div class="metrics">'; metricsFor(list).forEach(function(m){ h+='<div class="metric"><b>'+m[1]+'</b><span>'+esc(m[0])+(m[2]?' · '+esc(m[2]):'')+'</span></div>'; });
@@ -1026,19 +1045,22 @@ function campField(k,l,type,ph){ return '<label for="c-'+k+'">'+l+'</label><inpu
 
 function viewResults(){
   var d=ui.draft, v=function(k){return d[k]==null?'':d[k];}, h='';
-  h+='<div class="card"><h2>'+(ui.editing?'Edit this entry':'Log results')+'</h2><p class="muted small">Leave any box blank if you don’t know yet. Blank is not counted as zero. This is a light experiment log, not a replacement for your Lead Tracker.</p>'+
+  var b2b=d.channel==='b2b';
+  h+='<div class="card"><h2>'+(ui.editing?'Edit this entry':'Log results')+'</h2><div class="chips"><button class="chip'+(b2b?'':' on')+'" data-act="reschan" data-c="ads">Meta ad test</button><button class="chip'+(b2b?' on':'')+'" data-act="reschan" data-c="b2b">B2B referral outreach</button></div><p class="muted small">Leave any box blank if you don’t know yet. Blank is not counted as zero. This is a light experiment log, not a replacement for your Lead Tracker.</p>'+
   '<div class="g4"><div><label for="d-from">From</label><input type="date" id="d-from" data-draft="from" value="'+esc(v('from'))+'"></div><div><label for="d-to">To</label><input type="date" id="d-to" data-draft="to" value="'+esc(v('to'))+'"></div>'+
   '<div style="grid-column:span 2"><label for="d-product">Product advertised</label><select id="d-product" data-draft="product"><option value="">—</option>'+PRODUCTS.map(function(p){return '<option value="'+p.id+'"'+(v('product')===p.id?' selected':'')+'>'+p.name+'</option>';}).join('')+'</select></div></div><div class="g4">';
-  [['spend','Ad spend (RM)'],['enq','Enquiries'],['qual','Qualified leads'],['cons','Consultations / site visits'],['quot','Quotations'],['sales','Sales'],['rev','Revenue (RM)'],['gp','Gross profit (RM, if known)']].forEach(function(f){
+  (b2b?[['cont','Prospects contacted'],['repl','Replies'],['enq','Referrals received'],['qual','Qualified referrals'],['quot','Quotations'],['sales','Won jobs'],['rev','Revenue (RM)'],['gp','Gross profit (RM, if known)']]:[['spend','Ad spend (RM)'],['enq','Enquiries'],['qual','Qualified leads'],['cons','Consultations / site visits'],['quot','Quotations'],['sales','Sales'],['rev','Revenue (RM)'],['gp','Gross profit (RM, if known)']]).forEach(function(f){
     h+='<div><label for="d-'+f[0]+'">'+f[1]+'</label><input type="number" min="0" step="any" id="d-'+f[0]+'" data-draft="'+f[0]+'" value="'+esc(v(f[0]))+'"></div>'; });
   h+='</div><label for="d-obs">Observations and next action</label><textarea id="d-obs" rows="3" data-draft="obs">'+esc(v('obs'))+'</textarea>';
   if(ui.msg) h+='<p class="msg" role="alert">'+esc(ui.msg)+'</p>';
   h+='<div class="actions"><button class="btn" data-act="addres">'+(ui.editing?'Save changes':'Add to log')+'</button>'+(ui.editing?'<button class="btn ghost" data-act="canceledit">Cancel</button>':'')+'</div></div>';
   if(S.results.length){
-    h+='<div class="card"><h2>Totals across all entries</h2>'+metricsHTML(S.results)+'</div>';
+    var adsL=S.results.filter(function(x){return x.channel!=='b2b';}), b2bL=S.results.filter(function(x){return x.channel==='b2b';});
+    if(adsL.length) h+='<div class="card"><h2>Meta ad test: totals</h2>'+metricsHTML(adsL)+'</div>';
+    if(b2bL.length) h+='<div class="card"><h2>B2B referral outreach: totals</h2>'+b2bHTML(b2bL)+'</div>';
     S.results.forEach(function(e){
       var pn=PRODUCTS.filter(function(p){return p.id===e.product;})[0];
-      h+='<div class="card entry"><b>'+(e.from||e.to?fmtDate(e.from)+(e.to?' → '+fmtDate(e.to):''):'No dates')+'</b>'+(pn?' · '+pn.name:'')+metricsHTML([e])+
+      h+='<div class="card entry"><b>'+(e.from||e.to?fmtDate(e.from)+(e.to?' → '+fmtDate(e.to):''):'No dates')+'</b>'+(e.channel==='b2b'?' · B2B referral outreach':(pn?' · '+pn.name:''))+(e.channel==='b2b'?b2bHTML([e]):metricsHTML([e]))+
       (e.obs?'<p class="small" style="white-space:pre-wrap">'+esc(e.obs)+'</p>':'')+
       '<div class="actions"><button class="btn ghost sm" data-act="editres" data-id="'+esc(e.id)+'">Edit</button><button class="btn danger sm" data-act="delres" data-id="'+esc(e.id)+'">Delete</button></div></div>'; });
   } else h+='<div class="card"><p class="muted">No entries yet. After your ad has run, log what happened here. Even a quiet result is a result.</p></div>';
@@ -1182,7 +1204,7 @@ function fpItemHTML(it){
   if(op){
     h+='<div class="details">'+fpIn(it,'title','Title')+fpTa(it,'desc','Description (optional)')+
     '<div class="g2"><div>'+fpSel(it,'cat','Category',FP_CATOPT)+fpSel(it,'effort','Estimated effort',FP_EFFOPT,'Not estimated')+fpIn(it,'deadline','Deadline (only if genuine)','date')+'</div><div>'+fpIn(it,'outcome','Expected business outcome')+fpIn(it,'next','Smallest useful next action')+fpIn(it,'source','Source (where the idea came from)')+'</div></div>'+
-    fpTa(it,'notes','Notes')+'<div class="g2"><div>'+fpIn(it,'dep','Depends on')+'</div><div>'+fpIn(it,'blocker','Blocked by (leave empty if nothing)')+'</div></div>'+fpIn(it,'existing','Existing tool or process that already solves this (optional)');
+    fpTa(it,'notes','Notes')+'<div class="g2"><div>'+fpIn(it,'dep','Depends on')+'</div><div>'+fpIn(it,'blocker','Blocked by (leave empty if nothing)')+'</div></div>'+(it.blocker?fpIn(it,'unblock','Smallest action that would unblock it','text','e.g. WhatsApp Mom to confirm the referral fee'):'')+fpIn(it,'existing','Existing tool or process that already solves this (optional)');
     h+='<p style="margin-top:10px"><b>Handled explicitly (bypass the score):</b></p><label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.commitment" '+(it.flags.commitment?'checked':'')+'> A customer or partner commitment</label>'+
     '<label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.safety" '+(it.flags.safety?'checked':'')+'> A safety issue</label>'+
     '<label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.blocker" '+(it.flags.blocker?'checked':'')+'> A critical operational blocker</label>';
@@ -1216,13 +1238,18 @@ function fpCaptureHTML(){
   return h;
 }
 function fpFocusHTML(){
-  var st=S.fp.strategy, now=fpInQ('now'), top=now.slice(0,3), cap=fpCapacity(), inbox=fpActive().filter(function(x){return x.q==='inbox';}), parked=fpActive().filter(function(x){return x.q==='park';}).length, blockers=fpActive().filter(function(x){return x.blocker&&(x.q==='now'||x.q==='next');});
+  var st=S.fp.strategy, now=fpInQ('now').filter(function(x){return !x.blocker;}), waiting=fpInQ('now').filter(function(x){return x.blocker;}), top=now.slice(0,3), cap=fpCapacity(), inbox=fpActive().filter(function(x){return x.q==='inbox';}), parked=fpActive().filter(function(x){return x.q==='park';}).length, blockers=fpActive().filter(function(x){return x.blocker&&(x.q==='now'||x.q==='next');}).sort(fpRank);
   var h='<div class="card fp hero2"><p class="eyebrow">Current strategic objective</p><h2>'+esc(st.objective||'Not set')+'</h2>'+
   '<p class="small"><b>Primary bottleneck (hypothesis):</b> '+esc(st.bottleneck||'Not set')+'</p>'+
   '<label for="wk">Most important outcome to pursue this week</label><input type="text" id="wk" data-bind="fp.weekOutcome" value="'+esc(S.fp.weekOutcome)+'" placeholder="One outcome, e.g. 3 designers contacted and 1 meeting booked"></div>';
   var rec=top[0], q1=nextTasks(1)[0];
   h+='<div class="card fp"><p class="eyebrow">One recommended next action</p>';
-  if(rec) h+='<p style="font-size:1.15rem;font-weight:600;margin:2px 0">'+esc(rec.next||rec.title)+'</p><p class="small muted">'+(rec.next?'Smallest next step for: '+esc(rec.title):'No “smallest next action” recorded. Open the item to add one.')+'</p>';
+  if(rec){ var small=(rec.effort==='xs'), hasN=!!rec.next;
+    h+='<p style="font-size:1.15rem;font-weight:600;margin:2px 0">'+esc(hasN?rec.next:(small?rec.title:'First step needed for: '+rec.title))+'</p>';
+    if(hasN) h+='<p class="small muted">Smallest next step for: '+esc(rec.title)+(rec.effort?' · whole item: '+FP_EFF[rec.effort].l:'')+'</p>';
+    else if(small) h+='<p class="small muted">Already small (under 30 minutes), so the item itself is the action.</p>';
+    else h+='<p class="small muted">'+(rec.effort?'This item is about '+FP_EFF[rec.effort].l.toLowerCase()+'. ':'No effort estimate yet. ')+'What is the first step you could finish in 15–30 minutes?</p><label for="rn" class="sr">First 15–30 minute step</label><input type="text" id="rn" data-fpitem="'+rec.id+'|next" placeholder="e.g. Draft the 3-line WhatsApp message to the designer">'; }
+  else if(waiting.length){ var w0=waiting[0]; h+='<p style="font-size:1.1rem;font-weight:600;margin:2px 0">'+esc(w0.unblock||'Find the smallest step that unblocks “'+w0.title+'”')+'</p><p class="small muted">Everything in Do now is waiting on something. Unblocking is the next action. Waiting for: '+esc(w0.blocker)+'</p>'+(w0.unblock?'':'<label for="ru" class="sr">Smallest unblocking action</label><input type="text" id="ru" data-fpitem="'+w0.id+'|unblock" placeholder="e.g. WhatsApp Mom to confirm the referral fee">'); }
   else if(inbox.length) h+='<p style="font-size:1.1rem;font-weight:600;margin:2px 0">Triage one inbox item: “'+esc(inbox[0].title)+'”</p><p class="small muted">Nothing is in Do now yet. Deciding one thing is enough for today.</p><div class="actions"><button class="btn sm" data-act="fptriage" data-id="'+inbox[0].id+'">Help me decide</button></div>';
   else h+='<p style="font-size:1.05rem;margin:2px 0">Nothing is waiting. Capture anything on your mind, or carry on with your Marketing Quest.</p>';
   if(q1) h+='<p class="small" style="margin-top:8px">🧭 From your Marketing Quest: <b>'+esc(q1.title)+'</b> <button class="btn ghost sm" data-act="focus" data-id="'+q1.id+'">Open</button></p>';
@@ -1232,12 +1259,12 @@ function fpFocusHTML(){
   var cum=0, dayFull=false;
   top.forEach(function(it,i){ var hrs=fpHours(it); var today=!dayFull; if(hrs!=null){ cum+=hrs; if(cum>=cap.day) dayFull=true; } else if(i>=2) dayFull=true;
     if(ui.fpOpen===it.id){ h+=fpItemHTML(it); return; }
-    h+='<div class="fpitem q-now"><div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:1"><button class="ttitle" data-act="fpopen" data-id="'+it.id+'">'+(i+1)+'. '+esc(it.title)+'</button><div class="meta">'+(it.effort?'<span class="badge">'+FP_EFF[it.effort].l+'</span>':'<span class="badge">No effort estimate</span>')+'<span class="badge '+(today?'ok':'')+'">'+(today?'Fits today':'This week')+'</span>'+(it.deadline?'<span class="badge st">Due '+fmtDate(it.deadline)+'</span>':'')+(it.blocker?'<span class="badge st">Blocked</span>':'')+'</div>'+
-    '<p class="small muted" style="margin:4px 0 0">'+esc(fpWhyOutrank(it,i,top[0]))+'</p></div><button class="btn sm" data-act="fpdone" data-id="'+it.id+'">✓ Done</button></div></div>'; });
-  if(now.length>3) h+='<p class="small muted">+'+(now.length-3)+' more in Do now. Consider moving some to Next.</p>';
+    h+='<div class="fpitem q-now"><div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:1"><button class="ttitle" data-act="fpopen" data-id="'+it.id+'">'+(i+1)+'. '+esc(it.title)+'</button><div class="meta">'+(it.effort?'<span class="badge">'+FP_EFF[it.effort].l+'</span>':'<span class="badge">No effort estimate</span>')+'<span class="badge '+(today?'ok':'')+'">'+(today?'Fits today':'This week')+'</span>'+(it.deadline?'<span class="badge st">Due '+fmtDate(it.deadline)+'</span>':'')+'</div>'+
+    '<p class="small" style="margin:4px 0 0">'+(it.next?'Next step: '+esc(it.next):'<span class="muted">No 15–30 min step written yet</span>')+'</p><p class="small muted" style="margin:2px 0 0">'+esc(fpWhyOutrank(it,i,top[0]))+'</p></div><button class="btn sm" data-act="fpdone" data-id="'+it.id+'">✓ Done</button></div></div>'; });
+  if(now.length>3) h+='<p class="small muted">+'+(now.length-3)+' more ready in Do now. Consider moving some to Next.</p>';
   h+='<p class="small" style="margin-top:8px"><b>Time check:</b> Do now needs about <b>'+cap.load+'h</b>'+(cap.unknown?' (+'+cap.unknown+' without an estimate)':'')+' against about <b>'+cap.week+'h</b> available this week. '+(cap.over?'That is more than your realistic time. Moving one item to Next would keep things calm. ':'')+'<span class="muted">These are limits, not targets.</span></p>'+
   '<details class="park"><summary>My time this week</summary><div class="g4"><div><label for="ph">Focus hours per day</label><input type="number" id="ph" min="0" max="16" step="0.5" data-num data-fprefresh data-bind="fp.plan.hours" value="'+S.fp.plan.hours+'"></div><div><label for="pd">Working days</label><input type="number" id="pd" min="0" max="7" step="1" data-num data-fprefresh data-bind="fp.plan.days" value="'+S.fp.plan.days+'"></div><div><label for="pc">Hours already committed</label><input type="number" id="pc" min="0" step="0.5" data-num data-fprefresh data-bind="fp.plan.commit" value="'+S.fp.plan.commit+'"></div><div><label for="pn">Known commitments</label><input type="text" id="pn" data-bind="fp.plan.note" value="'+esc(S.fp.plan.note)+'" placeholder="e.g. site visits Tue"></div></div></details></div>';
-  h+='<div class="card fp"><h3>Active blockers</h3>'+(blockers.length?'<ul class="plain">'+blockers.map(function(x){return '<li>⛔ <b>'+esc(x.title)+'</b>: '+esc(x.blocker)+'</li>';}).join('')+'</ul>':'<p class="muted">No blockers recorded on Do now or Next items.</p>')+'</div>';
+  h+='<div class="card fp"><h3>Waiting on a prerequisite</h3>'+(blockers.length?'<p class="small muted">Blocked items are not recommended and do not use a Do-now slot until the blocker is cleared.</p>'+blockers.map(function(x){return '<div class="fpitem"><b>⛔ '+esc(x.title)+'</b>'+(fpPin(x).length?' <span class="badge st">Has a deadline or commitment: unblock first</span>':'')+'<p class="small" style="margin:4px 0">Waiting for: '+esc(x.blocker)+'</p><label for="u-'+x.id+'" class="small">Smallest action that would unblock it</label><input type="text" id="u-'+x.id+'" data-fpitem="'+x.id+'|unblock" value="'+esc(x.unblock)+'" placeholder="e.g. WhatsApp Mom to confirm the referral fee"><div class="actions"><button class="btn ghost sm" data-act="fpunblock" data-id="'+x.id+'">Blocker cleared</button></div></div>';}).join(''):'<p class="muted">Nothing is waiting on a prerequisite.</p>')+'</div>';
   h+='<div class="card fp"><h3>Why these outrank other ideas</h3><p class="small">Rule-based, not AI. Items with a genuine deadline, customer commitment, safety issue or critical blocker go first. The rest are ordered by a visible score (impact, urgency, alignment, effort, readiness, confidence and risk, with weights you can edit under Strategy). Anything outside Do now is safe and does not compete for your attention.</p>'+
   '<p class="small"><b>'+parked+'</b> idea'+(parked===1?'':'s')+' parked, not activated · <b>'+inbox.length+'</b> in the inbox · <b>'+fpInQ('next').length+'</b> scheduled next. <button class="btn ghost sm" data-act="fptab" data-t="items" data-qf="park">Open the parking lot</button></p></div>';
   return h;
@@ -1313,7 +1340,7 @@ function fpMove(id,q,why,displaceId){
   var it=fpItem(id); if(!it||(it.q===q&&!displaceId)) return;
   var from=it.q, sg=fpSuggest(it);
   if(q==='now'){
-    var cur=fpInQ('now').filter(function(x){return x.id!==id;});
+    var cur=fpInQ('now').filter(function(x){return x.id!==id&&!x.blocker;});
     if(cur.length>=3&&!displaceId){ fpDispDlg(id); return; }
     if(displaceId){ var d=fpItem(displaceId); if(d){ d.q='next'; d.updated=fpNow(); fpLog(d,'moved','now','next','Made room for “'+it.title+'”'); } }
   }
@@ -1324,7 +1351,7 @@ function fpMove(id,q,why,displaceId){
   if(it.ov) setTimeout(function(){ toast('You chose a different queue than suggested. You can add why in the item’s details.'); },1800);
 }
 function fpDispDlg(id){
-  var it=fpItem(id), cur=fpInQ('now').filter(function(x){return x.id!==id;}), dflt=cur.slice().reverse().filter(function(x){return !fpPin(x).length;})[0]||cur[cur.length-1];
+  var it=fpItem(id), cur=fpInQ('now').filter(function(x){return x.id!==id&&!x.blocker;}), dflt=cur.slice().reverse().filter(function(x){return !fpPin(x).length;})[0]||cur[cur.length-1];
   fpDlg('<h2 id="dlgh">Do now is full (3)</h2><p class="small muted">To add “'+esc(it.title)+'”, one item moves to Next. It isn’t lost.</p>'+
    cur.map(function(x){ return '<label class="inline"><input type="radio" name="disp" value="'+x.id+'" '+(dflt&&dflt.id===x.id?'checked':'')+'> '+esc(x.title)+'</label>'; }).join('')+
    '<label for="disWhy">Why does this one take priority? (optional)</label><input type="text" id="disWhy">'+
@@ -1437,6 +1464,7 @@ function fpAct(a,ds){
   switch(a){
     case 'fptab': ui.fpTab=ds.t; if(ds.qf) ui.fpFilter.show=ds.qf; ui.msg=''; render(); break;
     case 'fpopen': ui.fpOpen=(ui.fpOpen===id)?'':id; renderView(); break;
+    case 'fpunblock': it=fpItem(id); if(it){ var was=it.blocker; it.blocker=''; it.updated=fpNow(); fpLog(it,'blocker cleared',it.q,it.q,was); save(); renderView(); toast('Unblocked. It can be recommended again.'); } break;
     case 'fpshow': ui.fpFilter.show=ds.f; renderView(); break;
     case 'fpmove': fpMove(id,ds.q); break;
     case 'fpdone': fpDoneDlg(id); break;
@@ -1601,25 +1629,27 @@ function act(a,ds){
     case 'labmod': ui.mod[+id]=(ds.ex!=='true'); renderView(); break;
     case 'copy': var lc=LESSONS.filter(function(x){return x.id===id;})[0]; if(lc) copyText(promptFor(lc,ds.item?fpItem(ds.item):null)).then(function(ok){ toast(ok?'Prompt copied. Paste it into NotebookLM.':'Couldn’t copy automatically. Select the text in the prompt box and copy it.'); }); break;
     case 'addres': addResult(); break;
+    case 'reschan': ui.draft.channel=ds.c==='b2b'?'b2b':'ads'; renderView(); break;
     case 'canceledit': ui.editing=''; ui.draft={}; ui.msg=''; renderView(); break;
     case 'editres':
       var e=S.results.filter(function(x){return x.id===id;})[0]; if(!e) break;
-      ui.draft={from:e.from,to:e.to,product:e.product,obs:e.obs}; NUMF.forEach(function(k){ui.draft[k]=e[k]==null?'':String(e[k]);});
+      ui.draft={from:e.from,to:e.to,product:e.product,obs:e.obs,channel:e.channel||'ads'}; NUMF.forEach(function(k){ui.draft[k]=e[k]==null?'':String(e[k]);});
       ui.editing=id; ui.msg=''; renderView(); window.scrollTo({top:$('#view').offsetTop-8}); break;
     case 'delres': if(confirm('Delete this result entry?')){ S.results=S.results.filter(function(x){return x.id!==id;}); save(); if(ui.editing===id){ui.editing='';ui.draft={};} render(); } break;
   }
 }
 function addResult(){
-  var d=ui.draft, e={id:ui.editing||('r'+Date.now()),from:d.from||'',to:d.to||'',product:d.product||'',obs:(d.obs||'').trim()}, bad=false, any=false;
+  var d=ui.draft, e={id:ui.editing||('r'+Date.now()),from:d.from||'',to:d.to||'',product:d.product||'',obs:(d.obs||'').trim(),channel:d.channel==='b2b'?'b2b':'ads'}, bad=false, any=false;
   NUMF.forEach(function(k){ var n=numOrNull(d[k]); if(n!==null&&isNaN(n)) bad=true; e[k]=(n===null||isNaN(n))?null:n; if(e[k]!=null) any=true; });
   if(bad) ui.msg='Numbers need to be zero or more.';
-  else if(e.qual!=null&&e.enq!=null&&e.qual>e.enq) ui.msg='Qualified leads can’t be more than enquiries. Please check those two.';
+  else if(e.qual!=null&&e.enq!=null&&e.qual>e.enq) ui.msg='Qualified leads can’t be more than '+(e.channel==='b2b'?'referrals received':'enquiries')+'. Please check those two.';
+  else if(e.repl!=null&&e.cont!=null&&e.repl>e.cont) ui.msg='Replies can’t be more than prospects contacted. Please check those two.';
   else if(e.from&&e.to&&e.to<e.from) ui.msg='The end date is before the start date.';
   else if(!any&&!e.obs&&!e.from&&!e.to) ui.msg='Add at least one number or a note first.';
   else {
     var i=-1; S.results.forEach(function(x,j){if(x.id===e.id) i=j;});
     if(i>=0) S.results[i]=e; else S.results.push(e);
-    save(); ui.draft={}; ui.editing=''; ui.msg=''; render(); toast('Logged. Thank you for noting it down.'); return;
+    save(); ui.draft={channel:e.channel}; ui.editing=''; ui.msg=''; render(); toast('Logged. Thank you for noting it down.'); return;
   }
   renderView();
 }
