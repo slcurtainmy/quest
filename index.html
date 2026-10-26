@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SL Curtain Marketing Quest</title>
+<style>
+:root{
+  --bg:#FBF6F4; --card:#FFFFFF; --ink:#4B3A44; --muted:#7A6A72; --line:#F0E3E1; --shadow-c:rgba(150,80,95,.10);
+  --lav:#9C4F63; --lav2:#D99AA5; --lav-soft:#F7DFDF; --lav-dark:#82394D; --lav-hover:#F2CFCF; --lav-line:#F0CFD0; --lav-line2:#E3AEB3; --lav-tint:#FFF9F8; --hero2:#FBEAE8; --mid:#EFBDBD;
+  --blue:#7E95C4; --blue-soft:#EAF1FB; --sand:#F9E8E6;
+  --lab:#5E5A9C; --lab-dark:#4B4880; --lab-line:#D9D7EF; --lab-line2:#BBB7E5; --lab-soft:#EFEEF9; --lab-tint:#F7F6FC; --lab-chip:#E4E2F4;
+  --ok:#55702F; --ok-soft:#E6EDD3; --warn-soft:#FBF1DC; --warn:#7A5A12;
+  --r:18px; --shadow:0 6px 24px var(--shadow-c);
+}
+:root[data-theme=butter]{
+  --bg:#FCFAF0; --ink:#473F2C; --muted:#766C56; --line:#EBE5CF; --shadow-c:rgba(120,100,30,.12);
+  --lav:#7E6212; --lav2:#E0CB78; --lav-soft:#F7F1CE; --lav-dark:#624C0B; --lav-hover:#EFE7B4; --lav-line:#EBE2A8; --lav-line2:#D9C56A; --lav-tint:#FFFDF2; --hero2:#FBF6DC; --mid:#F3EDBD;
+  --blue:#8DA0C8; --blue-soft:#EAF1FB; --sand:#F6F0D3;
+  --lab:#55702B; --lab-dark:#435A22; --lab-line:#D7E2BC; --lab-line2:#B6C687; --lab-soft:#EEF3E0; --lab-tint:#F7FAF0; --lab-chip:#E3EBCB;
+  --ok:#55702F; --ok-soft:#E4ECCF;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;font-weight:600;margin:0;line-height:1.2}
+h1{font-size:clamp(1.6rem,4vw,2.3rem)}
+h2{font-size:1.35rem;margin-bottom:.4rem}
+h3{font-size:1.1rem}
+p{margin:.3rem 0}
+.wrap{max-width:980px;margin:0 auto;padding:16px 16px 60px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:99}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;margin:16px 0}
+.muted{color:var(--muted)}.small{font-size:.88rem}
+.eyebrow{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--lav);font-weight:600;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.btn{border:0;border-radius:999px;padding:10px 18px;background:var(--lav);color:#fff;font-weight:600;transition:transform .15s,background .15s}
+.btn:hover{background:var(--lav-dark);transform:translateY(-1px)}
+.btn.ghost{background:var(--lav-soft);color:var(--lav)}
+.btn.ghost:hover{background:var(--lav-hover)}
+.btn.sm{padding:6px 12px;font-size:.88rem}
+.btn.danger{background:#fff;color:#8a3b3b;border:1px solid #e3c6c6}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+textarea{resize:vertical}
+label{display:block;font-size:.88rem;font-weight:600;margin:10px 0 4px}
+label.inline{display:flex;gap:8px;align-items:center;font-weight:500;font-size:.95rem}
+
+/* hero */
+.hero{background:linear-gradient(135deg,#fff 0%,var(--hero2) 100%)}
+.hero-top{display:flex;justify-content:space-between;gap:16px;align-items:center}
+.micro{color:var(--lav);font-style:italic;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 12px}
+.stat{min-width:0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}
+.stat .big{font-size:2rem;font-family:Georgia,serif;font-weight:600;color:var(--lav);line-height:1}
+.stat .lbl{font-size:.8rem;color:var(--muted);display:block}
+.stat input[type=date]{margin:2px 0;min-width:0;max-width:100%;padding:6px 8px}
+.bar{height:14px;border-radius:99px;background:var(--lav-soft);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--lav2),var(--mid));border-radius:99px;transition:width .6s cubic-bezier(.3,1.3,.5,1)}
+.trail{list-style:none;display:flex;justify-content:space-between;padding:0;margin:12px 0 0}
+.node{flex:1;text-align:center;font-size:.72rem;color:var(--muted)}
+.node span{display:grid;place-items:center;width:28px;height:28px;margin:0 auto 2px;border-radius:50%;border:2px solid var(--line);background:#fff;font-weight:700;font-size:.8rem}
+.node.done span{background:var(--lav);border-color:var(--lav);color:#fff}
+.node.cur span{border-color:var(--lav);color:var(--lav);box-shadow:0 0 0 4px var(--lav-soft)}
+.node em{font-style:normal;display:block}
+.next{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--lav-soft);border-radius:14px;padding:12px 16px;margin-top:16px}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.pausebar{background:var(--warn-soft);color:var(--warn);border-radius:14px;padding:10px 16px;margin:12px 0 0;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+
+/* tabs */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0;margin-top:8px}
+.tab{border:0;background:transparent;padding:9px 16px;border-radius:999px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tab[aria-selected=true]{background:var(--lav);color:#fff}
+.tab:hover:not([aria-selected=true]){background:var(--lav-soft)}
+
+/* tasks */
+.task{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;margin:8px 0;background:#fff;transition:background .3s}
+.task.open{background:var(--lav-tint);border-color:var(--lav-line)}
+.task.s-done .ttitle{text-decoration:line-through;color:var(--muted)}
+.task.s-skipped,.task.s-deferred{background:#FAF8F4}
+.tbody{flex:1;min-width:0}
+.ttitle{background:none;border:0;padding:0;text-align:left;font-weight:600;font-size:1.02rem}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.badge{font-size:.74rem;padding:2px 9px;border-radius:99px;background:var(--sand);color:var(--ink)}
+.badge.opt{background:var(--blue-soft);color:var(--lab)}
+.badge.st{background:var(--lav-soft);color:var(--lav)}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.details{margin-top:10px}
+.details textarea{min-height:56px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.reasonbox{margin-top:10px;padding:10px;background:var(--sand);border-radius:12px}
+input.chk{appearance:none;-webkit-appearance:none;flex:none;width:28px;height:28px;margin:0;border:2px solid var(--lav-line2);border-radius:50%;background:#fff;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+input.chk:checked{background:var(--lav);border-color:var(--lav)}
+input.chk:checked::after{content:"✓";color:#fff;font-weight:700;font-size:.95rem}
+.task.popping{animation:pop .5s ease}
+.task.popping{background:var(--lav-soft)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+
+.stagehead{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;background:none;border:0;padding:4px 0;text-align:left}
+.stagehead .t{display:flex;gap:10px;align-items:center}
+.emo{font-size:1.5rem}
+.stagenote{background:var(--blue-soft);border-radius:12px;padding:8px 12px;font-size:.9rem;margin:8px 0}
+details.park summary{cursor:pointer;color:var(--muted);margin-top:12px}
+
+/* decide */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pcard{border:2px solid var(--line);border-radius:16px;padding:14px;background:#fff}
+.pcard.sel{border-color:var(--lav);background:var(--lav-tint)}
+.calc{background:var(--sand);border-radius:12px;padding:8px 12px;margin:10px 0;font-size:.95rem}
+.calc b{font-size:1.05rem}
+.tag{display:inline-block;font-size:.72rem;border-radius:99px;padding:1px 8px;margin-left:4px}
+.tag.est{background:var(--warn-soft);color:var(--warn)}
+.tag.ver{background:var(--ok-soft);color:var(--ok)}
+.tag.hyp{background:var(--blue-soft);color:var(--lab)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.ready{border-radius:14px;padding:12px 16px;margin:10px 0}
+.ready.no{background:var(--warn-soft);color:#5d430b}
+.ready.yes{background:var(--ok-soft);color:#255a40}
+ul.plain{list-style:none;padding:0;margin:8px 0}
+ul.plain li{padding:2px 0}
+
+/* results */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:0 12px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+.metric{background:var(--lav-soft);border-radius:12px;padding:8px 12px}
+.metric b{display:block;font-size:1.15rem;color:var(--lav)}
+.metric span{font-size:.78rem;color:var(--muted)}
+.entry{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.msg{color:#8a3b3b;font-size:.9rem;margin-top:8px}
+
+/* wins */
+.stamps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stamp{border:2px dashed var(--line);border-radius:14px;padding:10px;text-align:center;font-size:.85rem;color:var(--muted)}
+.stamp.on{border:2px solid var(--lav);background:var(--lav-soft);color:var(--ink)}
+.stamp .emo{display:block}
+
+/* toast / confetti */
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:all .3s;z-index:50;max-width:92vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.big{border-radius:20px;background:var(--lav);font-size:1.15rem;padding:18px 26px}
+#confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+#confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall 2.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.8}}
+dialog{border:0;border-radius:var(--r);padding:22px;max-width:440px;width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(45,42,62,.4)}
+/* lab */
+.tab.labtab{border:1px dashed var(--lab-line2);color:var(--lab)}
+.tab.labtab[aria-selected=true]{background:var(--lab);color:#fff;border-style:solid}
+.card.lab{background:var(--lab-soft);border:1px solid var(--lab-line);box-shadow:none}
+.card.lab .btn{background:var(--lab)}.card.lab .btn:hover{background:var(--lab-dark)}
+.card.lab .btn.ghost{background:var(--lab-chip);color:var(--lab)}
+.recbox{background:#fff;border:1px solid var(--lab-line);border-radius:14px;padding:12px 16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1px solid var(--lab-line2);background:#fff;color:var(--lab);border-radius:99px;padding:5px 12px;font-size:.88rem}
+.chip.on{background:var(--lab);color:#fff;border-color:var(--lab)}
+.mod{background:#fff;border:1px solid var(--lab-line);border-radius:14px;padding:10px 14px;margin:10px 0}
+.lrow{padding:8px 0;border-top:1px solid var(--lab-line)}
+.ltitle{background:none;border:0;padding:0;font-weight:600;text-align:left;margin-right:6px}
+.badge.lb-now{background:var(--lab-chip);color:var(--lab-dark)}.badge.lb-next{background:var(--lav-soft);color:var(--lav-dark)}
+.lesson{margin-top:8px;padding:12px;background:var(--lab-tint);border-radius:12px}
+.lesson textarea[readonly]{background:#fff;font-size:.85rem}
+.trackbox{margin-top:12px;padding:12px;border-radius:12px;background:#fff;border:1px solid var(--lab-line)}
+.lesson ul{margin:4px 0 8px;padding-left:20px}
+/* mascot */
+.mascot{position:relative;display:flex;align-items:center;flex:none}
+.mbtn{background:none;border:0;padding:0;line-height:0;border-radius:50%}
+.mbtn svg{width:104px;height:104px;overflow:visible}
+.bubble{position:absolute;right:100%;top:6px;margin-right:2px;background:#fff;border:1px solid var(--lav-line);color:var(--lav);border-radius:16px;padding:7px 12px;font-size:.85rem;font-weight:600;width:max-content;max-width:190px;box-shadow:0 4px 14px var(--shadow-c);z-index:5}
+.bubble[hidden]{display:none}
+.bubble::after{content:"";position:absolute;right:-6px;top:14px;width:10px;height:10px;background:#fff;border-right:1px solid var(--lav-line);border-top:1px solid var(--lav-line);transform:rotate(45deg)}
+.m-body{fill:var(--lav-soft);stroke:var(--lav-line2);stroke-width:2}
+.m-fold{fill:none;stroke:var(--lav-line);stroke-width:2;stroke-linecap:round}
+.m-feet{fill:var(--lav-line2)}.m-shadow{fill:var(--lav-line);opacity:.6}
+.m-ink{fill:var(--ink)}.m-white{fill:#fff}.m-cheek{fill:var(--mid);opacity:.85}
+.m-arc{fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.m-tassel{fill:none;stroke:var(--lav);stroke-width:2.4;stroke-linecap:round}.m-knot{fill:var(--lav)}
+.m-spark{fill:var(--lav2)}.m-zz{fill:var(--lav);font:700 11px Georgia,serif}
+.mascot .eyes-happy,.mascot .eyes-sleep,.mascot .mouth-open,.mascot .zz,.mascot .sparks{display:none}
+.mg{transform-box:fill-box;transform-origin:center bottom;animation:mbob 3.2s ease-in-out infinite}
+.eyes-open{transform-box:fill-box;transform-origin:center;animation:mblink 4.5s infinite}
+.mascot[data-mood=cheer] .eyes-open,.mascot[data-mood=party] .eyes-open,.mascot[data-mood=sleepy] .eyes-open{display:none}
+.mascot[data-mood=cheer] .eyes-happy,.mascot[data-mood=party] .eyes-happy{display:inline}
+.mascot[data-mood=cheer] .mouth-smile,.mascot[data-mood=party] .mouth-smile,.mascot[data-mood=sleepy] .mouth-smile{display:none}
+.mascot[data-mood=cheer] .mouth-open,.mascot[data-mood=party] .mouth-open{display:inline}
+.mascot[data-mood=cheer] .mg{animation:mjump .75s ease-out 1}
+.mascot[data-mood=party] .mg{animation:mjump .6s ease-out 5}
+.mascot[data-mood=party] .sparks{display:inline}
+.mascot[data-mood=party] .m-spark{animation:mtwinkle .6s ease-in-out infinite alternate}
+.mascot[data-mood=sleepy] .eyes-sleep,.mascot[data-mood=sleepy] .zz{display:inline}
+.mascot[data-mood=sleepy] .mg{animation:mbreathe 3.6s ease-in-out infinite}
+@keyframes mbob{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-3px) scale(1.02,.98)}}
+@keyframes mblink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes mjump{0%{transform:scale(1.08,.88)}35%{transform:translateY(-18px) scale(.95,1.06)}70%{transform:translateY(0) scale(1.08,.9)}100%{transform:scale(1,1)}}
+@keyframes mbreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.03,.97)}}
+@keyframes mtwinkle{from{opacity:.3;transform:scale(.7)}to{opacity:1;transform:scale(1.1)}}
+/* focuspilot */
+.sr{position:absolute;left:-999px}
+.card.fp{border-left:4px solid var(--lav-line2)}
+.card.fp.hero2{background:linear-gradient(135deg,#fff,var(--hero2))}
+.card.fp .chip{border-color:var(--lav-line2);color:var(--lav)}
+.card.fp .chip.on{background:var(--lav);color:#fff;border-color:var(--lav)}
+.fpitem{border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:8px 0;background:#fff}
+.fpitem.q-now{border-color:var(--lav-line2);background:var(--lav-tint)}
+.fpitem.isdone .ttitle{text-decoration:line-through;color:var(--muted)}
+.prev{display:flex;gap:10px;align-items:center;margin:6px 0}
+.scorebox{background:var(--sand);border-radius:12px;padding:10px 14px;margin-top:10px}
+.studybox{background:var(--lab-soft);border:1px solid var(--lab-line);border-radius:12px;padding:10px 14px;margin-top:10px}
+.optlist{display:grid;gap:8px;margin:8px 0}
+.optlist .btn{text-align:left}
+dialog .actions .btn{flex:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+@media (max-width:720px){
+  .stats{grid-template-columns:1fr 1fr}
+  .pgrid,.g2,.g4{grid-template-columns:1fr}
+  .stamps{grid-template-columns:1fr 1fr}
+  .node em{display:none}
+  .mbtn svg{width:76px;height:76px}
+  .bubble{right:0;top:100%;margin-top:4px;margin-right:0}
+  .bubble::after{display:none}
+}
+.printonly{display:none}
+@media print{
+  body{background:#fff}
+  .mascot,.tabs,.btn,.actions,.hero-actions,.next .btn,#toast,#confetti,#datasec,.skip,.reasonbox,.pausebar .btn{display:none!important}
+  .printonly{display:block}
+  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid-page}
+  .task{break-inside:avoid}
+  input.chk{border-color:#555}
+  .stat input[type=date]{border:0;padding:0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#view">Skip to content</a>
+<noscript><p style="padding:20px">This tracker needs JavaScript to run. Please open it in a normal browser.</p></noscript>
+<div class="wrap">
+  <header id="overview"></header>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Sections"></nav>
+  <main id="view" tabindex="-1"></main>
+  <section class="card" id="datasec" aria-labelledby="datahead">
+    <h2 id="datahead">Your data</h2>
+    <p class="small muted">Everything you enter is saved in <b>this browser, on this device</b> (browser localStorage). It does not sync to other devices or browsers, and clearing your browser's site data will erase it. Use <b>Export backup</b> now and then, and <b>Import backup</b> to restore it somewhere else.</p>
+    <p class="small" id="storewarn" style="color:#8a3b3b"></p>
+    <div class="hero-actions">
+      <button class="btn ghost sm" data-act="export">⬇ Export backup (JSON)</button>
+      <button class="btn ghost sm" data-act="import">⬆ Import backup</button>
+      <input type="file" id="imp" accept=".json,application/json" hidden>
+      <button class="btn ghost sm" data-act="print">🖨 Print view</button>
+      <button class="btn danger sm" data-act="reset">Reset everything</button>
+    </div>
+  </section>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="confetti" aria-hidden="true"></div>
+<dialog id="dlg" aria-labelledby="dlgh"></dialog>
+
+<script>
+(function(){
+'use strict';
+var APP='sl-curtain-marketing-quest', STORE_KEY='slq_v1';
+
+/* ---------- content ---------- */
+var STAGES=[
+ {id:1,emo:'🧭',short:'Choose',title:'Choose the opportunity',note:'The figures are estimates from your notes. Verify them first, and don’t just pick the highest margin.',tasks:[
+  {t:'Review the three candidate products',m:10,d:'You have looked at all three cards in the comparison panel.',link:'decide'},
+  {t:'Verify selling price and cost assumptions with Mom',m:15,d:'Price and cost are confirmed or corrected in the panel and “Verified” is ticked.',link:'decide'},
+  {t:'Compare estimated gross profit and GPM',m:10,d:'You have read profit per job and margin side by side, and rated the four “fit” rows.',link:'decide'},
+  {t:'Select ONE product for the first test',m:10,d:'One product is chosen in the panel. The others are parked, not deleted.',link:'decide'},
+  {t:'Record why I chose it',m:10,d:'One or two sentences are saved in the “Why this product” box.',link:'decide'}]},
+ {id:2,emo:'💬',short:'Customer',title:'Understand the customer',note:'This is a hypothesis to test, not a proven insight. Short answers are fine.',tasks:[
+  {t:'Define the specific customer segment',m:15,d:'“Target customer” on the hypothesis card says who, where and in what situation.',link:'decide'},
+  {t:'Identify one plausible customer problem',m:15,d:'“Customer problem” is one sentence, ideally in the customer’s own words.',link:'decide'},
+  {t:'Write one marketing hypothesis',m:15,d:'“Proposed benefit” and “Main assumption to test” are filled in.',link:'decide'},
+  {t:'Separate known facts from assumptions',m:15,opt:1,d:'“Supporting evidence” lists only what you actually know (past jobs, real enquiries). Everything else is labelled an assumption.',link:'decide'},
+  {t:'Define why SL Curtain is a suitable solution',m:10,d:'One sentence on why SL Curtain fits this customer, based on strengths you can back up.'}]},
+ {id:3,emo:'📸',short:'Evidence',title:'Find the evidence',note:'Use what already exists. You do not need to organise the whole media library for this test.',tasks:[
+  {t:'Locate the project photos or videos for the chosen product',m:20,d:'You know which files show this project. Nothing has been reorganised.'},
+  {t:'Select the strongest 3–5 visual assets',m:20,d:'3–5 files are picked. More is not better.'},
+  {t:'Identify what the project demonstrates',m:10,opt:1,d:'One line on what a viewer can actually see (e.g. light, finish, fit).'},
+  {t:'Confirm the service details with Mom',m:15,d:'What is included, installation and timing are confirmed for anything you will mention.'},
+  {t:'Mark any unsupported claims for removal',m:10,d:'Anything you cannot prove or deliver (e.g. “cheapest”, specific timelines) is crossed out of your notes.'}]},
+ {id:4,emo:'✍️',short:'Create',title:'Create the advertisement',note:'One angle, one headline, one visual. Done is better than endlessly polishing.',tasks:[
+  {t:'Choose one main creative angle',m:15,d:'One angle is picked (e.g. before/after, convenience, personal guidance). Just one.'},
+  {t:'Draft one headline',m:15,d:'One headline is written. Not ten.'},
+  {t:'Draft a short caption',m:20,d:'2–4 short lines with no unverified claims.'},
+  {t:'Choose one clear call to action',m:10,d:'One action for the reader (e.g. “WhatsApp us for a consultation”).'},
+  {t:'Prepare one primary visual',m:30,d:'One image or short video is ready to upload.'},
+  {t:'Review the creative against the customer hypothesis',m:10,opt:1,d:'You have checked it speaks to the customer and problem on your hypothesis card, and made at most one tweak.',link:'decide'}]},
+ {id:5,emo:'💌',short:'Leads',title:'Prepare lead handling',note:'Reuse what you have. No new CRM and no AI agent for this test.',tasks:[
+  {t:'Check the existing WhatsApp Quick Replies',m:15,d:'You have read through them and they work for a first reply to someone who clicked an ad.'},
+  {t:'Define the minimum enquiry information to collect',m:10,d:'A list of 3–4 things (e.g. area, room, rough timeline). No more.'},
+  {t:'Confirm who will respond to enquiries',m:10,d:'A named person is responsible for replying.'},
+  {t:'Check the existing CRM can record source and lead outcome',m:15,d:'In your Lead Tracker you can mark source as “Meta Ad” and record an outcome. If a column is missing, add a column. Do not rebuild.'}]},
+ {id:6,emo:'🚀',short:'Setup',title:'Set up the experiment',note:'Meta’s menus change over time, so check the options in Ads Manager as you go.',tasks:[
+  {t:'Confirm the serviceable location',m:10,d:'The areas you can actually serve are written in Campaign setup.',link:'decide'},
+  {t:'Select the Meta Ads objective and WhatsApp destination',m:20,d:'You have chosen an objective that sends people to WhatsApp and noted it in Campaign setup.',link:'decide'},
+  {t:'Set an affordable total budget',m:10,d:'A total in RM that you would be okay not getting back is entered in Campaign setup.',link:'decide'},
+  {t:'Choose the test duration',m:10,d:'A number of days is entered, long enough to collect some enquiries.',link:'decide'},
+  {t:'Check the ad preview, destination and tracking',m:20,d:'The preview looks right on a phone, tapping it opens the correct WhatsApp chat, and you know how you will tag the lead source.'},
+  {t:'Complete a pre-launch review',m:15,d:'Every critical item in the Pre-launch readiness list is ticked.',link:'decide'}]},
+ {id:7,emo:'🎈',short:'Launch',title:'Launch or make a readiness decision',note:'Either outcome is a good one. Not ready yet is a decision, not a failure.',tasks:[
+  {t:'Launch if the essential requirements are met',m:15,d:'The campaign is submitted. If it is not ready, mark this “Do later” and do the next task.'},
+  {t:'If not ready, record the exact blocker and a realistic next date',m:10,d:'Blocker and next date are in Campaign setup. If you launched, skip this with the reason “launched”.',link:'decide'},
+  {t:'Record the launch date and campaign settings',m:10,d:'Launch date and settings are in Campaign setup.',link:'decide'},
+  {t:'Schedule a review',m:5,d:'A review date is entered in Campaign setup and in your calendar.',link:'decide'}]},
+ {id:8,emo:'🌱',short:'Learn',title:'Learn from the results',note:'Success here means learning something, whatever the numbers say. Blank is fine if you do not know yet.',tasks:[
+  {t:'Record total spend',m:5,d:'Spend is in the Results log.',link:'results'},
+  {t:'Record enquiries',m:5,d:'Enquiry count is in the Results log.',link:'results'},
+  {t:'Record qualified enquiries',m:10,d:'Qualified count is in the Results log.',link:'results'},
+  {t:'Record consultations or site visits',m:5,d:'Count is in the Results log.',link:'results'},
+  {t:'Record quotations',m:5,d:'Count is in the Results log.',link:'results'},
+  {t:'Record sales and revenue',m:5,d:'Sales and revenue are in the Results log.',link:'results'},
+  {t:'Record gross profit where known',m:10,opt:1,d:'Gross profit is entered, or left blank if not known yet.',link:'results'},
+  {t:'Document what worked, what did not and what to test next',m:20,d:'“Observations and next action” is written in the Results log.',link:'results'}]}
+];
+var TASKS=[];
+STAGES.forEach(function(s){ s.tasks=s.tasks.map(function(x,i){
+  var t={id:s.id+'-'+(i+1),stage:s.id,title:x.t,min:x.m,opt:!!x.opt,done:x.d,link:x.link||''}; TASKS.push(t); return t; }); });
+var MODULES=[
+ {id:1,t:"Customer and Market Understanding",a:"Decide which homeowners to target first, what problem matters to them, and what evidence supports that."},
+ {id:2,t:"Offer and Value Proposition",a:"Develop one evidence-backed offer and message for your chosen product."},
+ {id:3,t:"Creative Strategy and Copywriting",a:"Create one primary ad creative and, only if practical, one alternative angle."},
+ {id:4,t:"Meta Ads Fundamentals",a:"Configure a small, controlled campaign with one objective and a fixed spending limit."},
+ {id:5,t:"Lead Qualification and Sales Conversion",a:"Define what a qualified lead means for SL Curtain and record enquiries consistently in your existing CRM."},
+ {id:6,t:"Marketing Measurement and Unit Economics",a:"Judge whether the test attracts relevant leads and whether the economics could be sustainable."},
+ {id:7,t:"Experimentation and Iteration",a:"Write a short post-campaign review and choose the next experiment from evidence, not guesswork."},
+ {id:8,t:"Growth Systems (added for FocusPilot)",a:"Channels, service quality and pricing decisions that come up in your prioritised work."}];
+var RAW=[
+["L1",1,"Market segmentation, targeting and positioning (STP)","core",["1-4","2-1"],20,
+"SL Curtain can serve many kinds of homeowners, but one ad can’t speak to all of them. STP helps you choose who to speak to first.",
+"Which homeowners to target with this first ad, and how SL Curtain should be positioned to them.",
+"Search: ‘segmentation targeting positioning explained’, ‘STP model B2C examples’. Source types: university course notes, a marketing textbook chapter you can access, a reputable business-school article.",
+["What is the difference between segmentation, targeting and positioning?","Which segmentation bases (life stage, situation, needs) suit renovating homeowners?","How narrow should a first target be?"],
+"Write two possible homeowner segments, pick one, and record why in the Hypothesis card."],
+["L2",1,"Ideal customer profiles and jobs-to-be-done","core",["2-1","2-2"],20,
+"Homeowners ‘hire’ curtains to get a job done (privacy, light, a finished look, less hassle). Knowing the job shapes the message.",
+"Who exactly the ad speaks to, and what job they want done.",
+"Search: ‘ideal customer profile’, ‘jobs to be done framework explained’, ‘jobs to be done home improvement’. Source types: course notes, a practitioner article, a book chapter you can access.",
+["What ‘job’ does a homeowner hire curtains to do?","What separates an ideal customer from any enquirer?","What would make someone switch from their current option?"],
+"Write one ICP sentence (who, situation, trigger) and one job statement: ‘When I…, I want to…, so I can…’."],
+["L3",1,"Customer pain points, motivations and buying behaviour","core",["2-2"],20,
+"A believable problem is what makes someone stop scrolling. Right now your problem is a hypothesis, not proof.",
+"Which one customer problem the ad leads with.",
+"Search: ‘customer pain points vs motivations’, ‘consumer buying decision process’, ‘home renovation customer journey’. Your own past enquiries are a source too.",
+["What are the stages of a typical buying decision?","How do pain points differ from motivations?","Which of my beliefs about this customer are facts and which are assumptions?"],
+"Reread 3–5 past enquiries and underline the problems customers described in their own words. Pick one for the hypothesis."],
+["L4",1,"Customer interviews and voice-of-customer research","adv",["2-4"],15,
+"Your best message evidence is what real customers say, and you already have WhatsApp chats and consultation notes.",
+"Whether your assumed problem is real, and which words to use in the ad.",
+"Search: ‘voice of customer research’, ‘customer interview questions that avoid leading’, ‘customer discovery interviews’.",
+["How do I ask without leading the customer?","What is the difference between what people say and what they do?","How many conversations give a first useful signal?"],
+"Pick 3 questions and ask the next 2 people who enquire. Write down their exact words."],
+["L5",1,"Competitor positioning and differentiation","adv",["2-5"],20,
+"Homeowners compare. One thing only SL Curtain can honestly say beats ‘good quality, good price’.",
+"Your single point of difference for this ad.",
+"Search: ‘competitive positioning map’, ‘differentiation strategy small business’. Primary sources: competitors’ own websites and social pages.",
+["What do all competitors say, and what does nobody say?","Which differences do customers actually care about?","Which of my differences can I prove?"],
+"Note how 2–3 local competitors describe themselves, then write one honest difference."],
+["L6",2,"Value propositions and positioning statements","core",["2-5","4-1"],20,
+"A clear value proposition turns ‘we sell curtains’ into a reason to message you.",
+"The one-sentence promise your ad makes.",
+"Search: ‘value proposition canvas’, ‘positioning statement template’, ‘value proposition examples for services’.",
+["What are the parts of a good value proposition?","How is a value proposition different from a slogan?","What proof makes a promise believable?"],
+"Draft: ‘For [customer] who [problem], SL Curtain gives [benefit] because [proof].’"],
+["L7",2,"Features vs benefits vs customer outcomes","core",["3-3","4-2"],15,
+"‘Double sheer layers’ is a feature. ‘Soft daylight and privacy without a dark room’ is the outcome the homeowner pictures.",
+"Which outcome goes in the headline.",
+"Search: ‘features vs benefits vs outcomes’, ‘benefit-driven copywriting’.",
+["What is the difference between a feature, a benefit and an outcome?","How do I turn a feature into an outcome?","Which outcome matters most to my target customer?"],
+"List 3 features of the chosen product and convert each to a benefit and an outcome. Pick one outcome."],
+["L8",2,"Unique selling propositions and proof points","adv",["3-5"],15,
+"Unsupported claims are the first thing to cut. Proof points keep the ad honest and credible.",
+"Which claims stay in the ad and which come out.",
+"Search: ‘unique selling proposition examples’, ‘proof points in marketing’.",
+["What makes a USP real rather than a slogan?","What counts as proof (photos, numbers, process)?","Which of my claims could I not defend if asked?"],
+"Mark each draft claim Proven / Probably true / Can’t prove. Remove the last group."],
+["L9",2,"Offer design and calls to action","core",["4-4"],15,
+"Many ads fail because the next step is unclear or too big. For a high-value purchase the first step should be small.",
+"The one action the ad asks for (e.g. start a WhatsApp chat).",
+"Search: ‘offer design marketing’, ‘call to action best practices’, ‘low-friction first step for high-ticket services’.",
+["What makes a good offer beyond price?","How big should the first ask be for a purchase of RM2,000 or more?","What should happen right after someone taps the call to action?"],
+"Write the call to action and the first WhatsApp reply that follows it, so they match."],
+["L10",2,"Trust signals, testimonials and portfolio-based marketing","adv",["3-2","3-4"],15,
+"For a custom, high-value service, real project photos do much of the persuading.",
+"Which 3–5 visuals to use and what each proves.",
+"Search: ‘trust signals in marketing’, ‘social proof types’, ‘portfolio marketing for service businesses’.",
+["What kinds of proof build trust for a service people can’t try first?","How do I use a customer project without overclaiming?","What permissions do I need to show a client’s home?"],
+"For each shortlisted visual, write one line on what it proves. Drop any that prove nothing."],
+["L11",3,"Advertising angles and creative hooks","core",["4-1"],20,
+"The angle is the reason to stop and look. You only need one for this test.",
+"The single creative angle for the ad.",
+"Search: ‘advertising angles examples’, ‘creative hooks for social ads’, ‘before and after creative’.",
+["What is an angle versus a hook versus a headline?","Which angles suit a considered, high-value purchase?","How do I tie the angle back to the customer problem?"],
+"List 3 possible angles, then choose the one that best matches your hypothesis."],
+["L12",3,"Problem–solution messaging","core",["4-2","4-6"],15,
+"Naming the problem first shows you understand the customer before you sell.",
+"How the headline and caption are structured.",
+"Search: ‘problem agitate solution copywriting’, ‘problem solution advertising examples’.",
+["What is the basic problem–solution structure?","How do I describe the problem without exaggerating?","How do I know whether my message matches the customer’s problem?"],
+"Rewrite your caption as: problem in one line, solution in one line, next step in one line."],
+["L13",3,"Visual storytelling and creative testing","adv",["4-5"],15,
+"In a feed, the picture does most of the work. One strong visual beats several mediocre ones.",
+"Which single visual leads the ad.",
+"Search: ‘visual storytelling in advertising’, ‘social ad creative best practices’, ‘creative testing basics’.",
+["What makes an image stop the scroll?","How should a single image or short video show a finished room?","What would I change first if the creative underperformed?"],
+"Pick your primary visual and write one sentence about what a viewer will understand in 2 seconds."],
+["L14",3,"Copywriting for Meta Ads","core",["4-3"],20,
+"Short, specific captions in plain language tend to work better than polished ones.",
+"The headline, caption and where the call to action sits.",
+"Search: ‘Meta ads copywriting’, ‘primary text headline description Meta ads’. Also check Meta’s own Business Help Centre for current format guidance (check the page date, as it changes).",
+["What do the primary text, headline and description each do?","How long should the caption be?","What claims should I avoid because I can’t support them?"],
+"Write the caption, read it aloud, then cut it by a third."],
+["L15",3,"Creative fatigue and when to refresh an ad","bg",[],10,
+"Useful once an ad has run for a while. Not needed for a first, short test.",
+"When to change the creative in a later round.",
+"Search: ‘ad creative fatigue signs’, ‘frequency Meta ads’.",
+["What are the signs of creative fatigue?","What does frequency tell me?","What should change first when I refresh?"],
+"Only later: after the test, note whether results fell off over time."],
+["L16",4,"Campaign objectives and conversion destinations","core",["6-2"],20,
+"The objective tells Meta what to optimise for. A mismatch is a common beginner mistake.",
+"Which objective and destination to choose for WhatsApp enquiries.",
+"Meta’s official Business Help Centre pages on campaign objectives (names change, so check the date). Search: ‘Meta ads objectives explained’.",
+["What are the current objectives and what does each optimise for?","Which destinations send people to WhatsApp?","What would I measure for this objective?"],
+"Write down the objective and destination you plan to select, and how you will know it worked."],
+["L17",4,"Campaign, ad set and ad structure","core",["6-5"],15,
+"Knowing where budget, audience and creative sit stops you changing the wrong setting.",
+"How to set up one campaign, one ad set and one ad.",
+"Meta’s official Ads Manager guides. Search: ‘Meta ads campaign ad set ad structure’.",
+["What is set at campaign, ad set and ad level?","Why start with one ad set?","What happens if I edit an ad during delivery?"],
+"Sketch your structure on paper: one campaign, one ad set, one ad."],
+["L18",4,"Audience selection and geographic targeting","core",["6-1"],20,
+"A wide audience wastes spend on people you can’t serve, and a narrow one may not deliver.",
+"The location and audience settings for the test.",
+"Meta’s official targeting guides. Search: ‘Meta ads location targeting’, ‘broad vs interest targeting’.",
+["How does location targeting work and what are its limits?","When does broad targeting make sense?","How do I keep out areas I can’t serve?"],
+"List the exact areas you can serve and the age range you want, then compare with the settings."],
+["L19",4,"Placements, budgets and campaign duration","core",["6-3","6-4"],20,
+"Budget and duration decide how much you can learn, and how much you can lose.",
+"Total spend and how many days to run.",
+"Meta’s official budget guides. Search: ‘daily vs lifetime budget Meta’, ‘automatic placements’.",
+["What is the difference between daily and lifetime budget?","What does automatic placement do?","How long is long enough to see some enquiries?"],
+"Write your total budget, the number of days, and the maximum you are willing to lose."],
+["L20",4,"Click-to-WhatsApp campaigns","core",["6-2"],20,
+"Your customers already use WhatsApp, so this is the shortest path from ad to conversation.",
+"How the ad opens a chat and what happens when it does.",
+"Meta’s official ‘click to WhatsApp’ guides (check dates). Search: ‘click to WhatsApp ads setup’, ‘WhatsApp ads pre-filled message’.",
+["What does the customer see after tapping the ad?","Can I set a pre-filled message to tag the source?","What do I need linked (Page, WhatsApp number) before I can run it?"],
+"Do a test tap on the ad preview and note exactly what appears in WhatsApp."],
+["L21",4,"Learning phase, delivery and common beginner mistakes","core",["6-5","7-1"],20,
+"A new campaign needs time to settle. Changing it too often resets learning and muddies what you learn.",
+"What to leave alone after launch and when to check results.",
+"Meta’s official pages on the learning phase and delivery. Search: ‘Meta ads learning phase’, ‘common Meta ads mistakes beginners’.",
+["What is the learning phase and what resets it?","What are the most common beginner mistakes?","When is it too early to judge results?"],
+"Write a ‘hands-off’ rule: what you will not change for the first few days, and your review date."],
+["L22",5,"Lead qualification and customer fit","core",["5-2","5-4"],20,
+"Not every enquiry is a good one. Defining ‘qualified’ lets you compare the ad’s quality, not just quantity.",
+"What counts as a qualified lead for SL Curtain.",
+"Search: ‘lead qualification criteria’, ‘BANT framework explained’, ‘qualifying questions home services’. Your Lead Tracker is a source too.",
+["What makes a lead qualified rather than just interested?","Which 3–4 questions are enough?","How do I record this in the Lead Tracker?"],
+"Write a 3–4 point definition of ‘qualified’, then mark it in your Lead Tracker."],
+["L23",5,"Speed-to-lead and follow-up","core",["5-3","5-1"],15,
+"People who enquire after seeing an ad lose interest fast. A prompt, friendly first reply matters.",
+"Who replies, how soon, and with what.",
+"Search: ‘speed to lead response time’, ‘lead follow-up cadence’.",
+["How quickly should I reply, and what is realistic for us?","What should the first reply contain?","When do I follow up if there’s no reply?"],
+"Choose your reply-time promise and check your first Quick Reply matches it."],
+["L24",5,"Lead funnels and conversion stages","adv",["5-4","8-4"],15,
+"Seeing the stages (ad, enquiry, qualified, consultation, quote, sale) shows where leads drop off.",
+"Which stages you will record so you can see where things leak.",
+"Search: ‘marketing funnel stages’, ‘sales funnel conversion rates’.",
+["What stages does my funnel have?","What is drop-off and why does it matter?","Which stage is most likely my weak point?"],
+"Write your funnel stages in order and check each has a place in the Lead Tracker."],
+["L25",5,"Consultation, quotation and closing","adv",["8-5"],20,
+"Enquiries become revenue in consultation and quotation, not in the ad.",
+"What to review when enquiries don’t become quotes or sales.",
+"Search: ‘consultative selling’, ‘quotation follow-up’, ‘closing techniques for services’.",
+["How do consultation and quotation differ?","What causes quotes to stall?","What follow-up is helpful rather than pushy?"],
+"Pick one lead that stalled and write what you would do differently."],
+["L26",5,"Handling price objections without competing only on price","adv",["8-5"],20,
+"If people only compare price, your value hasn’t landed yet.",
+"How to respond to ‘too expensive’ without discounting first.",
+"Search: ‘handling price objections’, ‘value-based selling’.",
+["What is behind a price objection?","How do I reframe price around outcomes?","When is it right to hold the price?"],
+"Write a short reply to ‘Your price is higher than others’ that uses your real proof points."],
+["L27",6,"Reach, impressions, CPM, CTR and CPC","core",["8-1"],15,
+"These show whether the ad is being seen and clicked, before anyone enquires.",
+"Whether the ad or the audience needs attention.",
+"Meta’s official metrics definitions in Ads Manager, plus search: ‘CPM CTR CPC explained’.",
+["What do reach and impressions mean?","How are CPM, CTR and CPC calculated?","What would a very low CTR suggest?"],
+"After the test, copy these three numbers from Ads Manager and write what each tells you."],
+["L28",6,"Cost per enquiry and cost per qualified lead","core",["8-2","8-3"],15,
+"A cheap enquiry that never qualifies isn’t cheap. Cost per qualified lead is closer to what matters.",
+"Whether the ad attracts the right people at a workable cost.",
+"Search: ‘cost per lead vs cost per qualified lead’, ‘lead quality metrics’.",
+["How do I calculate cost per enquiry and per qualified lead?","Why can they differ a lot?","How much data is too little to trust?"],
+"Use the Results log to compute both after the test, and write one sentence on the gap."],
+["L29",6,"Conversion rates and funnel drop-off","core",["8-4","8-5"],15,
+"Conversion rates show where leads fall away: at enquiry, qualification, consultation or quote.",
+"Which stage to investigate first.",
+"Search: ‘conversion rate funnel analysis’, ‘funnel drop-off’.",
+["How is a stage conversion rate calculated?","What does a big drop at one stage suggest?","Why are small numbers risky to compare?"],
+"Fill in each stage count in the Results log and note the biggest drop."],
+["L30",6,"Gross profit, contribution margin and break-even","core",["1-3","8-7"],20,
+"A higher selling price isn’t the same as higher profit. Your stated costs may leave out variable costs.",
+"Whether a product can pay for its own advertising.",
+"Search: ‘gross profit vs contribution margin’, ‘break-even analysis small business’. Your own Quote Calculator and pricing sheet are sources too.",
+["What costs belong in contribution margin?","How many sales cover the ad budget?","Which variable costs might my stated cost miss?"],
+"For your chosen product, compute break-even: ad budget ÷ profit per job = jobs needed."],
+["L31",6,"Revenue versus profitability","adv",["8-6"],15,
+"Revenue can look good while profit is thin once costs and ad spend are included.",
+"Whether to repeat or change the test.",
+"Search: ‘revenue vs profit’, ‘profitability analysis small business’.",
+["How are revenue, gross profit and net profit different?","Where does ad spend sit?","Why is profit per job more useful than revenue?"],
+"Enter revenue and gross profit in the Results log and note the difference."],
+["L32",6,"Customer acquisition cost (CAC)","bg",[],15,
+"Useful once you have several months of data. One small test is too early.",
+"Later: whether acquiring customers this way is sustainable.",
+"Search: ‘customer acquisition cost calculation’, ‘CAC vs lifetime value’.",
+["How is CAC calculated?","What costs count?","How does CAC relate to profit per customer?"],
+"Only later: divide spend by customers won across a longer period."],
+["L33",6,"Attribution limitations and small-sample uncertainty","bg",["8-8"],15,
+"With a small test, luck can swing results. Attribution is also imperfect. Treat results as hints.",
+"How much weight to give the first results.",
+"Search: ‘marketing attribution limitations’, ‘small sample size marketing’.",
+["Why can’t I be certain which ad caused a sale?","How does a small sample mislead?","What would make me more confident?"],
+"Write one sentence on how sure you are about your results, and why."],
+["L34",7,"Hypothesis-driven marketing","adv",["2-3"],15,
+"A hypothesis makes the test about learning, so a weak result still teaches you something.",
+"What exactly you are testing and what would change your mind.",
+"Search: ‘hypothesis-driven marketing’, ‘marketing experiment hypothesis template’.",
+["What makes a hypothesis testable?","What result would disprove mine?","How is a hypothesis different from a hope?"],
+"Write: ‘If we show [message] to [customer], then [result], because [reason].’"],
+["L35",7,"Minimum viable experiments","adv",["6-3","7-1"],15,
+"The smallest test that teaches you something is better than a perfect plan you never run.",
+"How small to keep the first test.",
+"Search: ‘minimum viable experiment marketing’, ‘lean experimentation’.",
+["What is the smallest test that could teach me something?","What am I tempted to add that isn’t necessary?","What would I do with each possible result?"],
+"Cross out anything in your plan that the test doesn’t need."],
+["L36",7,"Variables, controls and fair comparisons","bg",[],15,
+"Matters when you compare two ads. A first test compares nothing, so this can wait.",
+"Later: how to compare two ideas fairly.",
+"Search: ‘controlled experiment marketing’, ‘confounding variables marketing’.",
+["What is a control?","Why change one thing at a time?","What makes a comparison unfair?"],
+"Only later: plan a second test that changes exactly one thing."],
+["L37",7,"A/B testing fundamentals","bg",[],15,
+"A/B tests need more traffic than a first small test will have.",
+"Later: whether you have enough volume to test two versions.",
+"Search: ‘A/B testing basics’, ‘A/B testing Meta ads’.",
+["What is an A/B test?","What do I need for a fair test?","When is volume too low?"],
+"Only later: decide whether you could afford to test two creatives."],
+["L38",7,"Sample size and statistical uncertainty","bg",[],20,
+"Explains why 3 enquiries in a week aren’t proof of anything.",
+"Later: how much data you need before changing course.",
+"Search: ‘sample size intuition’, ‘statistical significance explained simply’.",
+["Why does small data mislead?","What is a rough rule of thumb for volume?","What conclusions are safe from a tiny sample?"],
+"Only later: write what you could not conclude from your first results."],
+["L39",7,"Diagnosing a weak result: audience, creative, offer or lead handling","adv",["8-8"],20,
+"When results are weak, the cause could be the audience, the creative, the offer or how leads are handled.",
+"What to change in the next experiment, and what to leave alone.",
+"Search: ‘marketing funnel diagnosis’, ‘why ads don’t convert checklist’, ‘post-campaign review template’.",
+["Which funnel stage points to which cause?","What evidence would separate audience from creative problems?","What is the next smallest experiment?"],
+"Write a short post-campaign review: what worked, what didn’t, the likeliest cause, and the next test."],["L40",8,"Relationship marketing and channel strategy (B2B referrals)","adv",[],20,
+"Partners such as designers, contractors and developers can refer repeat, better-fit customers, but they need a clear reason to refer you.",
+"Who to approach first and what a partner gets from working with SL Curtain.",
+"Search: ‘relationship marketing B2B’, ‘channel partner strategy small business’, ‘referral partner programs’.",
+["What makes a partner want to refer someone?","How do channel partners differ from direct customers economically?","What is a realistic first outreach?"],
+"List 3 partner types, pick one, and write what each side gives and gets."],
+["L41",8,"Service blueprinting and quality assurance","adv",[],20,
+"A smooth installation experience is part of a premium promise. A blueprint shows each step a customer and your team go through, and where things can go wrong.",
+"Which service standards to define or fix first.",
+"Search: ‘service blueprint explained’, ‘quality assurance checklist installation services’.",
+["What are the parts of a service blueprint?","Where do service failures usually happen?","How do I turn a standard into a simple checklist?"],
+"Map one recent job from enquiry to after-install, mark 2 pain points, and add one check for each."],
+["L42",8,"Pricing strategy and packaging","adv",[],20,
+"Pricing and packages shape how valuable an offer feels and how much margin you keep. A service-led offer needs a clear way to charge for guidance and coordination.",
+"How to package and price the White Glove offer.",
+"Search: ‘value-based pricing’, ‘good better best pricing packages’, ‘pricing strategy small service business’.",
+["What is value-based pricing?","How do packages change what customers choose?","How do I check a package still earns enough profit per job?"],
+"Sketch two package options and work out profit per job for each using your pricing sheet."]
+];
+var LESSONS=RAW.map(function(r){return {id:r[0],m:r[1],t:r[2],p:r[3],k:r[4],min:r[5],w:r[6],d:r[7],s:r[8],q:r[9],x:r[10]};});
+var TL={}, taskById={}, taskIdx={};
+TASKS.forEach(function(t,i){taskById[t.id]=t; taskIdx[t.id]=i;});
+LESSONS.forEach(function(l){ l.k.forEach(function(id){ (TL[id]=TL[id]||[]).push(l); }); });
+var PRODUCTS=[
+ {id:'sheer',name:'Double sheer',project:'Atiqah project',price:2560,cost:1615},
+ {id:'dream',name:'Dream curtain',project:'Kendra project',price:2058,cost:1127.8},
+ {id:'venetian',name:'Venetian blind',project:'Odd-space project · currently KIV',price:485,cost:223}];
+var RATES=[['evidence','Visual evidence available'],['problem','Customer problem is clear'],['fit','Fit with intended audience'],['delivery','Practical to deliver']];
+var PRE=[
+ ['creative','Headline, caption and one call to action are drafted'],
+ ['visual','One primary photo or video is ready'],
+ ['claims','Every claim in the ad is something we can deliver'],
+ ['service','Service details confirmed with Mom'],
+ ['location','Serviceable location confirmed'],
+ ['wa','Ad opens the correct WhatsApp chat; Quick Replies are ready'],
+ ['owner','A named person will reply to enquiries'],
+ ['crm','Lead Tracker can record source (Meta Ad) and outcome']];
+var QUOTES=['One small win at a time.','Progress, not perfection.','You don’t need the whole strategy today.','Done is better than endlessly polishing.','A test that teaches you something is a success.','Finish one thing before starting another.'];
+var WINS_MSG=['Nice. One small win.','That counts. ✨','Done. Next one, or take a breath.','Another one finished.'];
+var MILES={25:'25% — you’ve started, and that’s the hardest part. 🌱',50:'Halfway there. One step at a time is working. 🌤',75:'75% — the finish line is in sight. ✨',100:'100% — every step of the quest is done. Whatever the results say, you ran the experiment. 🎉'};
+var NUMF=['spend','enq','qual','cons','quot','sales','rev','gp'];
+
+/* ---------- FocusPilot: data and rules (rule-based, no AI) ---------- */
+var FP_CATS=[['rev','Revenue and cash flow'],['b2b','B2B partnerships'],['mkt','Marketing and lead generation'],['sales','Sales and customer experience'],['ops','Operations and service quality'],['sys','Existing systems and automation'],['fin','Finance and pricing'],['learn','Learning and skill development'],['strat','Long-term strategy'],['cap','Personal capacity or workload concern'],['other','Other']];
+var FP_EFF={xs:{l:'Under 30 min',h:0.5,v:5},s:{l:'1–2 hours',h:1.5,v:4},m:{l:'Half a day',h:4,v:3},l:{l:'1–2 days',h:12,v:2},xl:{l:'More than 2 days',h:24,v:1}};
+var FP_DIMS=[
+ ['impact','Business impact','Revenue, cash flow, gross profit, lead quality, conversion, service reliability or owner dependency. 1 = barely, 5 = material.'],
+ ['urgency','Urgency','A real deadline, commitment, financial risk or time-limited chance. 1 = can wait, 5 = pressing.'],
+ ['align','Strategic alignment','Supports the current strategy and bottleneck. 1 = unrelated, 5 = directly.'],
+ ['readiness','Readiness','Prerequisites, information, people and resources are available. 1 = not ready, 5 = ready.'],
+ ['confidence','Confidence','Strength of evidence that it will work. 1 = a guess, 5 = strong evidence.'],
+ ['risk','Reversibility and low risk','Cheap to test and easy to reverse. 1 = costly or committing, 5 = cheap and reversible.']];
+var FP_W0={impact:3,urgency:2,align:3,effort:2,readiness:2,confidence:1,risk:1};
+var FP_Q={inbox:'Inbox (not decided)',now:'Do now',next:'Schedule next',park:'Park',drop:'Drop / reject'};
+var FP_STOP='the a an and or to of for in on at with we i my our is are be it this that so as by from into about then also'.split(' ');
+var FP_DEFSTOP='major optional development system systems rebuilding integrations integration projects project initiatives new'.split(' ');
+var FP_STUDY=[
+ [/referral|partner|b2b|channel|designer|contractor|developer|outreach/i,'L40'],
+ [/referral fee|commission|margin|profit|rebate|contribution/i,'L30'],
+ [/premium|position|white glove|differentiat|value prop/i,'L6'],
+ [/meta|facebook|instagram|campaign|\bads?\b/i,'L16'],
+ [/funnel|conversion|qualif|lead/i,'L24'],
+ [/install|workmanship|standard|quality|checklist|service level/i,'L41'],
+ [/pricing|package|price|quote|quotation/i,'L42'],
+ [/experiment|pilot|test/i,'L35'],
+ [/interview|feedback|survey/i,'L4']];
+function fpDefaults(){
+  return {strategy:{
+    objective:'Improve commercial growth and cash flow.',
+    bottleneck:'SL Curtain needs a more effective, repeatable process for acquiring suitable customers. (Hypothesis, not verified.)',
+    hypothesis:'A premium, service-led (White Glove) offer and B2B referrals may attract better-fit opportunities.',
+    initiative:'Validate the offer and begin small-scale partner outreach.',
+    measure:'Qualified referred leads, quotations, won jobs, revenue and gross profit.',
+    review:'',
+    deferred:'Major website development, new AI-agent integrations, optional system rebuilding, rebranding and hiring.',
+    priorities:'1. Validate the White Glove positioning and B2B referral opportunities.\n2. Prepare minimum viable partner-sales materials and begin outreach.\n3. Maintain and use the existing CRM, Quote Calculator and Production Hub.\n4. Run a small Meta Ads experiment when the offer, visuals and lead handling are ready.\n5. Improve service standards based on actual job experience.\n6. Defer optional website, AI-agent, automation, rebranding and hiring projects until justified.',
+    longterm:'Modernise the business, reduce owner dependency, improve profitability and build a differentiated, premium service model.'},
+   weekOutcome:'',weights:JSON.parse(JSON.stringify(FP_W0)),plan:{hours:4,days:5,commit:0,note:''},
+   items:[],log:[],reviews:[],stratLog:[],rv:{evidence:'',blocked:'',learned:'',decisions:'',bottleneck:'no',bnote:'',next:''}};
+}
+function fpClean(it){
+  if(!it||typeof it!=='object') return null;
+  var str=function(v){return typeof v==='string'?v:'';}, title=str(it.title).trim(); if(!title) return null;
+  var o=fpNew({id:str(it.id)||undefined,title:title,desc:str(it.desc),cat:FP_CATS.some(function(c){return c[0]===it.cat;})?it.cat:'other',outcome:str(it.outcome),
+    effort:FP_EFF[it.effort]?it.effort:'',deadline:/^\d{4}-\d{2}-\d{2}$/.test(it.deadline||'')?it.deadline:'',source:str(it.source),notes:str(it.notes),next:str(it.next),dep:str(it.dep),blocker:str(it.blocker),existing:str(it.existing),
+    q:['inbox','now','next','park','drop'].indexOf(it.q)>=0?it.q:'inbox',done:it.done===true,doneAt:str(it.doneAt),result:str(it.result),archived:it.archived===true,ov:str(it.ov),ovWhy:str(it.ovWhy),
+    created:str(it.created)||new Date().toISOString(),updated:str(it.updated)||new Date().toISOString()});
+  if(it.flags&&typeof it.flags==='object'){ ['commitment','safety','blocker'].forEach(function(k){o.flags[k]=it.flags[k]===true;}); }
+  if(it.r&&typeof it.r==='object') FP_DIMS.forEach(function(d){var v=it.r[d[0]]; o.r[d[0]]=(typeof v==='number'&&v>=1&&v<=5)?Math.round(v):null;});
+  return o;
+}
+function fpNew(o){
+  var t=new Date().toISOString();
+  var it={id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'',desc:'',cat:'other',outcome:'',effort:'',deadline:'',source:'',notes:'',next:'',dep:'',blocker:'',existing:'',
+    q:'inbox',done:false,doneAt:'',result:'',archived:false,ov:'',ovWhy:'',flags:{commitment:false,safety:false,blocker:false},r:{impact:null,urgency:null,align:null,readiness:null,confidence:null,risk:null},created:t,updated:t};
+  for(var k in o){ if(o[k]!==undefined) it[k]=o[k]; } return it;
+}
+function fpSanitize(raw){
+  var d=fpDefaults(); if(!raw||typeof raw!=='object'||Array.isArray(raw)) return d;
+  var str=function(v,f){return typeof v==='string'?v:f;};
+  if(raw.strategy&&typeof raw.strategy==='object') Object.keys(d.strategy).forEach(function(k){d.strategy[k]=str(raw.strategy[k],d.strategy[k]);});
+  d.weekOutcome=str(raw.weekOutcome,'');
+  if(raw.weights&&typeof raw.weights==='object') Object.keys(FP_W0).forEach(function(k){var v=raw.weights[k]; if(typeof v==='number'&&isFinite(v)&&v>=0&&v<=10) d.weights[k]=v;});
+  if(raw.plan&&typeof raw.plan==='object'){ ['hours','days','commit'].forEach(function(k){var v=raw.plan[k]; if(typeof v==='number'&&isFinite(v)&&v>=0) d.plan[k]=v;}); d.plan.note=str(raw.plan.note,''); }
+  var seen={}; if(Array.isArray(raw.items)) raw.items.forEach(function(x){ var c=fpClean(x); if(c&&!seen[c.id]){ seen[c.id]=1; d.items.push(c);} });
+  if(Array.isArray(raw.log)) raw.log.slice(-500).forEach(function(l){ if(l&&typeof l==='object') d.log.push({id:str(l.id,''),at:str(l.at,''),item:str(l.item,''),itemId:str(l.itemId,''),action:str(l.action,''),from:str(l.from,''),to:str(l.to,''),why:str(l.why,'')}); });
+  if(Array.isArray(raw.stratLog)) raw.stratLog.slice(-100).forEach(function(l){ if(l&&typeof l==='object') d.stratLog.push({at:str(l.at,''),reason:str(l.reason,''),fields:str(l.fields,'')}); });
+  if(Array.isArray(raw.reviews)) raw.reviews.slice(-100).forEach(function(r){ if(r&&typeof r==='object'){ var o={at:str(r.at,''),week:str(r.week,'')}; ['done','evidence','blocked','learned','decisions','bottleneck','bnote','next','carry'].forEach(function(k){o[k]=str(r[k],'');}); d.reviews.push(o);} });
+  if(raw.rv&&typeof raw.rv==='object') Object.keys(d.rv).forEach(function(k){d.rv[k]=str(raw.rv[k],d.rv[k]);});
+  return d;
+}
+/* helpers */
+var fpNow=function(){return new Date().toISOString();};
+function fpItem(id){ return S.fp.items.filter(function(x){return x.id===id;})[0]; }
+function fpCat(c){ var m=FP_CATS.filter(function(x){return x[0]===c;})[0]; return m?m[1]:'Other'; }
+function fpLog(it,action,from,to,why){ S.fp.log.push({id:'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,4),at:fpNow(),item:it.title,itemId:it.id,action:action,from:from||'',to:to||'',why:why||''}); if(S.fp.log.length>500) S.fp.log=S.fp.log.slice(-500); }
+function fpActive(){ return S.fp.items.filter(function(x){return !x.archived&&!x.done;}); }
+function fpInQ(q){ return fpActive().filter(function(x){return x.q===q;}).sort(fpRank); }
+function fpWords(t){ return String(t||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(function(w){return w.length>1&&FP_STOP.indexOf(w)<0;}); }
+function fpDup(title,exceptId){
+  var a=fpWords(title); if(a.length<1) return null; var A={}; a.forEach(function(w){A[w]=1;}); var na=a.join(' ');
+  var best=null;
+  S.fp.items.forEach(function(x){ if(x.id===exceptId||x.q==='drop'&&x.archived) return;
+    var b=fpWords(x.title); if(!b.length) return; var nb=b.join(' '), inter=0, B={}; b.forEach(function(w){B[w]=1; if(A[w]) inter++;});
+    var uni=Object.keys(A).length+Object.keys(B).length-inter, j=uni?inter/uni:0;
+    if(j>=0.6||(na.length>=8&&(nb.indexOf(na)>=0||na.indexOf(nb)>=0)&&nb.length>=8)) best=best||x; });
+  return best;
+}
+function fpDeferredMatch(it){
+  var words=[]; String(S.fp.strategy.deferred||'').toLowerCase().split(/[,;\n]|\band\b/).forEach(function(p){ p.replace(/[^a-z0-9\s-]/g,' ').split(/[\s-]+/).forEach(function(w){ if(w.length>=5&&FP_DEFSTOP.indexOf(w)<0&&words.indexOf(w)<0) words.push(w); }); });
+  var blob=(it.title+' '+it.desc).toLowerCase();
+  for(var i=0;i<words.length;i++){ if(new RegExp('\\b'+words[i].replace(/[^a-z0-9]/g,'')).test(blob)) return words[i]; }
+  return '';
+}
+function fpSugAlign(it){ if(fpDeferredMatch(it)) return 1; if(['rev','b2b','mkt','sales','fin'].indexOf(it.cat)>=0) return 4; if(['ops','sys'].indexOf(it.cat)>=0) return 3; return 2; }
+function fpSugCat(text){
+  var t=String(text||'');
+  var m=[[/referral|partner|b2b|designer|contractor|developer|outreach|architect/i,'b2b'],[/meta|facebook|instagram|\bads?\b|lead gen|campaign|social media/i,'mkt'],[/quote|quotation|price|pricing|margin|invoice|payment|cost|cash|deposit/i,'fin'],[/install|measure|production|quality|workmanship|supplier|fabric/i,'ops'],[/crm|calculator|production hub|automation|ai.?agent|spreadsheet|system|whatsapp/i,'sys'],[/learn|course|study|notebooklm|read about/i,'learn'],[/website|rebrand|hire|hiring|strategy|long.?term/i,'strat'],[/customer experience|follow.?up|consultation|site visit|enquir/i,'sales'],[/revenue|sales|cash flow|profit/i,'rev'],[/overwhelm|workload|capacity|burn/i,'cap']];
+  for(var i=0;i<m.length;i++) if(m[i][0].test(t)) return m[i][1]; return '';
+}
+function fpPin(it){
+  var r=[]; if(it.flags.commitment) r.push('a customer or partner commitment'); if(it.flags.safety) r.push('a safety issue'); if(it.flags.blocker) r.push('a critical operational blocker');
+  if(it.deadline){ var d=daysTo(it.deadline); if(d!=null&&d<=7) r.push(d<0?'a deadline date that has passed':'a deadline in '+d+' day'+(d===1?'':'s')); }
+  return r;
+}
+function fpScore(it){
+  var w=S.fp.weights, parts=[], miss=[], num=0, den=0;
+  FP_DIMS.forEach(function(d){
+    var v=it.r[d[0]], sug=false;
+    if(v==null&&d[0]==='align'){ v=fpSugAlign(it); sug=true; }
+    if(v==null){ if(d[0]==='impact'||d[0]==='readiness') miss.push(d[1]); return; }
+    parts.push({k:d[0],l:d[1],v:v,w:w[d[0]],sug:sug});
+  });
+  var ef=FP_EFF[it.effort]; if(ef) parts.push({k:'effort',l:'Effort (lower effort scores higher)',v:ef.v,w:w.effort}); else miss.push('Effort estimate');
+  parts.forEach(function(p){num+=p.w*p.v; den+=p.w*5;});
+  return {score:den>0?Math.round(num/den*100):null,parts:parts,missing:miss,prov:miss.length>0};
+}
+function fpSuggest(it){
+  var sc=fpScore(it), pin=fpPin(it), n=function(a){return a.length?a.join(', '):'';};
+  if(it.done) return {q:it.q,why:'Completed.',prov:false,needs:[],sc:sc};
+  if(pin.length) return {q:'now',pinned:true,why:'Handled explicitly, not by score: this involves '+n(pin)+'.',prov:false,needs:[],sc:sc};
+  if(it.existing) return {q:'drop',why:'An existing tool or process already covers this ('+it.existing+'). Use it first; drop only if you confirm.',prov:sc.prov,needs:[],sc:sc};
+  var dm=fpDeferredMatch(it); if(dm) return {q:'park',why:'It looks related to a deferred initiative (“'+dm+'”). Park it unless new evidence changes the strategy.',prov:sc.prov,needs:sc.missing,sc:sc};
+  if(sc.score==null) return {q:'inbox',why:'Not enough information to rank yet.',prov:true,needs:sc.missing.length?sc.missing:['Any rating'],sc:sc};
+  var q, why, s=sc.score;
+  if(s>=70){q='now'; why='High score ('+s+'/100).';} else if(s>=50){q='next'; why='Useful, but a score of '+s+'/100 does not beat current priorities.';} else {q='park'; why='Score of '+s+'/100 is below what current priorities and capacity justify.';}
+  if(q==='now'&&(it.blocker||(it.r.readiness!=null&&it.r.readiness<=2))){ q='next'; why+=' It is blocked or not ready, so schedule it for after the blocker clears.'; }
+  if(q==='now'&&it.cat==='learn'){ q='next'; why+=' Learning should support a decision, not displace execution.'; }
+  var alp=sc.parts.filter(function(p){return p.k==='align';})[0];
+  if(s<35&&it.r.impact!=null&&it.r.impact<=2&&alp&&alp.v<=2){ q='drop'; why='Low score ('+s+'/100), low impact and low alignment. Consider dropping (needs your confirmation).'; }
+  return {q:q,why:why,prov:sc.prov,needs:sc.missing,sc:sc};
+}
+function fpRank(a,b){
+  var pa=fpPin(a).length>0, pb=fpPin(b).length>0; if(pa!==pb) return pa?-1:1;
+  var sa=fpScore(a).score, sb=fpScore(b).score; sa=sa==null?-1:sa; sb=sb==null?-1:sb; if(sa!==sb) return sb-sa;
+  return a.created<b.created?-1:1;
+}
+function fpHours(it){ var e=FP_EFF[it.effort]; return e?e.h:null; }
+function fpCapacity(){
+  var p=S.fp.plan, week=Math.max(0,p.hours*p.days-p.commit), now=fpInQ('now'), load=0, unk=0;
+  now.forEach(function(x){ var h=fpHours(x); if(h==null) unk++; else load+=h; });
+  return {day:p.hours,week:week,load:load,unknown:unk,over:load>week&&week>0};
+}
+function fpStudy(it){
+  if(it.done||it.archived||it.q==='drop') return null;
+  var blob=it.title+' '+it.desc+' '+it.outcome;
+  for(var i=0;i<FP_STUDY.length;i++){ if(FP_STUDY[i][0].test(blob)){ var l=LESSONS.filter(function(x){return x.id===FP_STUDY[i][1];})[0]; if(l&&stu(l.id).status!=='applied') return l; } }
+  return null;
+}
+function fpParse(text){
+  var out=[]; String(text||'').replace(/\r/g,'').split('\n').forEach(function(line){
+    var t=line.replace(/^\s*(?:[-*•–—]|\d+[.)]|\[[ xX]?\])\s*/,'').trim(); if(!t) return;
+    var parts=t.replace(/([.!?])\s+(?=[A-Z0-9])/g,'$1\u0001').split(/\u0001|;\s+/).map(function(x){return x.trim();}).filter(Boolean), merged=[];
+    parts.forEach(function(p){ if(merged.length&&merged[merged.length-1].length<12) merged[merged.length-1]+=' '+p; else merged.push(p); });
+    merged.forEach(function(p){ out.push(p); });
+  });
+  return out;
+}
+function fpFromLine(text){
+  var t=text.trim(), title=t.length>90?t.slice(0,87).replace(/\s+\S*$/,'')+'…':t, c=fpSugCat(t);
+  return {title:title,desc:t.length>90?t:'',cat:c||'other',source:'Brain dump '+todayISO()};
+}
+function fpMonday(d){ d=d||new Date(); var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); var g=(x.getDay()+6)%7; x.setDate(x.getDate()-g); return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate()); }
+function fpWhyOutrank(it,i,top){
+  var pin=fpPin(it), sc=fpScore(it);
+  if(pin.length) return 'Handled first because it involves '+pin.join(', ')+'.';
+  var best=sc.parts.slice().sort(function(a,b){return b.v*b.w-a.v*a.w;}).slice(0,2).map(function(p){return p.l.split(' (')[0].toLowerCase()+' '+p.v+'/5';}).join(' and ');
+  return (sc.score!=null?'Score '+sc.score+'/100'+(best?', strongest on '+best:'')+'.':'Not scored yet.')+(sc.prov?' Provisional: some information is missing.':'');
+}
+function fpWhyNot(it){
+  var now=fpInQ('now').filter(function(x){return x.id!==it.id;}), L=[], sg=fpSuggest(it), sc=sg.sc, dm=fpDeferredMatch(it), pin=fpPin(it), low=now[now.length-1];
+  if(it.q==='now') L.push('It is already in Do now.');
+  if(pin.length) L.push('Because it involves '+pin.join(', ')+', it should be handled explicitly and probably belongs in Do now.');
+  if(dm) L.push('It looks related to a deferred initiative (“'+dm+'”). The strategy says to defer that until justified.');
+  if(it.existing) L.push('You noted that an existing tool or process already covers it: '+it.existing+'.');
+  if(it.blocker) L.push('It is blocked: '+it.blocker+'.'); else if(it.r.readiness!=null&&it.r.readiness<=2) L.push('It is not ready yet (readiness '+it.r.readiness+'/5).');
+  if(sc.score!=null&&low){ var ls=fpScore(low).score; L.push('Its score is '+sc.score+'/100 against '+(ls==null?'an unscored':ls+'/100 for')+' “'+low.title+'”, the lowest-ranked item in Do now.'); }
+  var al=sc.parts.filter(function(p){return p.k==='align';})[0]; if(al&&al.v<=2) L.push('Its alignment with the current bottleneck is low ('+al.v+'/5'+(al.sug?', suggested from its category':'')+').');
+  if(now.length>=3&&!pin.length) L.push('Do now already has 3 items. Adding one means moving one to Next.');
+  var c=fpCapacity(); if(c.week>0&&c.load>=c.week) L.push('Your Do now queue already fills your available time this week ('+c.load+'h of '+c.week+'h).');
+  if(sg.prov) L.push('This is provisional. Missing: '+(sg.needs.join(', ')||'ratings')+'.');
+  if(!L.length) L.push('Nothing here blocks it. If it matches your priorities, it can go to Do now.');
+  return L;
+}
+var FP_CATOPT=FP_CATS, FP_EFFOPT=Object.keys(FP_EFF).map(function(k){return [k,FP_EFF[k].l];});
+/* ---------- state ---------- */
+function defaults(){
+  var prod={}; PRODUCTS.forEach(function(p){prod[p.id]={price:p.price,cost:p.cost,verified:false,r:{evidence:'',problem:'',fit:'',delivery:''}};});
+  return {app:APP,version:1,milestone:'2026-10-25',paused:false,pauseNote:'',theme:'rose',sound:true,tasks:{},product:'',why:'',prod:prod,
+    hyp:{customer:'Homeowners renovating or upgrading their interiors',problem:'',benefit:'Convenience, personalised guidance and fewer installation headaches when upgrading their curtains',evidence:'',assumption:''},
+    camp:{location:'',objective:'',budget:'',duration:'',launch:'',review:'',blocker:'',nextDate:''},
+    pre:{},results:[],celebrated:[],study:{},fp:fpDefaults()};
+}
+function sanitize(raw){
+  var d=defaults(); if(!raw||typeof raw!=='object'||Array.isArray(raw)) return d;
+  var str=function(v,f){return typeof v==='string'?v:f;};
+  var num=function(v){return (typeof v==='number'&&isFinite(v))?v:null;};
+  if(typeof raw.milestone==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(raw.milestone)) d.milestone=raw.milestone;
+  d.theme=raw.theme==='butter'?'butter':'rose'; d.sound=raw.sound!==false; d.paused=raw.paused===true; d.pauseNote=str(raw.pauseNote,'');
+  if(raw.tasks&&typeof raw.tasks==='object') TASKS.forEach(function(t){var r=raw.tasks[t.id];
+    if(r&&typeof r==='object') d.tasks[t.id]={status:['done','skipped','deferred'].indexOf(r.status)>=0?r.status:'open',reason:str(r.reason,''),note:str(r.note,''),doneAt:str(r.doneAt,'')};});
+  d.product=PRODUCTS.some(function(p){return p.id===raw.product;})?raw.product:'';
+  d.why=str(raw.why,'');
+  if(raw.prod&&typeof raw.prod==='object') PRODUCTS.forEach(function(p){var r=raw.prod[p.id]; if(r&&typeof r==='object'){var x=d.prod[p.id];
+    x.price=num(r.price); x.cost=num(r.cost); x.verified=r.verified===true;
+    if(r.r&&typeof r.r==='object') RATES.forEach(function(k){if(['','low','med','high'].indexOf(r.r[k[0]])>=0) x.r[k[0]]=r.r[k[0]];});}});
+  ['hyp','camp'].forEach(function(g){ if(raw[g]&&typeof raw[g]==='object') Object.keys(d[g]).forEach(function(k){d[g][k]=str(raw[g][k],d[g][k]);}); });
+  if(raw.pre&&typeof raw.pre==='object') PRE.forEach(function(p){ if(raw.pre[p[0]]===true) d.pre[p[0]]=true; });
+  if(Array.isArray(raw.results)) raw.results.forEach(function(r){ if(!r||typeof r!=='object') return;
+    var e={id:str(r.id,'r'+Math.random().toString(36).slice(2)),from:str(r.from,''),to:str(r.to,''),product:PRODUCTS.some(function(p){return p.id===r.product;})?r.product:'',obs:str(r.obs,'')};
+    NUMF.forEach(function(k){e[k]=num(r[k]);}); d.results.push(e); });
+  if(raw.study&&typeof raw.study==='object') LESSONS.forEach(function(l){var r=raw.study[l.id]; if(r&&typeof r==='object') d.study[l.id]={status:['none','progress','applied'].indexOf(r.status)>=0?r.status:'none',date:str(r.date,''),take:str(r.take,''),applied:str(r.applied,''),link:str(r.link,'')};});
+  d.fp=fpSanitize(raw.fp);
+  if(Array.isArray(raw.celebrated)) d.celebrated=raw.celebrated.filter(function(n){return [25,50,75,100].indexOf(n)>=0;});
+  return d;
+}
+var storageOK=true, loadNotice='';
+function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(S)); }catch(e){ storageOK=false; warnStore(); } }
+function load(){
+  var raw=null;
+  try{ raw=localStorage.getItem(STORE_KEY); }catch(e){ storageOK=false; return defaults(); }
+  if(!raw) return defaults();
+  try{ return sanitize(JSON.parse(raw)); }
+  catch(e){ try{localStorage.setItem(STORE_KEY+'_corrupt_backup',raw);}catch(_){}
+    loadNotice='Your saved data could not be read, so you’re starting fresh. A copy of the unreadable data was kept in this browser.'; return defaults(); }
+}
+var S=load();
+var ui={tab:'start',open:null,exp:{},reason:null,draft:{},editing:'',msg:'',q:Math.floor(Date.now()/86400000)%QUOTES.length,printing:false,lesson:'',from:'',labFilter:'now',mod:{},fpTab:'focus',fpFilter:{show:'all',cat:'',q:''},fpf:{cap:'',new:{},st:null,carry:{}},fpOpen:'',fpPrev:null,fpStratEdit:false,fpNewOpen:false,tri:null};
+
+/* ---------- helpers ---------- */
+var $=function(s){return document.querySelector(s);};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function st(id){return (S.tasks[id]&&S.tasks[id].status)||'open';}
+function ensureTask(id){ if(!S.tasks[id]) S.tasks[id]={status:'open',reason:'',note:'',doneAt:''}; return S.tasks[id]; }
+function setPath(path,val){var k=path.split('.'),o=S; for(var i=0;i<k.length-1;i++){ if(o[k[i]]==null||typeof o[k[i]]!=='object') o[k[i]]={}; o=o[k[i]]; } o[k[k.length-1]]=val;}
+function getPath(path){var k=path.split('.'),o=S; for(var i=0;i<k.length;i++){ if(o==null) return undefined; o=o[k[i]]; } return o;}
+function pad(n){return (n<10?'0':'')+n;}
+function todayISO(){var d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function fmtDate(iso){ if(!iso) return ''; var p=iso.split('-'); if(p.length!==3) return iso; var d=new Date(+p[0],+p[1]-1,+p[2]); return isNaN(d)?iso:d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+function daysTo(iso){ if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||'')) return null; var p=iso.split('-'),t=new Date(+p[0],+p[1]-1,+p[2]),n=new Date(); n=new Date(n.getFullYear(),n.getMonth(),n.getDate()); return Math.round((t-n)/86400000); }
+function daysText(){ var d=daysTo(S.milestone); if(d==null) return 'Pick a date that feels doable'; if(d>1) return d+' days to go'; if(d===1) return 'Tomorrow'; if(d===0) return 'Today'; return 'Date has passed — move it whenever you like'; }
+function money(n){ if(n==null||isNaN(n)) return '—'; var i=Math.abs(n-Math.round(n))<1e-9; return 'RM'+n.toLocaleString('en-MY',{minimumFractionDigits:i?0:2,maximumFractionDigits:2}); }
+function pct1(n){ return n==null?'—':(Math.round(n*1000)/10)+'%'; }
+
+/* ---------- progress ---------- */
+function progress(){
+  var req=TASKS.filter(function(t){return !t.opt;});
+  var skipped=req.filter(function(t){return st(t.id)==='skipped';}).length;
+  var done=req.filter(function(t){return st(t.id)==='done';}).length;
+  var denom=req.length-skipped;
+  return {done:done,denom:denom,pct:denom>0?Math.round(done/denom*100):0,
+    optDone:TASKS.filter(function(t){return t.opt&&st(t.id)==='done';}).length,
+    parked:TASKS.filter(function(t){return st(t.id)==='deferred';}).length};
+}
+function stageComplete(s){return s.tasks.filter(function(t){return !t.opt;}).every(function(t){var x=st(t.id);return x==='done'||x==='skipped';});}
+function currentStage(){return STAGES.filter(function(s){return !stageComplete(s);})[0]||null;}
+function nextTasks(n){return TASKS.filter(function(t){return !t.opt&&st(t.id)==='open';}).slice(0,n);}
+function stageOf(t){return STAGES[t.stage-1];}
+
+/* ---------- product maths ---------- */
+function calc(id){ var p=S.prod[id], gp=(p.price!=null&&p.cost!=null)?p.price-p.cost:null, gpm=(gp!=null&&p.price>0)?gp/p.price:null; return {gp:gp,gpm:gpm}; }
+function calcHTML(id){ var c=calc(id), v=S.prod[id].verified;
+  return 'Profit per job: <b>'+money(c.gp)+'</b><br>Margin (GPM): <b>'+pct1(c.gpm)+'</b> <span class="tag '+(v?'ver':'est')+'">'+(v?'Verified':'Estimate — verify')+'</span>'; }
+
+/* ---------- readiness ---------- */
+function readyItems(){
+  var p=S.product?S.prod[S.product]:null, items=[];
+  items.push({auto:1,ok:!!S.product,t:'One product is chosen'});
+  items.push({auto:1,ok:!!(p&&p.verified&&p.price>0&&p.cost>0),t:'Price and cost of the chosen product are verified with Mom'});
+  items.push({auto:1,ok:parseFloat(S.camp.budget)>0,t:'A total budget is set (Campaign setup)'});
+  PRE.forEach(function(x){items.push({key:x[0],ok:!!S.pre[x[0]],t:x[1]});});
+  return items;
+}
+function readyHTML(){
+  var items=readyItems(), open=items.filter(function(i){return !i.ok;}), h='';
+  if(open.length) h+='<div class="ready no"><b>Not ready to launch yet</b> — '+open.length+' critical item'+(open.length>1?'s':'')+' still open. That’s normal; pick the next one and carry on.</div>';
+  else h+='<div class="ready yes"><b>Essential requirements are met.</b> Launching is your call. If anything still feels off, it’s fine to wait.</div>';
+  h+='<ul class="plain">';
+  items.forEach(function(i){
+    if(i.auto) h+='<li><label class="inline"><input type="checkbox" class="chk" disabled '+(i.ok?'checked':'')+' aria-label="'+esc(i.t)+'"><span>'+esc(i.t)+' <span class="muted small">(updates automatically)</span></span></label></li>';
+    else h+='<li><label class="inline"><input type="checkbox" class="chk" data-bind="pre.'+i.key+'" '+(i.ok?'checked':'')+'><span>'+esc(i.t)+'</span></label></li>';
+  });
+  return h+'</ul>';
+}
+
+/* ---------- results maths ---------- */
+function sumField(list,f){ var s=0,c=0; list.forEach(function(e){ if(e[f]!=null){s+=e[f];c++;} }); return c?s:null; }
+function pair(list,a,b){ var x=0,y=0,c=0; list.forEach(function(e){ if(e[a]!=null&&e[b]!=null){x+=e[a];y+=e[b];c++;} }); return c?{x:x,y:y}:null; }
+function metricsFor(list){
+  var out=[], p;
+  p=pair(list,'spend','enq'); out.push(['Cost per enquiry', p&&p.y>0?money(p.x/p.y):'—', p&&p.y===0?'No enquiries yet':(p?'':'needs spend + enquiries')]);
+  p=pair(list,'spend','qual'); out.push(['Cost per qualified lead', p&&p.y>0?money(p.x/p.y):'—', p&&p.y===0?'No qualified leads yet':(p?'':'needs spend + qualified')]);
+  p=pair(list,'enq','qual'); out.push(['Enquiry → qualified', p&&p.x>0?pct1(p.y/p.x):'—', p&&p.x===0?'No enquiries yet':(p?'':'needs both counts')]);
+  p=pair(list,'cons','quot'); out.push(['Consultation → quotation', p&&p.x>0?pct1(p.y/p.x):'—', p&&p.x===0?'No consultations yet':(p?'':'needs both counts')]);
+  var s=sumField(list,'sales'), r=sumField(list,'rev'), g=sumField(list,'gp'), sp=sumField(list,'spend');
+  out.push(['Total spend', sp==null?'—':money(sp), '']);
+  out.push(['Sales', s==null?'—':String(s), '']);
+  out.push(['Revenue', r==null?'—':money(r), '']);
+  out.push(['Gross profit (where entered)', g==null?'—':money(g), '']);
+  return out;
+}
+function metricsHTML(list){
+  var h='<div class="metrics">'; metricsFor(list).forEach(function(m){ h+='<div class="metric"><b>'+m[1]+'</b><span>'+esc(m[0])+(m[2]?' · '+esc(m[2]):'')+'</span></div>'; });
+  h+='</div>';
+  var enq=sumField(list,'enq');
+  if(enq!=null&&enq<10) h+='<p class="small muted">Small sample: with fewer than 10 enquiries, treat these numbers as hints, not conclusions.</p>';
+  if(enq===0) h+='<p class="small muted">Zero enquiries is useful information about the message, offer or audience. It isn’t a verdict on you.</p>';
+  return h;
+}
+
+/* ---------- views ---------- */
+var TABS=[['start','Start here'],['roadmap','Roadmap'],['decide','Decide'],['results','Results log'],['wins','Wins'],['fp','🧭 FocusPilot'],['lab','🎓 MBA Lab']];
+
+function renderOverview(){
+  var pg=progress(), cur=currentStage(), nx=nextTasks(1)[0];
+  var h='<div class="card hero"><div class="hero-top"><div><p class="eyebrow">First small Meta Ads test</p><h1>SL Curtain Marketing Quest</h1><p class="micro" id="micro">'+esc(QUOTES[ui.q])+'</p></div>'+
+  '<div id="mascotSlot"></div></div>';
+  if(S.paused) h+='<div class="pausebar"><span>⏸ Quest paused'+(S.pauseNote?' — '+esc(S.pauseNote):'')+'. Your progress is safe.</span><button class="btn ghost sm" data-act="resume">Resume</button></div>';
+  h+='<div class="stats"><div class="stat"><span class="big">'+pg.pct+'%</span><span class="lbl">complete</span></div>'+
+  '<div class="stat"><span class="big">'+pg.done+'</span><span class="lbl">of '+pg.denom+' core tasks done'+(pg.optDone?' (+'+pg.optDone+' optional)':'')+'</span></div>'+
+  '<div class="stat"><b>'+(cur?'Stage '+cur.id+' · '+esc(cur.title):'All stages complete 🎉')+'</b><span class="lbl">current stage</span></div>'+
+  '<div class="stat"><label for="milestone" style="margin:0" class="lbl">Target milestone</label><input type="date" id="milestone" data-bind="milestone" value="'+esc(S.milestone)+'"><span class="lbl" id="days">'+daysText()+'</span></div></div>';
+  h+='<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pg.pct+'" aria-label="Overall progress"><i style="width:'+pg.pct+'%"></i></div><ol class="trail">';
+  STAGES.forEach(function(s){ var dn=stageComplete(s), c=cur&&cur.id===s.id; h+='<li class="node '+(dn?'done':c?'cur':'')+'" title="'+esc(s.title)+'"><span>'+(dn?'✓':s.id)+'</span><em>'+s.short+'</em></li>'; });
+  h+='</ol><div class="next"><div><b>Recommended next:</b> '+(nx?esc(nx.title):(pg.parked?'Bring back one parked task when you’re ready':'Look back at what you learned'))+'</div>'+
+  (nx?'<button class="btn sm" data-act="focus" data-id="'+nx.id+'">Take me there</button>':(pg.parked?'<button class="btn sm" data-act="tab" data-tab="start">See parked tasks</button>':'<button class="btn sm" data-act="tab" data-tab="wins">See my wins</button>'))+'</div>'+
+  '<div class="hero-actions"><button class="btn ghost sm" data-act="sound" aria-pressed='+(S.sound?'"true"':'"false"')+'>'+(S.sound?'🔔 Sound on':'🔕 Sound off')+'</button><button class="btn ghost sm" data-act="theme">🎨 Colour: '+(S.theme==='butter'?'Butter yellow':'Classic rose')+'</button><button class="btn ghost sm" data-act="reschedule">⏸ Pause / reschedule</button><button class="btn ghost sm" data-act="print">🖨 Print view</button></div></div>';
+  $('#overview').innerHTML=h;
+  var slot=$('#mascotSlot'); if(slot) slot.replaceWith(mascotEl);
+}
+function renderTabs(){
+  var h=''; TABS.forEach(function(t){ h+='<button class="tab'+(t[0]==='lab'?' labtab':'')+'" role="tab" aria-selected="'+(ui.tab===t[0])+'" data-act="tab" data-tab="'+t[0]+'">'+t[1]+'</button>'; });
+  $('#tabs').innerHTML=h;
+}
+
+function taskHTML(t,isOpen){
+  var s=st(t.id), rec=S.tasks[t.id]||{}, o=isOpen||ui.printing;
+  var h='<div class="task s-'+s+(o?' open':'')+'" id="t-'+t.id+'"><input type="checkbox" class="chk" data-act="toggle" data-id="'+t.id+'" '+(s==='done'?'checked':'')+' aria-label="Mark done: '+esc(t.title)+'">'+
+  '<div class="tbody"><button class="ttitle" data-act="open" data-id="'+t.id+'" aria-expanded="'+!!o+'">'+esc(t.title)+'</button><div class="meta"><span class="badge">~'+t.min+' min</span>'+
+  (t.opt?'<span class="badge opt">Optional</span>':'')+
+  (s==='skipped'?'<span class="badge st">Skipped'+(rec.reason?': '+esc(rec.reason):'')+'</span>':'')+
+  (s==='deferred'?'<span class="badge st">Parked for later'+(rec.reason?': '+esc(rec.reason):'')+'</span>':'')+
+  (s==='done'&&rec.doneAt?'<span class="badge ok">Done '+fmtDate(rec.doneAt)+'</span>':'')+'</div>';
+  if(o){
+    h+='<div class="details"><p class="small"><b>Done means:</b> '+esc(t.done)+'</p>';
+    if(t.link) h+='<button class="btn ghost sm" data-act="tab" data-tab="'+t.link+'">'+(t.link==='results'?'Open the Results log':'Open the Decide panel')+'</button>';
+    var ls=(TL[t.id]||[]).slice(0,2); if(ls.length){ h+='<div class="actions">'; ls.forEach(function(l){ h+='<button class="btn ghost sm" data-act="study" data-id="'+l.id+'" data-from="'+t.id+'">📚 Study this concept: '+esc(l.t)+' (optional, ~'+l.min+' min)</button>'; }); h+='</div>'; }
+    h+='<label for="n-'+t.id+'">Notes (optional)</label><textarea id="n-'+t.id+'" rows="2" data-bind="tasks.'+t.id+'.note" placeholder="Anything worth remembering…">'+esc(rec.note||'')+'</textarea>';
+    h+='<div class="actions">';
+    if(s==='open'||s==='deferred') h+='<button class="btn sm" data-act="done" data-id="'+t.id+'">✓ Mark done</button>';
+    if(s==='open') h+='<button class="btn ghost sm" data-act="ask" data-kind="deferred" data-id="'+t.id+'">Do later</button>';
+    if(s==='open'||s==='deferred') h+='<button class="btn ghost sm" data-act="ask" data-kind="skipped" data-id="'+t.id+'">Skip</button>';
+    if(s!=='open') h+='<button class="btn ghost sm" data-act="undo" data-id="'+t.id+'">'+(s==='done'?'Undo':'Put back')+'</button>';
+    h+='</div>';
+    if(ui.reason&&ui.reason.id===t.id) h+='<div class="reasonbox"><label for="reasonIn" style="margin-top:0">'+(ui.reason.kind==='skipped'?'Why skip this?':'Why later?')+' (a few words)</label><input type="text" id="reasonIn" placeholder="e.g. waiting for Mom">'+
+      '<div class="actions"><button class="btn sm" data-act="reasonok">Save</button><button class="btn ghost sm" data-act="reasonno">Cancel</button></div></div>';
+    h+='</div>';
+  }
+  return h+'</div></div>';
+}
+
+function viewStart(){
+  var cur=currentStage(), nx=nextTasks(3), pg=progress(), h='';
+  if(!cur){
+    h+='<div class="card"><h2>Every stage is complete 🎉</h2><p>You ran a real marketing experiment from start to finish. Look back at your Results log and decide the next small test.</p><button class="btn" data-act="tab" data-tab="wins">See what I’ve accomplished</button></div>';
+  } else {
+    h+='<div class="card"><p class="eyebrow">Your current stage</p><h2>'+cur.emo+' Stage '+cur.id+' — '+esc(cur.title)+'</h2><p class="muted small">'+esc(cur.note)+'</p>';
+    if(nx.length){
+      var openId=ui.open===null?nx[0].id:ui.open;
+      h+='<p style="margin-top:14px"><b>Next '+(nx.length>1?nx.length+' tasks':'task')+'</b> <span class="muted small">— just the first one is enough for today.</span></p>';
+      nx.forEach(function(t){ h+=taskHTML(t,openId===t.id); });
+    } else {
+      h+='<p style="margin-top:14px">Nothing new to start in this stage. Check the parked tasks below, or open the roadmap.</p>';
+    }
+    h+='<div class="actions"><button class="btn ghost" data-act="tab" data-tab="roadmap">Open full roadmap</button></div></div>';
+  }
+  var parked=TASKS.filter(function(t){return st(t.id)==='deferred';});
+  if(parked.length){ h+='<div class="card"><details class="park" '+(nx.length?'':'open')+'><summary>Parked for later ('+parked.length+')</summary>'; parked.forEach(function(t){h+=taskHTML(t,ui.open===t.id);}); h+='</details></div>'; }
+  return h;
+}
+function viewRoadmap(){
+  var cur=currentStage(), h='<div class="card"><h2>Full roadmap</h2><p class="muted small">Eight stages, one at a time. “Optional” tasks don’t count toward progress. Skipped tasks leave the count, and parked tasks stay until you bring them back.</p></div>';
+  STAGES.forEach(function(s){
+    var ex=ui.printing||(s.id in ui.exp?ui.exp[s.id]:(cur&&cur.id===s.id)), req=s.tasks.filter(function(t){return !t.opt;}), dn=req.filter(function(t){return st(t.id)==='done';}).length;
+    h+='<div class="card"><button class="stagehead" data-act="stage" data-id="'+s.id+'" aria-expanded="'+!!ex+'"><span class="t"><span class="emo">'+s.emo+'</span><span><b>Stage '+s.id+' — '+esc(s.title)+'</b><br><span class="muted small">'+dn+' of '+req.length+' core tasks done'+(stageComplete(s)?' · stage complete ✓':'')+'</span></span></span><span aria-hidden="true">'+(ex?'▾':'▸')+'</span></button>';
+    if(ex){ h+='<div class="stagenote">'+esc(s.note)+'</div>'; s.tasks.forEach(function(t){ h+=taskHTML(t,ui.open===t.id); }); }
+    h+='</div>';
+  });
+  return h;
+}
+
+function viewDecide(){
+  var h='<div class="card"><h2>Compare the three products</h2>'+
+  '<div class="stagenote"><b>These are preliminary figures from your notes, not verified margins.</b> Costs may not include every variable expense (installation, transport, wastage, commission). Confirm with Mom before deciding. The highest margin isn’t automatically the best first test.</div><div class="pgrid">';
+  PRODUCTS.forEach(function(p){ var d=S.prod[p.id], sel=S.product===p.id;
+    h+='<div class="pcard '+(sel?'sel':'')+'"><h3>'+p.name+'</h3><div class="muted small">'+p.project+'</div>'+
+    '<label for="pr-'+p.id+'">Selling price (RM)</label><input type="number" min="0" step="any" id="pr-'+p.id+'" data-num data-bind="prod.'+p.id+'.price" value="'+(d.price==null?'':d.price)+'">'+
+    '<label for="co-'+p.id+'">Stated cost (RM)</label><input type="number" min="0" step="any" id="co-'+p.id+'" data-num data-bind="prod.'+p.id+'.cost" value="'+(d.cost==null?'':d.cost)+'">'+
+    '<label class="inline"><input type="checkbox" class="chk" data-bind="prod.'+p.id+'.verified" '+(d.verified?'checked':'')+'> Verified with Mom</label>'+
+    '<div class="calc" id="calc-'+p.id+'">'+calcHTML(p.id)+'</div>';
+    RATES.forEach(function(r){ h+='<label for="rt-'+p.id+r[0]+'">'+r[1]+'</label><select id="rt-'+p.id+r[0]+'" data-bind="prod.'+p.id+'.r.'+r[0]+'">'+
+      [['','Not rated'],['low','Low'],['med','Medium'],['high','High']].map(function(o){return '<option value="'+o[0]+'"'+(d.r[r[0]]===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'; });
+    h+='<div class="actions"><button class="btn '+(sel?'':'ghost')+' sm" data-act="pick" data-id="'+p.id+'">'+(sel?'✓ Chosen for first test':'Choose this one')+'</button></div></div>';
+  });
+  h+='</div><label for="why">Why this product</label><textarea id="why" rows="2" data-bind="why" placeholder="One or two sentences…">'+esc(S.why)+'</textarea></div>';
+
+  h+='<div class="card"><h2>Hypothesis card <span class="tag hyp">To validate, not proven</span></h2><p class="muted small">Starter text comes from your brief. Edit anything.</p><div class="g2"><div>'+
+  hypField('customer','Target customer')+hypField('problem','Customer problem','The one frustration they may have…')+hypField('benefit','Proposed benefit')+'</div><div>'+
+  hypField('evidence','Supporting evidence (facts only)','What you actually know so far…')+hypField('assumption','Main assumption to test','If we show X, then people will…')+'</div></div></div>';
+
+  h+='<div class="card"><h2>Campaign setup</h2><p class="muted small">Fill in as you go. Nothing here is required until its task comes up.</p><div class="g2"><div>'+
+  campField('location','Serviceable location','text','e.g. KL / Selangor areas you cover')+campField('objective','Objective and WhatsApp destination','text','Check the options in Ads Manager')+
+  campField('budget','Total budget (RM)','number','')+campField('duration','Test duration (days)','number','')+'</div><div>'+
+  campField('launch','Launch date','date','')+campField('review','Review date','date','')+
+  campField('blocker','If not ready: the exact blocker','text','')+campField('nextDate','Realistic next date','date','')+'</div></div></div>';
+
+  h+='<div class="card"><h2>Pre-launch readiness</h2><div id="readyBox">'+readyHTML()+'</div>'+
+  '<details class="park"><summary>Not needed for this first test</summary><p class="small muted">A website, an AI agent, rebuilding the CRM, organising the whole media library and advanced analytics. Skip them for now; the test only needs one product, one message and a way to answer enquiries.</p></details></div>';
+  return h;
+}
+function hypField(k,l,ph){ return '<label for="h-'+k+'">'+l+'</label><textarea id="h-'+k+'" rows="2" data-bind="hyp.'+k+'" placeholder="'+esc(ph||'')+'">'+esc(S.hyp[k])+'</textarea>'; }
+function campField(k,l,type,ph){ return '<label for="c-'+k+'">'+l+'</label><input id="c-'+k+'" type="'+type+'" '+(type==='number'?'min="0" step="any" ':'')+'data-bind="camp.'+k+'" value="'+esc(S.camp[k])+'" placeholder="'+esc(ph)+'">'; }
+
+function viewResults(){
+  var d=ui.draft, v=function(k){return d[k]==null?'':d[k];}, h='';
+  h+='<div class="card"><h2>'+(ui.editing?'Edit this entry':'Log results')+'</h2><p class="muted small">Leave any box blank if you don’t know yet. Blank is not counted as zero. This is a light experiment log, not a replacement for your Lead Tracker.</p>'+
+  '<div class="g4"><div><label for="d-from">From</label><input type="date" id="d-from" data-draft="from" value="'+esc(v('from'))+'"></div><div><label for="d-to">To</label><input type="date" id="d-to" data-draft="to" value="'+esc(v('to'))+'"></div>'+
+  '<div style="grid-column:span 2"><label for="d-product">Product advertised</label><select id="d-product" data-draft="product"><option value="">—</option>'+PRODUCTS.map(function(p){return '<option value="'+p.id+'"'+(v('product')===p.id?' selected':'')+'>'+p.name+'</option>';}).join('')+'</select></div></div><div class="g4">';
+  [['spend','Ad spend (RM)'],['enq','Enquiries'],['qual','Qualified leads'],['cons','Consultations / site visits'],['quot','Quotations'],['sales','Sales'],['rev','Revenue (RM)'],['gp','Gross profit (RM, if known)']].forEach(function(f){
+    h+='<div><label for="d-'+f[0]+'">'+f[1]+'</label><input type="number" min="0" step="any" id="d-'+f[0]+'" data-draft="'+f[0]+'" value="'+esc(v(f[0]))+'"></div>'; });
+  h+='</div><label for="d-obs">Observations and next action</label><textarea id="d-obs" rows="3" data-draft="obs">'+esc(v('obs'))+'</textarea>';
+  if(ui.msg) h+='<p class="msg" role="alert">'+esc(ui.msg)+'</p>';
+  h+='<div class="actions"><button class="btn" data-act="addres">'+(ui.editing?'Save changes':'Add to log')+'</button>'+(ui.editing?'<button class="btn ghost" data-act="canceledit">Cancel</button>':'')+'</div></div>';
+  if(S.results.length){
+    h+='<div class="card"><h2>Totals across all entries</h2>'+metricsHTML(S.results)+'</div>';
+    S.results.forEach(function(e){
+      var pn=PRODUCTS.filter(function(p){return p.id===e.product;})[0];
+      h+='<div class="card entry"><b>'+(e.from||e.to?fmtDate(e.from)+(e.to?' → '+fmtDate(e.to):''):'No dates')+'</b>'+(pn?' · '+pn.name:'')+metricsHTML([e])+
+      (e.obs?'<p class="small" style="white-space:pre-wrap">'+esc(e.obs)+'</p>':'')+
+      '<div class="actions"><button class="btn ghost sm" data-act="editres" data-id="'+esc(e.id)+'">Edit</button><button class="btn danger sm" data-act="delres" data-id="'+esc(e.id)+'">Delete</button></div></div>'; });
+  } else h+='<div class="card"><p class="muted">No entries yet. After your ad has run, log what happened here. Even a quiet result is a result.</p></div>';
+  return h;
+}
+
+function viewWins(){
+  var pg=progress(), doneT=TASKS.filter(function(t){return st(t.id)==='done';}).sort(function(a,b){var x=(S.tasks[a.id].doneAt||''),y=(S.tasks[b.id].doneAt||''); return x<y?1:x>y?-1:0;});
+  var pn=PRODUCTS.filter(function(p){return p.id===S.product;})[0];
+  var h='<div class="card"><h2>What I have accomplished</h2><div class="stats" style="grid-template-columns:repeat(4,1fr)">'+
+  '<div class="stat"><span class="big">'+doneT.length+'</span><span class="lbl">tasks finished</span></div>'+
+  '<div class="stat"><span class="big">'+STAGES.filter(stageComplete).length+'</span><span class="lbl">stages complete</span></div>'+
+  '<div class="stat"><span class="big">'+S.results.length+'</span><span class="lbl">result entries</span></div>'+
+  '<div class="stat"><b>'+(pn?pn.name:'Not chosen yet')+'</b><span class="lbl">first test product</span></div></div>'+
+  '<p class="small muted">Wins are about steps taken, not ad performance. A campaign with poor results can still be a successful learning experiment.</p>'+
+  '<h3 style="margin-top:14px">Stage stamps</h3><div class="stamps" style="margin-top:8px">';
+  STAGES.forEach(function(s){ var on=stageComplete(s); h+='<div class="stamp '+(on?'on':'')+'"><span class="emo">'+s.emo+'</span>'+esc(s.title)+'<br>'+(on?'Complete ✓':'Waiting, no rush')+'</div>'; });
+  h+='</div><h3 style="margin-top:14px">Milestones</h3><p>';
+  [25,50,75,100].forEach(function(m){ h+='<span class="badge '+(S.celebrated.indexOf(m)>=0?'ok':'')+'" style="margin-right:6px">'+m+'%'+(S.celebrated.indexOf(m)>=0?' ✓':'')+'</span>'; });
+  h+='</p></div><div class="card"><h3>My completed wins</h3>';
+  if(!doneT.length) h+='<p class="muted">Your first win is one small task away.</p>';
+  else { h+='<ul class="plain">'; doneT.forEach(function(t){ h+='<li style="padding:6px 0;border-bottom:1px solid var(--line)">✓ <b>'+esc(t.title)+'</b> <span class="muted small">· Stage '+t.stage+' · '+fmtDate(S.tasks[t.id].doneAt)+'</span> <button class="btn ghost sm" data-act="undo" data-id="'+t.id+'">Undo</button></li>'; }); h+='</ul>'; }
+  return h+'</div>';
+}
+
+/* ---------- MBA Lab ---------- */
+var STUDY_LBL={none:'Not started',progress:'In progress',applied:'Applied'};
+var LBL={now:'Learn now',next:'Learn next',later:'Learn later',review:'Optional review'};
+function stu(id){ var r=S.study[id]||{}; return {status:r.status||'none',date:r.date||'',take:r.take||'',applied:r.applied||'',link:r.link||''}; }
+function openTasksOf(l){ return l.k.filter(function(id){return ['done','skipped'].indexOf(st(id))<0;}); }
+function lessonLabel(l){
+  if(l.p==='bg') return 'later';
+  var o=openTasksOf(l); if(!o.length) return l.k.length?'review':'later';
+  var s=Math.min.apply(null,o.map(function(id){return taskById[id].stage;})), c=currentStage(); c=c?c.id:9;
+  if(l.p==='core') return s<=c?'now':(s<=c+2?'next':'later');
+  return s<=c?'next':'later';
+}
+function recommended(){
+  var c=LESSONS.filter(function(l){return lessonLabel(l)==='now'&&stu(l.id).status!=='applied';});
+  if(!c.length) return null;
+  var key=function(l){return Math.min.apply(null,openTasksOf(l).map(function(id){return taskIdx[id];}));};
+  c.sort(function(a,b){return key(a)-key(b);}); return c[0];
+}
+function promptFor(l,item){
+  var pn=PRODUCTS.filter(function(p){return p.id===S.product;})[0], o=openTasksOf(l), tk=taskById[o[0]||l.k[0]];
+  return ['I am a beginner learning marketing while running a real experiment. Act as a patient tutor. Base factual claims only on the sources uploaded to this notebook.','',
+  'TOPIC: '+l.t,'',
+  'MY BUSINESS CONTEXT: SL Curtain Sdn Bhd is a family-owned soft-furnishing business in the Klang Valley, Malaysia (customised curtains, blinds, wallpaper, SPC flooring, window tinting). I am running my first small Meta Ads test to get WhatsApp enquiries. Product for the test: '+(pn?pn.name:'not chosen yet')+'. Target customer hypothesis (unproven): '+(S.hyp.customer||'not written yet')+'. My current task: '+(item?item.title:(tk?tk.title:'n/a'))+'. The decision this should help me make: '+l.d,'',
+  'Questions I want answered: '+l.q.join(' / '),'',
+  'Please:',
+  '1. Explain the concept in plain English before using any jargon.',
+  '2. Identify the core principles, framework and relevant examples from my uploaded sources.',
+  '3. Clearly separate what the sources explicitly state from what you are inferring.',
+  '4. Explain common misconceptions and the limitations of the concept.',
+  '5. Apply the concept to SL Curtain using the business context above.',
+  '6. Give me one practical exercise that supports my current task.',
+  '7. End with 3–5 short retrieval-practice questions (without answers, so I can test myself first).',
+  '8. List any gaps where my sources do not give enough information, so I know what else to find. Do not invent sources, quotes or citations.'].join('\n');
+}
+function fallbackCopy(txt){ var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); var ok=false; try{ok=document.execCommand('copy');}catch(e){} ta.remove(); return ok; }
+function copyText(txt){
+  if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(txt).then(function(){return true;},function(){return fallbackCopy(txt);});
+  return Promise.resolve(fallbackCopy(txt));
+}
+function lessonHTML(l){
+  var r=stu(l.id), lab=lessonLabel(l), tk=l.k.map(function(id){return taskById[id];});
+  var h='<div class="lesson" id="les-'+l.id+'"><div class="lbody">';
+  if(ui.from) h+='<button class="btn ghost sm" data-act="backtask">← Back to my task</button> ';
+  h+='<h3>'+esc(l.t)+'</h3><p class="small muted">'+LBL[lab]+' · about '+l.min+' min · optional unless you feel stuck</p>'+
+  '<p><b>Why it matters for SL Curtain:</b> '+esc(l.w)+'</p><p><b>Decision it helps with:</b> '+esc(l.d)+'</p>';
+  if(tk.length) h+='<p><b>Linked task'+(tk.length>1?'s':'')+':</b> '+tk.map(function(t){return esc(t.title)+' <span class="muted small">(Stage '+t.stage+')</span>';}).join('; ')+'</p>';
+  h+='<p><b>Find or upload to NotebookLM:</b> '+esc(l.s)+'</p><p class="small muted">No links or citations are given on purpose. Choose sources you trust, and add your own SL Curtain material (past enquiries, quotes, Lead Tracker export).</p>'+
+  '<p><b>Learning questions</b></p><ul>'+l.q.map(function(q){return '<li>'+esc(q)+'</li>';}).join('')+'</ul>'+
+  '<p><b>Apply it to your task:</b> '+esc(l.x)+'</p>'+
+  '<label for="pt-'+l.id+'">NotebookLM prompt</label><textarea id="pt-'+l.id+'" rows="7" readonly>'+esc(promptFor(l))+'</textarea>'+
+  '<div class="actions"><button class="btn sm" data-act="copy" data-id="'+l.id+'">📋 Copy prompt</button></div>'+
+  '<div class="trackbox"><b>My study record</b><div class="g2"><div><label for="ss-'+l.id+'">Status</label><select id="ss-'+l.id+'" data-bind="study.'+l.id+'.status">'+
+  ['none','progress','applied'].map(function(k){return '<option value="'+k+'"'+(r.status===k?' selected':'')+'>'+STUDY_LBL[k]+'</option>';}).join('')+'</select></div>'+
+  '<div><label for="sd-'+l.id+'">Date studied</label><input type="date" id="sd-'+l.id+'" data-bind="study.'+l.id+'.date" value="'+esc(r.date)+'"></div></div>'+
+  '<label for="st-'+l.id+'">Key takeaway</label><textarea id="st-'+l.id+'" rows="2" data-bind="study.'+l.id+'.take">'+esc(r.take)+'</textarea>'+
+  '<label for="sa-'+l.id+'">How I applied it</label><textarea id="sa-'+l.id+'" rows="2" data-bind="study.'+l.id+'.applied">'+esc(r.applied)+'</textarea>'+
+  '<label for="sl-'+l.id+'">NotebookLM notebook link or notes (optional)</label><input type="text" id="sl-'+l.id+'" data-bind="study.'+l.id+'.link" value="'+esc(r.link)+'"></div></div></div>';
+  return h;
+}
+function viewLab(){
+  var rec=recommended(), applied=0, prog=0, nowLeft=0;
+  LESSONS.forEach(function(l){ var s=stu(l.id).status; if(s==='applied') applied++; if(s==='progress') prog++; if(lessonLabel(l)==='now'&&s!=='applied') nowLeft++; });
+  var h='<div class="card lab"><p class="eyebrow">Marketing MBA Lab</p><h2>Learn only what the next task needs</h2>'+
+  '<p class="muted">Everything here is optional. Launching your ad never depends on finishing a lesson or a module. Study when a task makes you stuck, then use it straight away.</p>'+
+  '<details class="park"><summary>A lightweight learning rhythm</summary><ol class="small"><li><b>10–20 minutes</b> in NotebookLM when a concept is needed. No daily schedule.</li><li><b>5 minutes</b> to write one key takeaway below.</li><li><b>Apply it now</b> to one decision or deliverable in your task.</li><li><b>Review later</b>, only if useful.</li></ol></details></div>';
+  h+='<div class="card lab"><h3>Study dashboard</h3>';
+  if(rec){
+    var o=openTasksOf(rec), t=taskById[o[0]], r=stu(rec.id);
+    h+='<div class="recbox"><p class="eyebrow">Recommended topic</p><p style="font-size:1.1rem;font-weight:600;margin:2px 0">'+esc(rec.t)+'</p>'+
+    '<p class="small"><b>Why now:</b> '+esc(rec.w)+'</p>'+
+    '<p class="small"><b>Linked task:</b> '+esc(t.title)+' <span class="muted">(Stage '+t.stage+')</span> · <b>Time:</b> ~'+rec.min+' min · <b>Status:</b> '+STUDY_LBL[r.status]+'</p>'+
+    '<div class="actions"><button class="btn sm" data-act="copy" data-id="'+rec.id+'">📋 Copy NotebookLM prompt</button><button class="btn ghost sm" data-act="openlesson" data-id="'+rec.id+'">Open the lesson</button></div></div>';
+  } else h+='<div class="recbox"><p><b>Nothing urgent to study.</b> Go and execute. You can pick any topic below if you’re curious.</p></div>';
+  h+='<p class="small" style="margin-top:10px">Applied <b>'+applied+'</b> · In progress <b>'+prog+'</b> · of '+LESSONS.length+' topics. Topics marked “Learn now” still open: <b>'+nowLeft+'</b>. Only those matter for the first test.</p>';
+  var notes=LESSONS.filter(function(l){var r=stu(l.id); return r.take||r.applied;});
+  if(notes.length){ h+='<h3 style="margin-top:12px">Key takeaways and applications</h3><ul class="plain">'; notes.forEach(function(l){ var r=stu(l.id);
+    h+='<li style="padding:4px 0"><b>'+esc(l.t)+'</b> <span class="muted small">'+STUDY_LBL[r.status]+(r.date?' · '+fmtDate(r.date):'')+'</span>'+(r.take?'<br>💡 '+esc(r.take):'')+(r.applied?'<br>🛠 '+esc(r.applied):'')+'</li>'; }); h+='</ul>'; }
+  h+='</div>';
+  var cnt=function(f){return LESSONS.filter(function(l){return f==='all'||lessonLabel(l)===f||(f==='later'&&lessonLabel(l)==='review');}).length;};
+  h+='<div class="card lab"><h3>Study roadmap</h3><p class="small muted">Labels follow your progress: topics tied to your current stage are “Learn now”, the following stages “Learn next”, and the rest “Learn later”. Advanced topics such as attribution, A/B testing and sample size stay in “later”.</p><div class="chips">';
+  [['now','Learn now'],['next','Learn next'],['later','Learn later'],['all','All']].forEach(function(f){ h+='<button class="chip'+(ui.labFilter===f[0]?' on':'')+'" data-act="labfilter" data-f="'+f[0]+'">'+f[1]+' ('+cnt(f[0])+')</button>'; });
+  h+='</div>';
+  MODULES.forEach(function(m){
+    var ls=LESSONS.filter(function(l){ if(l.m!==m.id) return false; var lb=lessonLabel(l); return ui.labFilter==='all'||lb===ui.labFilter||(ui.labFilter==='later'&&lb==='review'); });
+    if(!ls.length) return;
+    var all=LESSONS.filter(function(l){return l.m===m.id;}), ex=(m.id in ui.mod)?ui.mod[m.id]:(ls.some(function(l){return l.id===ui.lesson;})||ls.some(function(l){return lessonLabel(l)==='now';}));
+    h+='<div class="mod"><button class="stagehead" data-act="labmod" data-id="'+m.id+'" data-ex="'+!!ex+'" aria-expanded="'+!!ex+'"><span><b>Module '+m.id+' — '+esc(m.t)+'</b><br><span class="muted small">'+esc(m.a)+'</span></span><span aria-hidden="true">'+(ex?'▾':'▸')+'</span></button>';
+    if(ex) ls.forEach(function(l){ var s=stu(l.id).status, lb=lessonLabel(l), op=ui.lesson===l.id;
+      h+='<div class="lrow'+(op?' open':'')+'"><button class="ltitle" data-act="openlesson" data-id="'+l.id+'" aria-expanded="'+op+'">'+esc(l.t)+'</button><span class="badge lb-'+lb+'">'+LBL[lb]+'</span> <span class="badge">~'+l.min+' min</span>'+(s!=='none'?' <span class="badge '+(s==='applied'?'ok':'st')+'">'+STUDY_LBL[s]+'</span>':'')+(op?lessonHTML(l):'')+'</div>'; });
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+/* ---------- FocusPilot: views ---------- */
+function fpOpt(list,cur,blank){ var h=blank?'<option value="">'+blank+'</option>':''; list.forEach(function(o){ h+='<option value="'+o[0]+'"'+(String(cur)===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'; }); return h; }
+function fpGet(it,f){ var p=f.split('.'),o=it; for(var i=0;i<p.length;i++){ if(o==null) return ''; o=o[p[i]]; } return o==null?'':o; }
+function fpIn(it,f,label,type,ph){ var id='x-'+it.id+'-'+f.replace('.','_'); return '<label for="'+id+'">'+label+'</label><input id="'+id+'" type="'+(type||'text')+'" data-fpitem="'+it.id+'|'+f+'" value="'+esc(fpGet(it,f))+'" placeholder="'+esc(ph||'')+'">'; }
+function fpTa(it,f,label,ph){ var id='x-'+it.id+'-'+f; return '<label for="'+id+'">'+label+'</label><textarea id="'+id+'" rows="2" data-fpitem="'+it.id+'|'+f+'" placeholder="'+esc(ph||'')+'">'+esc(fpGet(it,f))+'</textarea>'; }
+function fpSel(it,f,label,opts,blank){ var id='x-'+it.id+'-'+f.replace('.','_'); return '<label for="'+id+'">'+label+'</label><select id="'+id+'" data-fpitem="'+it.id+'|'+f+'">'+fpOpt(opts,fpGet(it,f),blank)+'</select>'; }
+function fpQBtns(it){
+  var h='<div class="actions">';
+  ['now','next','park','drop'].forEach(function(q){ h+='<button class="btn sm '+(it.q===q?'':'ghost')+'" data-act="fpmove" data-id="'+it.id+'" data-q="'+q+'" aria-pressed="'+(it.q===q)+'">'+({now:'Do now',next:'Next',park:'Park',drop:'Drop'})[q]+'</button>'; });
+  if(it.q==='inbox') h+='<button class="btn sm" data-act="fptriage" data-id="'+it.id+'">Help me decide</button>';
+  h+='<button class="btn ghost sm" data-act="fpdone" data-id="'+it.id+'">✓ Done</button></div>'; return h;
+}
+function fpItemHTML(it){
+  var sg=fpSuggest(it), sc=sg.sc, op=ui.fpOpen===it.id, dup=fpDup(it.title,it.id), pin=fpPin(it), dl=it.deadline?daysTo(it.deadline):null;
+  var h='<div class="fpitem q-'+it.q+(it.done?' isdone':'')+'" id="fi-'+it.id+'"><button class="ttitle" data-act="fpopen" data-id="'+it.id+'" aria-expanded="'+op+'">'+esc(it.title)+'</button><div class="meta">'+
+   '<span class="badge">'+esc(fpCat(it.cat))+'</span>'+(it.effort?'<span class="badge">'+FP_EFF[it.effort].l+'</span>':'')+
+   (it.deadline?'<span class="badge st">Due '+fmtDate(it.deadline)+'</span>':'')+(it.q!=='inbox'?'<span class="badge lb-now">'+FP_Q[it.q]+'</span>':'')+
+   (pin.length&&!it.done?'<span class="badge st">Handled explicitly</span>':'')+(it.blocker&&!it.done?'<span class="badge st">Blocked</span>':'')+
+   (it.done?'<span class="badge ok">Done'+(it.doneAt?' '+fmtDate(it.doneAt.slice(0,10)):'')+'</span>':'')+(it.archived?'<span class="badge">Archived</span>':'')+
+   (dup?'<span class="badge st" title="'+esc(dup.title)+'">Possible duplicate</span>':'')+'</div>';
+  if(!it.done&&!it.archived) h+='<p class="small muted" style="margin:6px 0 0">Suggestion (rule-based'+(sg.prov?', provisional':'')+'): <b>'+FP_Q[sg.q]+'</b>'+(sc.score!=null?' · score '+sc.score+'/100':'')+'. '+esc(sg.why)+(sg.needs.length?' <i>Needs: '+esc(sg.needs.join(', '))+'.</i>':'')+'</p>';
+  if(!it.done&&!it.archived) h+=fpQBtns(it);
+  if(op){
+    h+='<div class="details">'+fpIn(it,'title','Title')+fpTa(it,'desc','Description (optional)')+
+    '<div class="g2"><div>'+fpSel(it,'cat','Category',FP_CATOPT)+fpSel(it,'effort','Estimated effort',FP_EFFOPT,'Not estimated')+fpIn(it,'deadline','Deadline (only if genuine)','date')+'</div><div>'+fpIn(it,'outcome','Expected business outcome')+fpIn(it,'next','Smallest useful next action')+fpIn(it,'source','Source (where the idea came from)')+'</div></div>'+
+    fpTa(it,'notes','Notes')+'<div class="g2"><div>'+fpIn(it,'dep','Depends on')+'</div><div>'+fpIn(it,'blocker','Blocked by (leave empty if nothing)')+'</div></div>'+fpIn(it,'existing','Existing tool or process that already solves this (optional)');
+    h+='<p style="margin-top:10px"><b>Handled explicitly (bypass the score):</b></p><label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.commitment" '+(it.flags.commitment?'checked':'')+'> A customer or partner commitment</label>'+
+    '<label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.safety" '+(it.flags.safety?'checked':'')+'> A safety issue</label>'+
+    '<label class="inline"><input type="checkbox" class="chk" data-fpitem="'+it.id+'|flags.blocker" '+(it.flags.blocker?'checked':'')+'> A critical operational blocker</label>';
+    h+='<p style="margin-top:10px"><b>Ratings</b> <span class="muted small">(optional, 1–5; leave blank if you don’t know)</span></p><div class="g2">';
+    FP_DIMS.forEach(function(d){ h+='<div><label for="x-'+it.id+'-r_'+d[0]+'" title="'+esc(d[2])+'">'+d[1]+'</label><select id="x-'+it.id+'-r_'+d[0]+'" data-fpitem="'+it.id+'|r.'+d[0]+'">'+fpOpt([[1,'1 – low'],[2,'2'],[3,'3'],[4,'4'],[5,'5 – high']],it.r[d[0]]==null?'':it.r[d[0]],'Not rated')+'</select><span class="muted small">'+esc(d[2])+'</span></div>'; });
+    h+='</div><div class="scorebox"><b>How the score is made</b> <span class="muted small">(decision support, not an objective truth)</span><ul class="plain">';
+    sc.parts.forEach(function(p){ h+='<li>'+esc(p.l)+': <b>'+p.v+'/5</b>'+(p.sug?' <span class="muted small">(suggested from category)</span>':'')+' × weight '+p.w+'</li>'; });
+    h+='</ul>'+(sc.score!=null?'<p>Score: <b>'+sc.score+'/100</b>'+(sc.prov?' (provisional)':'')+'</p>':'<p class="muted">Add an effort estimate or a rating to see a score.</p>')+(sc.missing.length?'<p class="small">Still needed for a firm recommendation: '+esc(sc.missing.join(', '))+'.</p>':'')+'</div>';
+    if(sg.q!==it.q&&it.q!=='inbox'&&!it.done) h+=fpIn(it,'ovWhy','You chose '+FP_Q[it.q]+' instead of the suggested '+FP_Q[sg.q]+'. Why? (recorded)');
+    var lsn=fpStudy(it); if(lsn) h+='<div class="studybox"><b>Optional study:</b> “'+esc(lsn.t)+'” (~'+lsn.min+' min) may help with this decision. It is not a task.<div class="actions"><button class="btn ghost sm" data-act="copy" data-id="'+lsn.id+'" data-item="'+it.id+'">📋 Copy NotebookLM prompt</button><button class="btn ghost sm" data-act="study" data-id="'+lsn.id+'">Open in MBA Lab</button></div></div>';
+    if(dup) h+='<p class="small">Possible duplicate of “'+esc(dup.title)+'”.</p>';
+    h+='<div class="actions">'+(it.archived?'<button class="btn ghost sm" data-act="fparch" data-id="'+it.id+'">Restore from archive</button>':'<button class="btn ghost sm" data-act="fparch" data-id="'+it.id+'">Archive</button>')+
+      (it.done?'<button class="btn ghost sm" data-act="fpundone" data-id="'+it.id+'">Re-open</button>':'<button class="btn ghost sm" data-act="fpwhy" data-id="'+it.id+'">Why this, not that?</button>')+
+      '<button class="btn danger sm" data-act="fpdel" data-id="'+it.id+'">Delete permanently…</button></div></div>';
+  }
+  return h+'</div>';
+}
+function fpCaptureHTML(){
+  var f=ui.fpf, h='<div class="card fp"><h3>Quick capture</h3><p class="muted small">Paste anything: one idea, a messy paragraph or a list. Nothing becomes a task automatically. Everything lands in the inbox first.</p>'+
+  '<label for="cap" class="sr">Brain dump</label><textarea id="cap" rows="3" data-fpf="cap" placeholder="e.g. - call the designer I met&#10;- check the referral fee idea&#10;- redo the website">'+esc(f.cap||'')+'</textarea>'+
+  '<div class="actions"><button class="btn" data-act="fpcapture">Capture</button></div>';
+  if(ui.fpPrev){ h+='<div class="stagenote" style="margin-top:12px"><b>Check how I split this</b> <span class="muted">(rule-based: one item per line, bullet or sentence; I kept all your words). Edit titles or untick anything you don’t want.</span></div>';
+    ui.fpPrev.forEach(function(p,i){ h+='<div class="prev"><input type="checkbox" class="chk" data-fpf="prev.'+i+'.inc" '+(p.inc?'checked':'')+' aria-label="Include"><div style="flex:1"><input type="text" data-fpf="prev.'+i+'.t" value="'+esc(p.t)+'">'+(p.dup?'<span class="small" style="color:var(--warn)">Possible duplicate of “'+esc(p.dup)+'”</span>':'')+'</div></div>'; });
+    h+='<div class="actions"><button class="btn" data-act="fpcapok">Add selected to inbox</button><button class="btn ghost" data-act="fpcapcancel">Cancel</button></div>'; }
+  h+='<details class="park" '+(ui.fpNewOpen?'open':'')+'><summary>Add one item with details</summary>'+
+  '<label for="n-title">Title</label><input type="text" id="n-title" data-fpf="new.title" value="'+esc((f.new||{}).title||'')+'">'+
+  '<label for="n-desc">Description (optional)</label><textarea id="n-desc" rows="2" data-fpf="new.desc">'+esc((f.new||{}).desc||'')+'</textarea>'+
+  '<div class="g2"><div><label for="n-cat">Category</label><select id="n-cat" data-fpf="new.cat">'+fpOpt(FP_CATOPT,(f.new||{}).cat||'other')+'</select><label for="n-eff">Estimated effort</label><select id="n-eff" data-fpf="new.effort">'+fpOpt(FP_EFFOPT,(f.new||{}).effort||'','Not estimated')+'</select><label for="n-dl">Deadline (only if genuine)</label><input type="date" id="n-dl" data-fpf="new.deadline" value="'+esc((f.new||{}).deadline||'')+'"></div>'+
+  '<div><label for="n-out">Expected business outcome</label><input type="text" id="n-out" data-fpf="new.outcome" value="'+esc((f.new||{}).outcome||'')+'"><label for="n-src">Source</label><input type="text" id="n-src" data-fpf="new.source" value="'+esc((f.new||{}).source||'')+'"><label for="n-notes">Notes</label><input type="text" id="n-notes" data-fpf="new.notes" value="'+esc((f.new||{}).notes||'')+'"></div></div>'+
+  '<div class="actions"><button class="btn" data-act="fpadd">Add to inbox</button></div></details></div>';
+  return h;
+}
+function fpFocusHTML(){
+  var st=S.fp.strategy, now=fpInQ('now'), top=now.slice(0,3), cap=fpCapacity(), inbox=fpActive().filter(function(x){return x.q==='inbox';}), parked=fpActive().filter(function(x){return x.q==='park';}).length, blockers=fpActive().filter(function(x){return x.blocker&&(x.q==='now'||x.q==='next');});
+  var h='<div class="card fp hero2"><p class="eyebrow">Current strategic objective</p><h2>'+esc(st.objective||'Not set')+'</h2>'+
+  '<p class="small"><b>Primary bottleneck (hypothesis):</b> '+esc(st.bottleneck||'Not set')+'</p>'+
+  '<label for="wk">Most important outcome to pursue this week</label><input type="text" id="wk" data-bind="fp.weekOutcome" value="'+esc(S.fp.weekOutcome)+'" placeholder="One outcome, e.g. 3 designers contacted and 1 meeting booked"></div>';
+  var rec=top[0], q1=nextTasks(1)[0];
+  h+='<div class="card fp"><p class="eyebrow">One recommended next action</p>';
+  if(rec) h+='<p style="font-size:1.15rem;font-weight:600;margin:2px 0">'+esc(rec.next||rec.title)+'</p><p class="small muted">'+(rec.next?'Smallest next step for: '+esc(rec.title):'No “smallest next action” recorded. Open the item to add one.')+'</p>';
+  else if(inbox.length) h+='<p style="font-size:1.1rem;font-weight:600;margin:2px 0">Triage one inbox item: “'+esc(inbox[0].title)+'”</p><p class="small muted">Nothing is in Do now yet. Deciding one thing is enough for today.</p><div class="actions"><button class="btn sm" data-act="fptriage" data-id="'+inbox[0].id+'">Help me decide</button></div>';
+  else h+='<p style="font-size:1.05rem;margin:2px 0">Nothing is waiting. Capture anything on your mind, or carry on with your Marketing Quest.</p>';
+  if(q1) h+='<p class="small" style="margin-top:8px">🧭 From your Marketing Quest: <b>'+esc(q1.title)+'</b> <button class="btn ghost sm" data-act="focus" data-id="'+q1.id+'">Open</button></p>';
+  h+='</div>';
+  h+='<div class="card fp"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><h3>Immediate tasks ('+top.length+' of max 3)</h3><button class="btn ghost sm" data-act="fpwhy" data-id="">Why this, not that?</button></div>';
+  if(!top.length) h+='<p class="muted">Do now is empty. Move an item here from the inbox when it deserves your focus.</p>';
+  var cum=0, dayFull=false;
+  top.forEach(function(it,i){ var hrs=fpHours(it); var today=!dayFull; if(hrs!=null){ cum+=hrs; if(cum>=cap.day) dayFull=true; } else if(i>=2) dayFull=true;
+    if(ui.fpOpen===it.id){ h+=fpItemHTML(it); return; }
+    h+='<div class="fpitem q-now"><div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:1"><button class="ttitle" data-act="fpopen" data-id="'+it.id+'">'+(i+1)+'. '+esc(it.title)+'</button><div class="meta">'+(it.effort?'<span class="badge">'+FP_EFF[it.effort].l+'</span>':'<span class="badge">No effort estimate</span>')+'<span class="badge '+(today?'ok':'')+'">'+(today?'Fits today':'This week')+'</span>'+(it.deadline?'<span class="badge st">Due '+fmtDate(it.deadline)+'</span>':'')+(it.blocker?'<span class="badge st">Blocked</span>':'')+'</div>'+
+    '<p class="small muted" style="margin:4px 0 0">'+esc(fpWhyOutrank(it,i,top[0]))+'</p></div><button class="btn sm" data-act="fpdone" data-id="'+it.id+'">✓ Done</button></div></div>'; });
+  if(now.length>3) h+='<p class="small muted">+'+(now.length-3)+' more in Do now. Consider moving some to Next.</p>';
+  h+='<p class="small" style="margin-top:8px"><b>Time check:</b> Do now needs about <b>'+cap.load+'h</b>'+(cap.unknown?' (+'+cap.unknown+' without an estimate)':'')+' against about <b>'+cap.week+'h</b> available this week. '+(cap.over?'That is more than your realistic time. Moving one item to Next would keep things calm. ':'')+'<span class="muted">These are limits, not targets.</span></p>'+
+  '<details class="park"><summary>My time this week</summary><div class="g4"><div><label for="ph">Focus hours per day</label><input type="number" id="ph" min="0" max="16" step="0.5" data-num data-fprefresh data-bind="fp.plan.hours" value="'+S.fp.plan.hours+'"></div><div><label for="pd">Working days</label><input type="number" id="pd" min="0" max="7" step="1" data-num data-fprefresh data-bind="fp.plan.days" value="'+S.fp.plan.days+'"></div><div><label for="pc">Hours already committed</label><input type="number" id="pc" min="0" step="0.5" data-num data-fprefresh data-bind="fp.plan.commit" value="'+S.fp.plan.commit+'"></div><div><label for="pn">Known commitments</label><input type="text" id="pn" data-bind="fp.plan.note" value="'+esc(S.fp.plan.note)+'" placeholder="e.g. site visits Tue"></div></div></details></div>';
+  h+='<div class="card fp"><h3>Active blockers</h3>'+(blockers.length?'<ul class="plain">'+blockers.map(function(x){return '<li>⛔ <b>'+esc(x.title)+'</b>: '+esc(x.blocker)+'</li>';}).join('')+'</ul>':'<p class="muted">No blockers recorded on Do now or Next items.</p>')+'</div>';
+  h+='<div class="card fp"><h3>Why these outrank other ideas</h3><p class="small">Rule-based, not AI. Items with a genuine deadline, customer commitment, safety issue or critical blocker go first. The rest are ordered by a visible score (impact, urgency, alignment, effort, readiness, confidence and risk, with weights you can edit under Strategy). Anything outside Do now is safe and does not compete for your attention.</p>'+
+  '<p class="small"><b>'+parked+'</b> idea'+(parked===1?'':'s')+' parked, not activated · <b>'+inbox.length+'</b> in the inbox · <b>'+fpInQ('next').length+'</b> scheduled next. <button class="btn ghost sm" data-act="fptab" data-t="items" data-qf="park">Open the parking lot</button></p></div>';
+  return h;
+}
+function fpItemsHTML(){
+  var f=ui.fpFilter, list=S.fp.items.filter(function(x){
+    if(f.show==='archived') { if(!x.archived) return false; } else { if(x.archived) return false; if(f.show==='done'&&!x.done) return false; if(f.show!=='done'&&f.show!=='all'&&(x.done||x.q!==f.show)) return false; if(f.show==='all'&&x.done) return false; }
+    if(f.cat&&x.cat!==f.cat) return false; if(f.q){ var b=(x.title+' '+x.desc+' '+x.notes+' '+x.outcome+' '+x.source).toLowerCase(); if(b.indexOf(f.q.toLowerCase())<0) return false; } return true; }).sort(function(a,b){ return f.show==='done'?(b.doneAt<a.doneAt?-1:1):fpRank(a,b); });
+  var cnt=function(k){ return S.fp.items.filter(function(x){ if(k==='archived') return x.archived; if(x.archived) return false; if(k==='done') return x.done; if(k==='all') return !x.done; return !x.done&&x.q===k; }).length; };
+  var h='<div class="card fp"><h3>All items</h3><div class="g2"><div><label for="fq">Search</label><input type="text" id="fq" data-fpf="flt.q" value="'+esc(f.q)+'" placeholder="Search title, notes, outcome…"></div><div><label for="fc">Category</label><select id="fc" data-fpf="flt.cat" data-fprender>'+fpOpt(FP_CATS,f.cat,'All categories')+'</select></div></div><div class="chips">';
+  [['all','Active'],['now','Do now'],['next','Next'],['park','Parked'],['drop','Dropped'],['done','Completed'],['archived','Archived']].forEach(function(c){ h+='<button class="chip'+(f.show===c[0]?' on':'')+'" data-act="fpshow" data-f="'+c[0]+'">'+c[1]+' ('+cnt(c[0])+')</button>'; });
+  h+='</div>'+(list.length?list.map(fpItemHTML).join(''):'<p class="muted">Nothing here.</p>')+'</div>';
+  h+='<div class="card fp"><details class="park"><summary>Decision log ('+S.fp.log.length+')</summary>'+(S.fp.log.length?'<ul class="plain small">'+S.fp.log.slice().reverse().slice(0,60).map(function(l){return '<li style="padding:3px 0"><span class="muted">'+fmtDate((l.at||'').slice(0,10))+'</span> · <b>'+esc(l.item)+'</b> · '+esc(l.action)+(l.from||l.to?' ('+esc(FP_Q[l.from]||l.from||'')+' → '+esc(FP_Q[l.to]||l.to||'')+')':'')+(l.why?' — '+esc(l.why):'')+'</li>';}).join('')+'</ul>':'<p class="muted small">Decisions and the reasons you give will appear here.</p>')+'</details></div>';
+  return h;
+}
+function fpInboxHTML(){
+  var inbox=fpActive().filter(function(x){return x.q==='inbox';}).sort(function(a,b){return a.created<b.created?1:-1;});
+  var h=fpCaptureHTML()+'<div class="card fp"><h3>Inbox ('+inbox.length+')</h3><p class="muted small">Ideas wait here safely. You don’t have to act on any of them.</p>';
+  if(inbox.length) h+='<div class="actions" style="margin-bottom:6px"><button class="btn sm" data-act="fptriage" data-id="'+inbox[0].id+'">Triage the newest</button></div>';
+  h+=(inbox.length?inbox.map(fpItemHTML).join(''):'<p class="muted">The inbox is empty. Capture whatever is on your mind above.</p>')+'</div>';
+  return h;
+}
+function fpStrategyHTML(){
+  var st=S.fp.strategy, F=[['objective','Primary business objective'],['bottleneck','Current bottleneck (hypothesis)'],['hypothesis','Current strategic hypothesis'],['initiative','Current experiment or initiative'],['measure','Main success measures'],['review','Review date'],['deferred','Explicitly deferred initiatives']];
+  var h='<div class="card fp"><h3>Current strategy</h3><p class="small muted">These are starting assumptions, not verified conclusions. New ideas don’t change the strategy. Change it only with material new evidence, a significant external change or a critical constraint, and record why.</p>';
+  if(!ui.fpStratEdit){
+    F.forEach(function(x){ h+='<p style="margin:8px 0 0"><b>'+x[1]+'</b><br>'+(x[0]==='review'?(st.review?fmtDate(st.review)+(daysTo(st.review)!=null&&daysTo(st.review)<0?' (date passed, a good time to review)':''):'<span class="muted">No review date set</span>'):esc(st[x[0]]||'—').replace(/\n/g,'<br>'))+'</p>'; });
+    h+='<p style="margin:8px 0 0"><b>Longer-term goal</b><br>'+esc(st.longterm)+'</p><details class="park"><summary>Current priorities (provisional)</summary><p class="small" style="white-space:pre-wrap">'+esc(st.priorities)+'</p></details>'+
+    '<div class="actions"><button class="btn" data-act="fpstratedit">Edit strategy</button></div>';
+  } else {
+    var g=ui.fpf.st;
+    F.forEach(function(x){ h+='<label for="s-'+x[0]+'">'+x[1]+'</label>'+(x[0]==='review'?'<input type="date" id="s-review" data-fpf="st.review" value="'+esc(g.review)+'">':'<textarea id="s-'+x[0]+'" rows="2" data-fpf="st.'+x[0]+'">'+esc(g[x[0]])+'</textarea>'); });
+    h+='<label for="s-longterm">Longer-term goal</label><textarea id="s-longterm" rows="2" data-fpf="st.longterm">'+esc(g.longterm)+'</textarea><label for="s-priorities">Current priorities (provisional)</label><textarea id="s-priorities" rows="5" data-fpf="st.priorities">'+esc(g.priorities)+'</textarea>'+
+    '<label for="s-reason">What changed? (required, saved in your log)</label><input type="text" id="s-reason" data-fpf="st.reason" value="'+esc(g.reason||'')+'" placeholder="e.g. first referral partner gave feedback on pricing">'+(ui.msg?'<p class="msg">'+esc(ui.msg)+'</p>':'')+
+    '<div class="actions"><button class="btn" data-act="fpstratsave">Save strategy</button><button class="btn ghost" data-act="fpstratcancel">Cancel</button></div>'; }
+  h+='</div>';
+  if(S.fp.stratLog.length) h+='<div class="card fp"><details class="park"><summary>Strategy change history ('+S.fp.stratLog.length+')</summary><ul class="plain small">'+S.fp.stratLog.slice().reverse().slice(0,10).map(function(l){return '<li style="padding:3px 0"><span class="muted">'+fmtDate((l.at||'').slice(0,10))+'</span> · '+esc(l.fields)+' — '+esc(l.reason)+'</li>';}).join('')+'</ul></details></div>';
+  var w=S.fp.weights;
+  h+='<div class="card fp"><h3>Scoring weights</h3><p class="small muted">Visible and editable. Score = weighted average of the ratings you have given (each 1–5), shown out of 100. Suggestions: ≥70 Do now · 50–69 Next · below 50 Park. It is decision support, not an objective truth, and genuine deadlines, commitments, safety issues and critical blockers bypass it. Effort counts in favour of smaller tasks.</p><div class="g4">';
+  [['impact','Impact'],['urgency','Urgency'],['align','Alignment'],['effort','Low effort'],['readiness','Readiness'],['confidence','Confidence'],['risk','Reversible / low risk']].forEach(function(d){ h+='<div><label for="w-'+d[0]+'">'+d[1]+'</label><input type="number" id="w-'+d[0]+'" min="0" max="10" step="0.5" data-num data-fprefresh data-bind="fp.weights.'+d[0]+'" value="'+w[d[0]]+'"></div>'; });
+  h+='</div><div class="actions"><button class="btn ghost sm" data-act="fpwreset">Reset to defaults</button></div></div>';
+  return h;
+}
+function fpReviewHTML(){
+  var wk=fpMonday(), done=S.fp.items.filter(function(x){return x.done&&(x.doneAt||'').slice(0,10)>=wk;}), rv=S.fp.rv;
+  var carry=fpActive().filter(function(x){return x.q==='now'||x.q==='next';});
+  var h='<div class="card fp"><h3>Weekly review</h3><p class="muted small">Week starting '+fmtDate(wk)+'. Take five minutes. Nothing here is a score, and unfinished work is just information.</p>'+
+  '<p><b>Completed this week ('+done.length+')</b></p>'+(done.length?'<ul class="plain">'+done.map(function(x){return '<li>✓ '+esc(x.title)+(x.result?' — <i>'+esc(x.result)+'</i>':'')+'</li>';}).join('')+'</ul>':'<p class="muted small">Nothing marked done yet. That’s okay.</p>')+
+  fpRv('evidence','What business outcome or evidence resulted?')+fpRv('blocked','What remains blocked?')+fpRv('learned','What did I learn?')+fpRv('decisions','What should continue, stop, change or be deferred?')+
+  '<label for="rv-b">Has the main bottleneck changed?</label><select id="rv-b" data-bind="fp.rv.bottleneck">'+fpOpt([['no','No'],['unsure','Not sure yet'],['yes','Yes']],rv.bottleneck)+'</select>'+
+  (rv.bottleneck==='yes'?'<p class="small">If so, review the strategy with a recorded reason. <button class="btn ghost sm" data-act="fprvstrat">Open strategy editor</button></p>':'')+
+  fpRv('bnote','Notes on the bottleneck (optional)')+
+  '<label for="rv-n">The single most important outcome for next week</label><input type="text" id="rv-n" data-bind="fp.rv.next" value="'+esc(rv.next)+'">';
+  if(carry.length){ h+='<p style="margin-top:12px"><b>Open items: what should happen to each?</b></p>'; carry.forEach(function(x){ var cv=(ui.fpf.carry||{})[x.id]||'keep'; h+='<div class="prev"><div style="flex:1">'+esc(x.title)+' <span class="badge">'+FP_Q[x.q]+'</span></div><select data-fpf="carry.'+x.id+'" aria-label="Action for '+esc(x.title)+'">'+fpOpt([['keep','Carry forward'],['next','Reschedule to Next'],['park','Park for now'],['drop','Drop (kept in Dropped)']],cv)+'</select></div>'; }); }
+  h+='<div class="actions"><button class="btn" data-act="fprvsave">Save review and apply choices</button></div></div>';
+  if(S.fp.reviews.length) h+='<div class="card fp"><h3>Past reviews</h3>'+S.fp.reviews.slice().reverse().slice(0,6).map(function(r){return '<details class="park"><summary>Week of '+fmtDate(r.week)+'</summary><div class="small"><p><b>Done:</b> '+esc(r.done||'—')+'</p><p><b>Evidence:</b> '+esc(r.evidence||'—')+'</p><p><b>Blocked:</b> '+esc(r.blocked||'—')+'</p><p><b>Learned:</b> '+esc(r.learned||'—')+'</p><p><b>Decisions:</b> '+esc(r.decisions||'—')+'</p><p><b>Bottleneck changed:</b> '+esc(r.bottleneck)+' '+esc(r.bnote)+'</p><p><b>Next outcome:</b> '+esc(r.next||'—')+'</p></div></details>';}).join('')+'</div>';
+  return h;
+}
+function fpRv(k,l){ return '<label for="rv-'+k+'">'+l+'</label><textarea id="rv-'+k+'" rows="2" data-bind="fp.rv.'+k+'">'+esc(S.fp.rv[k])+'</textarea>'; }
+function viewFP(){
+  var inb=fpActive().filter(function(x){return x.q==='inbox';}).length, T=[['focus','Focus'],['inbox','Inbox'+(inb?' ('+inb+')':'')],['items','All items'],['strategy','Strategy'],['review','Weekly review']];
+  var h='<div class="card fp"><p class="eyebrow">FocusPilot · rule-based prioritisation (no AI service connected)</p><p><b>Capture everything. Commit to very little. Execute what matters. Review the evidence.</b></p><div class="chips" style="margin-bottom:0">';
+  T.forEach(function(t){ h+='<button class="chip'+(ui.fpTab===t[0]?' on':'')+'" data-act="fptab" data-t="'+t[0]+'">'+t[1]+'</button>'; });
+  h+='</div></div>';
+  return h+({focus:fpFocusHTML,inbox:fpInboxHTML,items:fpItemsHTML,strategy:fpStrategyHTML,review:fpReviewHTML}[ui.fpTab]||fpFocusHTML)();
+}
+/* ---------- FocusPilot: actions and dialogs ---------- */
+function fpDlg(html){ var d=$('#dlg'); d.innerHTML=html; if(d.showModal){ if(!d.open) d.showModal(); } else d.setAttribute('open',''); }
+function fpAddItems(list){
+  var n=0; list.forEach(function(o){ var it=fpNew(o); S.fp.items.push(it); fpLog(it,'captured','','inbox',''); n++; }); save(); return n;
+}
+function fpMove(id,q,why,displaceId){
+  var it=fpItem(id); if(!it||(it.q===q&&!displaceId)) return;
+  var from=it.q, sg=fpSuggest(it);
+  if(q==='now'){
+    var cur=fpInQ('now').filter(function(x){return x.id!==id;});
+    if(cur.length>=3&&!displaceId){ fpDispDlg(id); return; }
+    if(displaceId){ var d=fpItem(displaceId); if(d){ d.q='next'; d.updated=fpNow(); fpLog(d,'moved','now','next','Made room for “'+it.title+'”'); } }
+  }
+  it.q=q; it.updated=fpNow(); it.ov=(sg.q!==q&&sg.q!=='inbox')?sg.q:''; if(!it.ov) it.ovWhy='';
+  fpLog(it,it.ov?'moved (override)':'moved',from,q,why||'');
+  save(); closeDlg(); renderView();
+  toast(q==='drop'?'Moved to Dropped. Nothing is deleted.':q==='park'?'Parked safely. It will wait.':q==='now'?'In Do now. One thing at a time.':'Scheduled for next.');
+  if(it.ov) setTimeout(function(){ toast('You chose a different queue than suggested. You can add why in the item’s details.'); },1800);
+}
+function fpDispDlg(id){
+  var it=fpItem(id), cur=fpInQ('now').filter(function(x){return x.id!==id;}), dflt=cur.slice().reverse().filter(function(x){return !fpPin(x).length;})[0]||cur[cur.length-1];
+  fpDlg('<h2 id="dlgh">Do now is full (3)</h2><p class="small muted">To add “'+esc(it.title)+'”, one item moves to Next. It isn’t lost.</p>'+
+   cur.map(function(x){ return '<label class="inline"><input type="radio" name="disp" value="'+x.id+'" '+(dflt&&dflt.id===x.id?'checked':'')+'> '+esc(x.title)+'</label>'; }).join('')+
+   '<label for="disWhy">Why does this one take priority? (optional)</label><input type="text" id="disWhy">'+
+   '<div class="actions"><button class="btn" data-act="fpdisok" data-id="'+id+'">Swap them</button><button class="btn ghost" data-act="dlgcancel">Cancel</button></div>');
+}
+function fpDoneDlg(id){
+  var it=fpItem(id);
+  fpDlg('<h2 id="dlgh">Mark as done</h2><p class="small">“'+esc(it.title)+'”</p><label for="doneRes">What outcome or evidence resulted? (optional)</label><textarea id="doneRes" rows="3" placeholder="e.g. Designer replied and wants a sample board"></textarea>'+
+   '<div class="actions"><button class="btn" data-act="fpdoneok" data-id="'+id+'">✓ Done</button><button class="btn ghost" data-act="dlgcancel">Cancel</button></div>');
+}
+function fpWhyDlg(id){
+  var cands=fpActive().filter(function(x){return x.q!=='now';}), it=id?fpItem(id):cands[0];
+  if(!it){ fpDlg('<h2 id="dlgh">Why this, not that?</h2><p>There are no other ideas competing with your Do now list yet.</p><div class="actions"><button class="btn ghost" data-act="dlgcancel">Close</button></div>'); return; }
+  var L=fpWhyNot(it);
+  fpDlg('<h2 id="dlgh">Why this, not that?</h2><p class="small muted">Rule-based reasoning from your own ratings and strategy. It is not AI.</p><label for="whySel">Idea</label><select id="whySel" data-fpf="whyid">'+fpActive().map(function(x){return '<option value="'+x.id+'"'+(x.id===it.id?' selected':'')+'>'+esc(x.title)+' ('+FP_Q[x.q]+')</option>';}).join('')+'</select>'+
+   '<ul style="padding-left:20px">'+L.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+
+   '<div class="actions">'+(it.q!=='now'?'<button class="btn" data-act="fpmove" data-id="'+it.id+'" data-q="now">Make it Do now anyway</button>':'')+'<button class="btn ghost" data-act="dlgcancel">Close</button></div>');
+}
+/* triage assistant */
+var TRI={
+ type:{q:'What kind of thing is this?',opts:[['commit','A real commitment (someone is counting on it)'],['opp','An opportunity'],['prob','A problem'],['idea','Just an interesting idea']]},
+ outcome:{q:'What outcome would it create?',text:'outcome',ph:'e.g. more qualified referrals'},
+ bottleneck:{q:'Does it address the current bottleneck?',opts:[['direct','Yes, directly'],['indirect','Indirectly'],['no','No']]},
+ risk:{q:'Is there a genuine deadline or material risk?'},
+ existing:{q:'Is there an existing tool or process that already solves it?',opts:[['no','No'],['yes','Yes']]},
+ existing2:{q:'Which tool or process?',text:'existing2',ph:'e.g. Quote Calculator, CRM'},
+ smallest:{q:'What is the smallest useful next action?',text:'smallest',ph:'e.g. Send one message to the designer'},
+ essentials:{q:'Two quick ratings so the suggestion isn’t just a guess'},
+ wait:{q:'Can it wait?',opts:[['yes','Yes, it can wait'],['no','No, it needs attention soon']]}
+};
+function fpTriSeq(a,it){
+  var s=['type']; if(!a.type) return s; var t=a.type;
+  s.push('outcome'); if(t!=='commit') s.push('bottleneck'); if(t!=='idea') s.push('risk');
+  if(t!=='commit'){ s.push('existing'); if(a.existing==='yes') s.push('existing2'); }
+  if(t!=='idea') s.push('smallest');
+  if((it.r.impact==null||it.r.readiness==null||!it.effort)&&t!=='idea') s.push('essentials');
+  s.push('wait'); return s;
+}
+function fpTriStart(id){ ui.tri={id:id,i:0,a:{}}; fpTriRender(); }
+function fpTriRender(){
+  var t=ui.tri, it=fpItem(t.id), seq=fpTriSeq(t.a,it);
+  if(t.i>=seq.length){ fpTriResult(); return; }
+  var k=seq[t.i], S0=TRI[k], h='<h2 id="dlgh">Help me decide</h2><p class="small muted">“'+esc(it.title)+'” · question '+(t.i+1)+' of about '+Math.max(seq.length,t.i+1)+'</p><p style="font-weight:600;font-size:1.05rem">'+S0.q+'</p>';
+  if(S0.opts){ h+='<div class="optlist">'+S0.opts.map(function(o){return '<button class="btn ghost" data-act="fptri" data-v="'+o[0]+'">'+o[1]+'</button>';}).join('')+'</div>'; }
+  else if(k==='risk'){ h+='<label class="inline"><input type="checkbox" class="chk" id="tr-c"> Someone is counting on it (a commitment)</label><label class="inline"><input type="checkbox" class="chk" id="tr-s"> It’s a safety issue</label><label class="inline"><input type="checkbox" class="chk" id="tr-b"> It blocks critical operations</label><label for="tr-d">Genuine deadline (optional)</label><input type="date" id="tr-d"><p class="small muted">Leave everything empty if none apply.</p><div class="actions"><button class="btn" data-act="fptrinext">Next</button></div>'; }
+  else if(k==='essentials'){ h+=(it.r.impact==null?'<label for="tr-imp">Business impact (1 low – 5 material)</label><select id="tr-imp">'+fpOpt([[1,'1'],[2,'2'],[3,'3'],[4,'4'],[5,'5']],'','Not sure')+'</select>':'')+(it.r.readiness==null?'<label for="tr-rdy">Readiness (1 not ready – 5 ready)</label><select id="tr-rdy">'+fpOpt([[1,'1'],[2,'2'],[3,'3'],[4,'4'],[5,'5']],'','Not sure')+'</select>':'')+(!it.effort?'<label for="tr-eff">Estimated effort</label><select id="tr-eff">'+fpOpt(FP_EFFOPT,'','Not sure')+'</select>':'')+'<div class="actions"><button class="btn" data-act="fptrinext">Next</button></div>'; }
+  else { h+='<input type="text" id="triIn" placeholder="'+esc(S0.ph||'')+'" value="'+esc(k==='outcome'?(it.outcome||''):k==='smallest'?(it.next||''):'')+'">'+(k==='smallest'&&!it.effort?'<label for="tr-eff">Roughly how big is that step?</label><select id="tr-eff">'+fpOpt(FP_EFFOPT,'','Not sure')+'</select>':'')+'<div class="actions"><button class="btn" data-act="fptrinext">Next</button><button class="btn ghost" data-act="fptrinext" data-skip="1">Skip</button></div>'; }
+  h+='<div class="actions">'+(t.i>0?'<button class="btn ghost sm" data-act="fptriback">← Back</button>':'')+'<button class="btn ghost sm" data-act="dlgcancel">Cancel (nothing changes)</button></div>';
+  fpDlg(h); var inp=$('#triIn'); if(inp) inp.focus();
+}
+function fpTriNext(skip){
+  var t=ui.tri, it=fpItem(t.id), k=fpTriSeq(t.a,it)[t.i], v=function(id){var e=$('#'+id); return e?e.value:'';};
+  if(!skip){
+    if(k==='risk'){ t.a.rc=$('#tr-c').checked; t.a.rs=$('#tr-s').checked; t.a.rb=$('#tr-b').checked; t.a.rd=v('tr-d'); }
+    else if(k==='essentials'){ t.a.imp=v('tr-imp'); t.a.rdy=v('tr-rdy'); t.a.eff=v('tr-eff'); }
+    else { t.a[TRI[k].text]=v('triIn').trim(); if(k==='smallest') t.a.eff=v('tr-eff'); }
+  }
+  t.i++; fpTriRender();
+}
+function fpTriApply(it,a){
+  if(a.type==='commit') it.flags.commitment=true;
+  if(a.outcome) it.outcome=a.outcome;
+  if(a.bottleneck) it.r.align={direct:5,indirect:3,no:1}[a.bottleneck];
+  if(a.rc) it.flags.commitment=true; if(a.rs) it.flags.safety=true; if(a.rb) it.flags.blocker=true; if(a.rd) it.deadline=a.rd;
+  if(a.existing==='yes'&&a.existing2) it.existing=a.existing2; else if(a.existing==='no') it.existing='';
+  if(a.smallest) it.next=a.smallest;
+  if(a.eff&&FP_EFF[a.eff]) it.effort=a.eff;
+  if(a.imp) it.r.impact=+a.imp; if(a.rdy) it.r.readiness=+a.rdy;
+  if(a.wait==='yes') it.r.urgency=1; else if(a.wait==='no') it.r.urgency=4;
+  if(it.cat==='other'){ var c=fpSugCat(it.title+' '+it.desc+' '+it.outcome); if(c) it.cat=c; }
+  it.updated=fpNow();
+}
+function fpTriResult(){
+  var t=ui.tri, it=fpItem(t.id); fpTriApply(it,t.a); save();
+  var rec=fpSuggest(it), a=t.a;
+  if(a.type==='idea'&&(rec.q==='inbox'||rec.q==='next')){ rec={q:'park',why:'You called it an interesting idea that can wait. Parking keeps it safe without committing any time.',prov:true,needs:rec.needs,sc:rec.sc}; }
+  else if(rec.q==='inbox'&&a.wait==='yes'){ rec={q:'park',why:'It can wait and there isn’t enough information to rank it, so parking is the calm default.',prov:true,needs:rec.needs,sc:rec.sc}; }
+  t.rec=rec.q;
+  var now=fpInQ('now').filter(function(x){return x.id!==it.id;}), cap=fpCapacity(), lsn=fpStudy(it), post;
+  if(rec.q==='now'&&now.length>=3) post='Do now already has 3 items. Activating this means moving “'+now[now.length-1].title+'” (lowest-ranked) to Next.';
+  else if(rec.q==='now') post='Nothing has to move: Do now will have '+(now.length+1)+' of 3.'+(cap.over||(cap.week>0&&cap.load+(fpHours(it)||0)>cap.week)?' Note: that would exceed your available time this week, so consider moving something to Next.':'');
+  else post='Nothing needs to move.';
+  fpDlg('<h2 id="dlgh">My suggestion</h2><p class="small muted">Rule-based from your answers and ratings. It’s decision support, and you decide.</p>'+
+   '<p><b>Category:</b> '+esc(fpCat(it.cat))+'</p><p><b>Suggested priority:</b> '+FP_Q[rec.q]+(rec.sc&&rec.sc.score!=null?' (score '+rec.sc.score+'/100)':'')+(rec.prov?' <span class="badge st">Provisional</span>':'')+'</p><p class="small">'+esc(rec.why)+(rec.needs&&rec.needs.length?' <i>To firm this up I need: '+esc(rec.needs.join(', '))+'.</i>':'')+'</p>'+
+   '<p><b>Why it matters:</b> '+esc(it.outcome||'No outcome recorded yet.')+'</p><p><b>Depends on:</b> '+esc(it.blocker||it.dep||'Nothing recorded')+'</p><p><b>Smallest next step:</b> '+esc(it.next||'Not defined yet')+'</p><p><b>What gets postponed:</b> '+esc(post)+'</p>'+
+   (it.existing?'<p class="small"><b>Existing tool:</b> '+esc(it.existing)+'. Try that first.</p>':'')+
+   (lsn?'<div class="studybox small"><b>Optional study:</b> “'+esc(lsn.t)+'” (~'+lsn.min+' min) could help resolve this decision. <button class="btn ghost sm" data-act="copy" data-id="'+lsn.id+'" data-item="'+it.id+'">📋 Copy NotebookLM prompt</button></div>':'')+
+   '<div class="actions">'+(rec.q!=='inbox'?'<button class="btn" data-act="fptriaccept">Accept: '+FP_Q[rec.q]+'</button>':'')+'</div><p class="small muted" style="margin-bottom:0">Or choose yourself:</p><div class="actions">'+['now','next','park','drop'].map(function(q){return '<button class="btn ghost sm" data-act="fpmove" data-id="'+it.id+'" data-q="'+q+'">'+({now:'Do now',next:'Next',park:'Park',drop:'Drop'})[q]+'</button>';}).join('')+'<button class="btn ghost sm" data-act="dlgcancel">Keep in inbox</button></div>');
+}
+function fpSetF(t){
+  var n=t.dataset.fpf, v=(t.type==='checkbox')?t.checked:t.value, f=ui.fpf, p=n.split('.');
+  if(n==='cap') f.cap=v;
+  else if(p[0]==='prev'){ var o=ui.fpPrev&&ui.fpPrev[+p[1]]; if(o){ if(p[2]==='inc') o.inc=v; else o.t=v; } }
+  else if(p[0]==='new'){ f.new=f.new||{}; f.new[p[1]]=v; }
+  else if(n==='flt.q'){ ui.fpFilter.q=v; var pos=t.selectionStart; renderView(); var e=$('#fq'); if(e){ e.focus(); try{e.setSelectionRange(pos,pos);}catch(x){} } }
+  else if(n==='flt.cat'){ ui.fpFilter.cat=v; renderView(); }
+  else if(p[0]==='st'){ f.st[p[1]]=v; }
+  else if(p[0]==='carry'){ f.carry=f.carry||{}; f.carry[p[1]]=v; }
+  else if(n==='whyid'){ fpWhyDlg(v); }
+}
+function fpItemInput(t,rerender){
+  var p=t.dataset.fpitem.split('|'), it=fpItem(p[0]); if(!it) return; var f=p[1], v=(t.type==='checkbox')?t.checked:t.value;
+  if(f.indexOf('r.')===0) v=v===''?null:parseInt(v,10);
+  if(f==='title'&&!String(v).trim()) return;
+  var o=it, k=f.split('.'); for(var i=0;i<k.length-1;i++) o=o[k[i]]; o[k[k.length-1]]=v;
+  it.updated=fpNow(); save(); if(rerender) renderView();
+}
+function fpAct(a,ds){
+  var id=ds.id, it;
+  switch(a){
+    case 'fptab': ui.fpTab=ds.t; if(ds.qf) ui.fpFilter.show=ds.qf; ui.msg=''; render(); break;
+    case 'fpopen': ui.fpOpen=(ui.fpOpen===id)?'':id; renderView(); break;
+    case 'fpshow': ui.fpFilter.show=ds.f; renderView(); break;
+    case 'fpmove': fpMove(id,ds.q); break;
+    case 'fpdone': fpDoneDlg(id); break;
+    case 'fpdoneok':
+      it=fpItem(id); it.done=true; it.doneAt=fpNow(); it.result=($('#doneRes').value||'').trim(); it.updated=fpNow(); fpLog(it,'completed',it.q,'done',it.result); save(); closeDlg(); render();
+      playDone(); mascotReact('cheer',pick(CHEER),1500); toast('Done. That counts.'); break;
+    case 'fpundone': it=fpItem(id); it.done=false; it.doneAt=''; it.updated=fpNow(); fpLog(it,'re-opened','done',it.q,''); save(); renderView(); break;
+    case 'fparch': it=fpItem(id); it.archived=!it.archived; fpLog(it,it.archived?'archived':'restored','','',''); save(); renderView(); break;
+    case 'fpdel': it=fpItem(id); if(it&&confirm('Delete “'+it.title+'” permanently? This cannot be undone. (Parking or dropping keeps it safe.)')){ S.fp.items=S.fp.items.filter(function(x){return x.id!==id;}); fpLog({id:id,title:it.title},'deleted permanently','','',''); save(); renderView(); toast('Deleted.'); } break;
+    case 'fpcapture':
+      var lines=fpParse(ui.fpf.cap||''); if(!lines.length){ toast('Type or paste something first.'); break; }
+      var prev=lines.map(function(l){ var o=fpFromLine(l), d=fpDup(o.title); return {t:o.title,raw:l,inc:true,dup:d?d.title:''}; });
+      if(prev.length===1&&!prev[0].dup){ fpAddItems([fpFromLine(prev[0].raw)]); ui.fpf.cap=''; renderView(); toast('Captured in your inbox.'); }
+      else ui.fpPrev=prev; renderView(); break;
+    case 'fpcapok':
+      var sel=(ui.fpPrev||[]).filter(function(p){return p.inc&&p.t.trim();}).map(function(p){ var o=fpFromLine(p.raw); var edited=p.t.trim()!==fpFromLine(p.raw).title; if(edited){ o.title=p.t.trim(); o.desc=p.raw; } return o; });
+      var n=fpAddItems(sel); ui.fpPrev=null; ui.fpf.cap=''; renderView(); toast(n?n+' item'+(n>1?'s':'')+' added to your inbox.':'Nothing selected.'); break;
+    case 'fpcapcancel': ui.fpPrev=null; renderView(); break;
+    case 'fpadd':
+      var nw=ui.fpf.new||{}; if(!(nw.title||'').trim()){ toast('Give it a title first. Everything else is optional.'); break; }
+      var dp=fpDup(nw.title); if(dp&&!confirm('Possible duplicate of “'+dp.title+'”. Add anyway?')) break;
+      fpAddItems([{title:nw.title.trim(),desc:nw.desc||'',cat:nw.cat||'other',effort:nw.effort||'',deadline:nw.deadline||'',outcome:nw.outcome||'',source:nw.source||'',notes:nw.notes||''}]);
+      ui.fpf.new={}; ui.fpNewOpen=false; renderView(); toast('Added to your inbox.'); break;
+    case 'fptriage': fpTriStart(id); break;
+    case 'fptri': var tt=ui.tri, kk=fpTriSeq(tt.a,fpItem(tt.id))[tt.i]; tt.a[kk]=ds.v; tt.i++; fpTriRender(); break;
+    case 'fptrinext': fpTriNext(!!ds.skip); break;
+    case 'fptriback': if(ui.tri.i>0){ ui.tri.i--; fpTriRender(); } break;
+    case 'fptriaccept': fpMove(ui.tri.id,ui.tri.rec,'Accepted the rule-based suggestion'); break;
+    case 'fpwhy': fpWhyDlg(id||''); break;
+    case 'fpdisok':
+      var ch=document.querySelector('input[name=disp]:checked'); if(!ch){ toast('Choose which item moves to Next.'); break; }
+      fpMove(id,'now',($('#disWhy').value||'').trim(),ch.value); break;
+    case 'fpstratedit': var g={}; Object.keys(S.fp.strategy).forEach(function(k){g[k]=S.fp.strategy[k];}); g.reason=''; ui.fpf.st=g; ui.fpStratEdit=true; ui.msg=''; renderView(); break;
+    case 'fpstratcancel': ui.fpStratEdit=false; ui.msg=''; renderView(); break;
+    case 'fpstratsave':
+      var gs=ui.fpf.st; if(!(gs.reason||'').trim()){ ui.msg='Please add a short reason so future-you knows why the strategy changed.'; renderView(); break; }
+      var ch2=[]; Object.keys(S.fp.strategy).forEach(function(k){ if(S.fp.strategy[k]!==gs[k]){ ch2.push(k); S.fp.strategy[k]=gs[k]; } });
+      if(ch2.length){ S.fp.stratLog.push({at:fpNow(),reason:gs.reason.trim(),fields:ch2.join(', ')}); fpLog({id:'',title:'Strategy'},'strategy updated','','',gs.reason.trim()+' ('+ch2.join(', ')+')'); }
+      save(); ui.fpStratEdit=false; ui.msg=''; renderView(); toast(ch2.length?'Strategy updated and logged.':'No changes to save.'); break;
+    case 'fpwreset': if(confirm('Reset the scoring weights to the defaults?')){ S.fp.weights=JSON.parse(JSON.stringify(FP_W0)); save(); renderView(); } break;
+    case 'fprvstrat': ui.fpTab='strategy'; fpAct('fpstratedit',{}); render(); break;
+    case 'fprvsave':
+      var wk=fpMonday(), dn=S.fp.items.filter(function(x){return x.done&&(x.doneAt||'').slice(0,10)>=wk;}).map(function(x){return x.title;}), r=S.fp.rv, cs=ui.fpf.carry||{}, moved=[];
+      Object.keys(cs).forEach(function(cid){ var x=fpItem(cid); if(x&&cs[cid]!=='keep'&&['next','park','drop'].indexOf(cs[cid])>=0){ var fr=x.q; x.q=cs[cid]; x.updated=fpNow(); fpLog(x,'moved (weekly review)',fr,x.q,''); moved.push(x.title+' → '+FP_Q[x.q]); } });
+      S.fp.reviews.push({at:fpNow(),week:wk,done:dn.join('; '),evidence:r.evidence,blocked:r.blocked,learned:r.learned,decisions:r.decisions,bottleneck:r.bottleneck,bnote:r.bnote,next:r.next,carry:moved.join('; ')});
+      if(r.next.trim()) S.fp.weekOutcome=r.next.trim();
+      S.fp.rv={evidence:'',blocked:'',learned:'',decisions:'',bottleneck:'no',bnote:'',next:''}; ui.fpf.carry={}; save(); render(); toast('Review saved. Fresh week, no guilt.'); break;
+  }
+}
+function renderView(){
+  var h='';
+  if(ui.printing){
+    h='<p class="printonly small">Printed '+fmtDate(todayISO())+' · SL Curtain Marketing Quest</p>'+viewRoadmap()+viewDecide()+viewResults()+viewWins();
+  } else h={start:viewStart,roadmap:viewRoadmap,decide:viewDecide,results:viewResults,wins:viewWins,fp:viewFP,lab:viewLab}[ui.tab]();
+  $('#view').innerHTML=h;
+  if(ui.reason){ var r=$('#reasonIn'); if(r) r.focus(); }
+}
+function applyTheme(){ document.documentElement.setAttribute('data-theme',S.theme==='butter'?'butter':'rose'); }
+function render(){ applyTheme(); renderOverview(); renderTabs(); renderView(); syncMascot(); }
+function updateDerived(){
+  PRODUCTS.forEach(function(p){ var el=$('#calc-'+p.id); if(el) el.innerHTML=calcHTML(p.id); });
+  var rb=$('#readyBox'); if(rb) rb.innerHTML=readyHTML();
+}
+function warnStore(){ $('#storewarn').textContent='Saving to this browser isn’t available right now (private mode or blocked storage). Your work will be lost when you close this page, so use Export backup before you leave.'; }
+
+var CHEER=['Yay! Nice one!','Boop! Done!','You did it!','Look at you go!','So proud of you!'];
+var BOOPS=['Hehe!','Boop!','Hi there!','One small step!'];
+var mascotEl=(function(){ var d=document.createElement('div'); d.className='mascot'; d.id='mascot'; d.setAttribute('data-mood','idle');
+  d.innerHTML='<div class="bubble" id="mbub" hidden></div><button class="mbtn" data-act="boop" aria-label="Say hi to your tassel buddy">'+'<svg viewBox="0 0 100 100" aria-hidden="true"><ellipse class="m-shadow" cx="50" cy="93" rx="28" ry="4"/><g class="mg"><ellipse class="m-feet" cx="38" cy="87" rx="9" ry="5"/><ellipse class="m-feet" cx="62" cy="87" rx="9" ry="5"/><ellipse class="m-body" cx="50" cy="60" rx="34" ry="29"/><path class="m-fold" d="M31 44Q36 60 32 76M69 44Q64 60 68 76"/><path class="m-tassel" d="M50 20Q43 26 42 33M50 20V34M50 20Q57 26 58 33"/><path class="m-tassel" d="M50 12V20"/><circle class="m-knot" cx="50" cy="12" r="4.5"/><g class="eyes-open"><ellipse class="m-ink" cx="39" cy="57" rx="3.6" ry="4.4"/><ellipse class="m-ink" cx="61" cy="57" rx="3.6" ry="4.4"/><circle class="m-white" cx="40.2" cy="55.4" r="1.3"/><circle class="m-white" cx="62.2" cy="55.4" r="1.3"/></g><g class="eyes-happy"><path class="m-arc" d="M34 58Q39 51 44 58M56 58Q61 51 66 58"/></g><g class="eyes-sleep"><path class="m-arc" d="M34 57Q39 61 44 57M56 57Q61 61 66 57"/></g><circle class="m-cheek" cx="30" cy="66" r="5"/><circle class="m-cheek" cx="70" cy="66" r="5"/><path class="m-arc mouth-smile" d="M45 66Q50 71 55 66"/><ellipse class="m-ink mouth-open" cx="50" cy="68" rx="4.4" ry="4"/><g class="zz"><text class="m-zz" x="70" y="34">z</text><text class="m-zz" x="78" y="24" style="font-size:14px">Z</text></g></g><g class="sparks"><path class="m-spark" d="M12 26l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path class="m-spark" d="M88 14l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path class="m-spark" d="M90 50l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/></g></svg>'+'</button>'; return d; })();
+function setMascot(mood,msg){ mascotEl.setAttribute('data-mood',mood); var b=mascotEl.querySelector('#mbub'); if(msg){ b.textContent=msg; b.hidden=false; } else { b.hidden=true; b.textContent=''; } }
+function syncMascot(){ if(ui.mTimer) return; setMascot(S.paused?'sleepy':'idle',S.paused?'Resting… take your time.':''); }
+function mascotReact(mood,msg,ms){ clearTimeout(ui.mTimer); setMascot(mood,msg); ui.mTimer=setTimeout(function(){ ui.mTimer=0; syncMascot(); },ms); }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+/* ---------- feedback ---------- */
+var actx=null;
+function audio(){
+  try{ if(!actx){ var C=window.AudioContext||window.webkitAudioContext; if(!C) return null; actx=new C(); }
+    if(actx.state==='suspended') actx.resume(); return actx; }catch(e){ return null; }
+}
+function tone(f,t0,dur,vol,type){
+  var a=audio(); if(!a) return;
+  var o=a.createOscillator(), g=a.createGain();
+  o.type=type||'sine'; o.frequency.setValueAtTime(f,t0);
+  g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(vol,t0+0.015); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0+dur+0.05);
+}
+function playDone(){ if(!S.sound) return; var a=audio(); if(!a) return; var t=a.currentTime+0.01;
+  tone(784,t,0.16,0.11); tone(1175,t+0.07,0.26,0.09); tone(2349,t+0.07,0.12,0.02,'triangle'); }
+function playMile(){ if(!S.sound) return; var a=audio(); if(!a) return; var t=a.currentTime+0.01;
+  [523,659,784,1047,1319].forEach(function(f,i){ tone(f,t+i*0.09,0.32,0.09); }); }
+var toastTimer;
+function toast(msg,big){ var t=$('#toast'); t.textContent=msg; t.className='show'+(big?' big':''); clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.className='';},big?6000:2400); }
+function confetti(){
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var c=$('#confetti'), cols=(function(){var cs=getComputedStyle(document.documentElement); return ['--lav2','--mid','--lav-line2','--lab-line2','--lav'].map(function(v){return cs.getPropertyValue(v).trim();});})();
+  for(var i=0;i<44;i++){ var s=document.createElement('i'); s.style.left=Math.random()*100+'%'; s.style.background=cols[i%5]; s.style.animationDelay=(Math.random()*.5)+'s'; s.style.transform='rotate('+Math.random()*360+'deg)'; c.appendChild(s); }
+  setTimeout(function(){c.innerHTML='';},3200);
+}
+
+/* ---------- actions ---------- */
+function setStatus(id,status,reason){
+  var before=progress().pct, r=ensureTask(id);
+  r.status=status; r.reason=reason||''; r.doneAt=status==='done'?todayISO():'';
+  save(); ui.reason=null;
+  var after=progress().pct;
+  if(status==='done'){
+    ui.q=(ui.q+1)%QUOTES.length;
+    var row=$('#t-'+id); if(row) row.classList.add('popping');
+    renderOverview();
+    var passed=[25,50,75,100].filter(function(m){return before<m&&after>=m&&S.celebrated.indexOf(m)<0;});
+    if(passed.length){ passed.forEach(function(m){S.celebrated.push(m);}); save(); toast(MILES[passed[passed.length-1]],true); confetti(); playMile(); mascotReact('party',passed[passed.length-1]+'% — look at you!',3200); }
+    else { playDone(); mascotReact('cheer',pick(CHEER),1500); toast(WINS_MSG[Math.floor(Math.random()*WINS_MSG.length)]); }
+    setTimeout(render,520);
+  } else render();
+}
+function download(name,text){ var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:'application/json'})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500); }
+function openDlg(){
+  var d=$('#dlg');
+  d.innerHTML='<h2 id="dlgh">Pause or reschedule</h2><p class="small muted">Dates move. Progress stays. Nothing is lost.</p>'+
+  '<label for="dlgDate">New target date</label><input type="date" id="dlgDate" value="'+esc(S.milestone)+'">'+
+  '<label for="dlgNote">Note (optional)</label><input type="text" id="dlgNote" value="'+esc(S.pauseNote)+'" placeholder="e.g. waiting for Mom’s figures">'+
+  '<label class="inline" style="margin-top:12px"><input type="checkbox" class="chk" id="dlgPause" '+(S.paused?'checked':'')+'> Pause the quest for now</label>'+
+  '<div class="actions"><button class="btn" data-act="dlgsave">Save</button><button class="btn ghost" data-act="dlgcancel">Cancel</button></div>';
+  if(d.showModal) d.showModal(); else d.setAttribute('open','');
+}
+function closeDlg(){ var d=$('#dlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
+function numOrNull(x){ if(x===undefined||x==='') return null; var n=parseFloat(x); return isFinite(n)&&n>=0?n:NaN; }
+
+function act(a,ds){
+  var id=ds.id;
+  if(a.indexOf('fp')===0){ fpAct(a,ds); return; }
+  switch(a){
+    case 'tab': ui.tab=ds.tab; ui.msg=''; ui.from=''; render(); window.scrollTo({top:$('#tabs').offsetTop-8}); break;
+    case 'focus': ui.tab='start'; ui.open=id; render(); var el=$('#t-'+id); if(el) el.scrollIntoView({block:'center'}); break;
+    case 'open': ui.open=(ui.open===id||(ui.open===null&&ui.tab==='start'&&nextTasks(1)[0]&&nextTasks(1)[0].id===id))?'':id; render(); break;
+    case 'stage': var cs=currentStage(), cur=(+id in ui.exp)?ui.exp[+id]:(cs&&cs.id===+id); ui.exp[+id]=!cur; render(); break;
+    case 'done': setStatus(id,'done'); break;
+    case 'undo': setStatus(id,'open'); break;
+    case 'ask': ui.reason={id:id,kind:ds.kind}; ui.open=id; renderView(); break;
+    case 'reasonno': ui.reason=null; renderView(); break;
+    case 'reasonok': var inp=$('#reasonIn'), txt=inp?inp.value.trim():''; setStatus(ui.reason.id,ui.reason.kind,txt||'No reason given'); break;
+    case 'pick': S.product=(S.product===id)?'':id; save(); render(); break;
+    case 'boop': mascotReact(S.paused?'sleepy':'cheer',S.paused?'Zzz… hm?':pick(BOOPS),1100); if(S.sound){ var ac=audio(); if(ac) tone(1047,ac.currentTime+0.01,0.14,0.08); } break;
+    case 'sound': S.sound=!S.sound; save(); render(); if(S.sound) playDone(); break;
+    case 'theme': S.theme=S.theme==='butter'?'rose':'butter'; save(); render(); break;
+    case 'reschedule': openDlg(); break;
+    case 'dlgcancel': closeDlg(); break;
+    case 'dlgsave': var dt=$('#dlgDate').value; if(/^\d{4}-\d{2}-\d{2}$/.test(dt)) S.milestone=dt; S.paused=$('#dlgPause').checked; S.pauseNote=$('#dlgNote').value.trim(); save(); closeDlg(); render(); toast('Saved. Dates move, progress stays.'); break;
+    case 'resume': S.paused=false; save(); render(); toast('Welcome back. One small step is plenty.'); break;
+    case 'export': download('SL_Curtain_Marketing_Quest_backup_'+todayISO()+'.json',JSON.stringify({app:APP,version:1,exportedAt:new Date().toISOString(),data:S},null,2)); toast('Backup downloaded.'); break;
+    case 'import': $('#imp').click(); break;
+    case 'print': window.print(); break;
+    case 'reset':
+      if(confirm('Reset everything? This clears all progress, notes and results in this browser. Export a backup first if you might want it back.')){
+        try{localStorage.removeItem(STORE_KEY);}catch(e){}
+        S=defaults(); ui.fpOpen=''; ui.fpPrev=null; ui.tri=null; ui.tab='start'; ui.open=null; ui.exp={}; ui.reason=null; ui.draft={}; ui.editing=''; ui.msg=''; render(); toast('Fresh start.'); }
+      break;
+    case 'study': ui.tab='lab'; ui.lesson=id; ui.from=ds.from||''; ui.labFilter='all'; var lm=LESSONS.filter(function(x){return x.id===id;})[0]; if(lm) ui.mod[lm.m]=true; render(); var le=$('#les-'+id); if(le) le.scrollIntoView({block:'start'}); break;
+    case 'openlesson': ui.lesson=(ui.lesson===id)?'':id; ui.from=''; var lm2=LESSONS.filter(function(x){return x.id===id;})[0]; if(lm2&&ui.lesson){ ui.mod[lm2.m]=true; var lb=lessonLabel(lm2); if(ui.labFilter!=='all'&&ui.labFilter!==lb&&!(ui.labFilter==='later'&&lb==='review')) ui.labFilter='all'; } render(); var le2=$('#les-'+id); if(le2) le2.scrollIntoView({block:'start'}); break;
+    case 'backtask': var bt=taskById[ui.from]; ui.tab='roadmap'; if(bt){ ui.exp[bt.stage]=true; ui.open=bt.id; } ui.from=''; render(); var be=bt&&$('#t-'+bt.id); if(be) be.scrollIntoView({block:'center'}); break;
+    case 'labfilter': ui.labFilter=ds.f; renderView(); break;
+    case 'labmod': ui.mod[+id]=(ds.ex!=='true'); renderView(); break;
+    case 'copy': var lc=LESSONS.filter(function(x){return x.id===id;})[0]; if(lc) copyText(promptFor(lc,ds.item?fpItem(ds.item):null)).then(function(ok){ toast(ok?'Prompt copied. Paste it into NotebookLM.':'Couldn’t copy automatically. Select the text in the prompt box and copy it.'); }); break;
+    case 'addres': addResult(); break;
+    case 'canceledit': ui.editing=''; ui.draft={}; ui.msg=''; renderView(); break;
+    case 'editres':
+      var e=S.results.filter(function(x){return x.id===id;})[0]; if(!e) break;
+      ui.draft={from:e.from,to:e.to,product:e.product,obs:e.obs}; NUMF.forEach(function(k){ui.draft[k]=e[k]==null?'':String(e[k]);});
+      ui.editing=id; ui.msg=''; renderView(); window.scrollTo({top:$('#view').offsetTop-8}); break;
+    case 'delres': if(confirm('Delete this result entry?')){ S.results=S.results.filter(function(x){return x.id!==id;}); save(); if(ui.editing===id){ui.editing='';ui.draft={};} render(); } break;
+  }
+}
+function addResult(){
+  var d=ui.draft, e={id:ui.editing||('r'+Date.now()),from:d.from||'',to:d.to||'',product:d.product||'',obs:(d.obs||'').trim()}, bad=false, any=false;
+  NUMF.forEach(function(k){ var n=numOrNull(d[k]); if(n!==null&&isNaN(n)) bad=true; e[k]=(n===null||isNaN(n))?null:n; if(e[k]!=null) any=true; });
+  if(bad) ui.msg='Numbers need to be zero or more.';
+  else if(e.qual!=null&&e.enq!=null&&e.qual>e.enq) ui.msg='Qualified leads can’t be more than enquiries. Please check those two.';
+  else if(e.from&&e.to&&e.to<e.from) ui.msg='The end date is before the start date.';
+  else if(!any&&!e.obs&&!e.from&&!e.to) ui.msg='Add at least one number or a note first.';
+  else {
+    var i=-1; S.results.forEach(function(x,j){if(x.id===e.id) i=j;});
+    if(i>=0) S.results[i]=e; else S.results.push(e);
+    save(); ui.draft={}; ui.editing=''; ui.msg=''; render(); toast('Logged. Thank you for noting it down.'); return;
+  }
+  renderView();
+}
+
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest('[data-act]'); if(!b||b.type==='checkbox') return; act(b.dataset.act,b.dataset);
+});
+document.addEventListener('change',function(ev){
+  var t=ev.target;
+  if(t.dataset.fprefresh!==undefined&&ui.tab==='fp') renderView();
+  if(t.dataset.fpitem){ fpItemInput(t,t.tagName==='SELECT'||t.type==='checkbox'||t.type==='date'); return; }
+  if(t.dataset.fpf!==undefined){ if(t.tagName==='SELECT'||t.type==='checkbox'||t.type==='date') fpSetF(t); return; }
+  if(t.dataset.act==='toggle'){ setStatus(t.dataset.id,t.checked?'done':'open'); return; }
+  if(t.id==='imp'){ importFile(t); return; }
+  if(t.dataset.draft){ ui.draft[t.dataset.draft]=t.value; return; }
+  if(t.dataset.bind&&/^study\.[^.]+\.status$/.test(t.dataset.bind)&&t.value!=='none'){ var dp=t.dataset.bind.replace(/status$/,'date'); if(!getPath(dp)) setPath(dp,todayISO()); }
+  if(t.dataset.bind&&(t.type==='checkbox'||t.tagName==='SELECT')){ setPath(t.dataset.bind,t.type==='checkbox'?t.checked:t.value); save(); render(); }
+});
+document.addEventListener('input',function(ev){
+  var t=ev.target;
+  if(t.dataset.fpitem){ fpItemInput(t,false); return; }
+  if(t.dataset.fpf!==undefined){ fpSetF(t); return; }
+  if(t.dataset.draft){ ui.draft[t.dataset.draft]=t.value; return; }
+  if(!t.dataset.bind||t.type==='checkbox'||t.tagName==='SELECT') return;
+  var v=t.value; if(t.hasAttribute('data-num')){ v=v===''?null:parseFloat(v); if(v!==null&&isNaN(v)) v=null; }
+  setPath(t.dataset.bind,v); save();
+  if(t.closest('#overview')){ if(t.dataset.bind==='milestone') $('#days').textContent=daysText(); }
+  else { renderOverview(); updateDerived(); }
+});
+function importFile(inp){
+  var f=inp.files&&inp.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    var obj; try{ obj=JSON.parse(rd.result); }catch(e){ obj=null; }
+    if(!obj||obj.app!==APP||!obj.data||typeof obj.data!=='object'){ toast('That file doesn’t look like a Quest backup. Nothing was changed.'); inp.value=''; return; }
+    if(confirm('Replace everything currently in this browser with the backup'+(obj.exportedAt?' from '+fmtDate(String(obj.exportedAt).slice(0,10)):'')+'?')){
+      S=sanitize(obj.data); save(); ui.draft={}; ui.editing=''; ui.reason=null; render(); toast('Backup restored.'); }
+    inp.value='';
+  };
+  rd.onerror=function(){ toast('Couldn’t read that file.'); };
+  rd.readAsText(f);
+}
+window.addEventListener('beforeprint',function(){ ui.printing=true; renderView(); });
+window.addEventListener('afterprint',function(){ ui.printing=false; renderView(); });
+document.addEventListener('keydown',function(ev){ if(ev.key==='Enter'&&ev.target.id==='reasonIn'){ ev.preventDefault(); act('reasonok',{}); } if(ev.key==='Enter'&&ev.target.id==='triIn'){ ev.preventDefault(); fpAct('fptrinext',{}); } });
+
+if(!storageOK) warnStore();
+render();
+if(loadNotice) toast(loadNotice,true);
+window.__slq={get state(){return S;},sanitize:sanitize};
+})();
+</script>
+</body>
+</html>
